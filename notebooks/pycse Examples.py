@@ -117,29 +117,6 @@ print func2(x02)
 %reset
 %pylab inline
 
-import scipy.integrate as integrate
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-import numpy as np
-import math
-from pycse import odelay
-from scipy.optimize import fsolve
-
-from thesis_functions.initialconditions import InputDataDictionary, SetInitialConditions
-from thesis_functions.astro import FindOrbitCenter, ComputeLibrationPoints, stop_yEquals0, stop_zEquals0, linearDerivativesFunction, nonlinearDerivativesFunction, PropagateSatellite, BuildRICFrame, BuildVNBFrame
-from thesis_functions.visualization import PlotGrid
-
-
-def stop_maxTime(state, t):
-    isterminal = True
-    direction = 0
-    value = abs(t)-2  # stop if time is greater than 2 units
-    return value, isterminal, direction
-
-# <codecell>
-
-%reset
-%pylab inline
 
 import scipy.integrate as integrate
 import matplotlib.pyplot as plt
@@ -149,10 +126,17 @@ import math
 from pycse import odelay
 from scipy.optimize import fsolve
 
-from thesis_functions.initialconditions import InputDataDictionary, SetInitialConditions
-from thesis_functions.astro import FindOrbitCenter, ComputeLibrationPoints, stop_yEquals0, stop_zEquals0, linearDerivativesFunction, nonlinearDerivativesFunction, PropagateSatellite, BuildRICFrame, BuildVNBFrame
-from thesis_functions.visualization import PlotGrid
+def stop_yEquals0(state, t):
+    isterminal = True
+    direction = 0
+    value = state[1]
+    return value, isterminal, direction
 
+def stop_zEquals0(state, t):
+    isterminal = True
+    direction = 0
+    value = state[2]
+    return value, isterminal, direction
 
 def stop_maxTime(state, t):
     isterminal = True
@@ -160,22 +144,22 @@ def stop_maxTime(state, t):
     value = abs(t)-2  # stop if time is greater than 2 units
     return value, isterminal, direction
 
-ICs = InputDataDictionary()
-
-mu, timespan, initialstate1 = SetInitialConditions(ICs, ICset = 'Howell', ICtestcase = 0, numPoints = 200)
+def nonlinearDerivativesFunction(inputstate, timespan):
     
-L1, L2, L3, L4, L5 = ComputeLibrationPoints(mu)
-
-x1, y1, z1, xdot1, ydot1, zdot1 = PropagateSatellite(mu, timespan, initialstate1)
+    x, y, z, xdot, ydot, zdot = inputstate
     
-center = FindOrbitCenter(x1, y1, z1);
-
-# Plot satellite 1 in RLP frame
-data = {'sat1': {'x':x1, 'y':y1, 'z':z1}}
-points = {'L1': L1, 'center': center}
-PlotGrid('Satellite 1 in RLP Frame', 'X', 'Y', 'Z', data, points, 'equal')
- 
-
+    # distances
+    r1 = np.sqrt((mu+x)**2.0 + y**2.0 + z**2.0);
+    r2 = np.sqrt((1-mu-x)**2.0 + y**2.0 + z**2.0);
+    
+    derivs = [xdot, 
+              ydot,
+              zdot, 
+              x + 2.0*ydot + (1 - mu)*(-mu - x)/(r1**3.0) + mu*(1 - mu - x)/(r2**3.0),
+              y - 2.0*xdot - (1 - mu)*y/(r1**3.0) - mu*y/(r2**3.0),
+              -(1 - mu)*z/(r1**3.0) - mu*z/(r2**3.0)]
+    
+    return derivs
 
 muArray_H = [0.04]
 testcases_H = np.array([[0.723268, 0.040000, 0.198019, 1.300177*4.0]]) # x, z, ydot, T
