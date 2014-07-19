@@ -83,7 +83,7 @@ def InitializeSecondSatellite(thetaindex, x1, y1, z1, xdot1, ydot1, zdot1, cente
     initialstate2 = [x1[desiredthetaindex], y1[desiredthetaindex], z1[desiredthetaindex], 
                      xdot1[desiredthetaindex], ydot1[desiredthetaindex], zdot1[desiredthetaindex]]
     
-    return initialstate2
+    #return initialstate2
 
 
     ## VNB velocity offset approach
@@ -91,8 +91,11 @@ def InitializeSecondSatellite(thetaindex, x1, y1, z1, xdot1, ydot1, zdot1, cente
     # compute a small offset to velocity along the velocity direction
 
     # assign initial state to second satellite
-    #initialstate2 = [x1[0], y1[0], z1[0], 
-    #                 xdot1[0]*1.001, ydot1[0]*1.001, zdot1[0]*1.001]
+    factor = thetaindex*1.001
+    initialstate2 = [x1[0], y1[0], z1[0], 
+                     xdot1[0]*factor, ydot1[0]*factor, zdot1[0]*factor]
+    
+    return initialstate2
 
 
     #generate closed halo...
@@ -198,8 +201,15 @@ vVec, nVec, bVec = BuildVNBFrame(x1, y1, z1, xdot1, ydot1, zdot1, center)
 
 data.clear();
 
+# create empty dictionaries
+dataRLP = {};
+dataoffsetRLP = {};
+dataRIC = {};
+dataVNB = {};
+
 #def SecondSatellite(thetaindex):
-for thetaindex in np.arange(10, 50, 10):
+#for thetaindex in np.arange(10, 50, 10): # thetaindex range
+for thetaindex in np.arange(1, 5, 1): # VNB factor range
     
     initialstate2 = InitializeSecondSatellite(thetaindex, x1, y1, z1, xdot1, ydot1, zdot1, center);
     
@@ -214,27 +224,32 @@ for thetaindex in np.arange(10, 50, 10):
     # Compute offsets in VNB frame
     dv, dn, db = ConvertOffsets(dx, dy, dz, vVec, nVec, bVec);
     
-    data['offsetVNB' + str(thetaindex)] = {'x':dv, 'y':dn, 'z':db}
+    dataRLP['sat1' + str(thetaindex)] = {'x':x1, 'y':y1, 'z':z1}
+    dataRLP['sat2' + str(thetaindex)] = {'x':x2, 'y':y2, 'z':z2}
+    
+    dataoffsetRLP['offsetRLP' + str(thetaindex)] = {'x':dx, 'y':dy, 'z':dz}
+    dataRIC['offsetRIC' + str(thetaindex)] = {'x':dr, 'y':di, 'z':dc}
+    dataVNB['offsetVNB' + str(thetaindex)] = {'x':dv, 'y':dn, 'z':db}
 
-    # Plot both satellites in RLP
-    #data = {'sat1': {'x':x1, 'y':y1, 'z':z1}, 'sat2': {'x':x2, 'y':y2, 'z':z2}}
-    #points = {'L1': L1, 'center': center}
-    #PlotGrid('Satellites 1 and 2 in RLP Frame', 'X', 'Y', 'Z', data, points, 'equal')
+# Plot both satellites in RLP
+#data = {'sat1': {'x':x1, 'y':y1, 'z':z1}, 'sat2': {'x':x2, 'y':y2, 'z':z2}}
+points = {'L1': L1, 'center': center}
+PlotGrid('Satellites 1 and 2 in RLP Frame', 'X', 'Y', 'Z', dataRLP, points, 'equal')
+
+# Plot offset (relative motion) between satellites 1 and 2 in RLP
+#data = {'offsetRLP': {'x':dx, 'y':dy, 'z':dz}}
+points = {'zero': [0,0,0]}
+PlotGrid('Offset between Satellites 1 and 2 in RLP Frame', 'X', 'Y', 'Z', dataoffsetRLP, points, 'auto')
     
-    # Plot offset (relative motion) between satellites 1 and 2 in RLP
-    #data = {'offsetRLP': {'x':dx, 'y':dy, 'z':dz}}
-    #points = {'zero': [0,0,0]}
-    #PlotGrid('Offset between Satellites 1 and 2 in RLP Frame', 'X', 'Y', 'Z', data, points, 'auto')
-    
-    # Plot relative motion in RIC frame
-    #data = {'offsetRIC': {'x':dr, 'y':di, 'z':dc}}
-    #points = {'zero': [0,0,0]}
-    #PlotGrid('Offset between Satellites 1 and 2 in RIC Frame', 'R', 'I', 'C', data, points, 'auto')
+# Plot relative motion in RIC frame
+#data = {'offsetRIC': {'x':dr, 'y':di, 'z':dc}}
+points = {'zero': [0,0,0]}
+PlotGrid('Offset between Satellites 1 and 2 in RIC Frame', 'R', 'I', 'C', dataRIC, points, 'auto')
     
 # Plot relative motion in VNB frame
 #data = {'offsetVNB': {'x':dv, 'y':dn, 'z':db}}
 points = {'zero': [0,0,0]}
-PlotGrid('Offset between Satellites 1 and 2 in VNB Frame', 'V', 'N', 'B', data, points, 'auto')
+PlotGrid('Offset between Satellites 1 and 2 in VNB Frame', 'V', 'N', 'B', dataVNB, points, 'auto')
     
     #return dx, dy, dz, x2, y2, z2
     
