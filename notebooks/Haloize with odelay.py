@@ -25,7 +25,7 @@ from thesis_functions.visualization import PlotGrid
 def stop_maxTime(state, t):
     isterminal = True
     direction = 0
-    value = abs(t)-3  # stop if time is greater than 2 units
+    value = abs(t)-3  # stop if time is greater than 3 units
     return value, isterminal, direction
 
 def nonlinearDerivativesFunction(inputstate, timespan):

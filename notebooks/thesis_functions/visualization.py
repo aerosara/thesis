@@ -45,16 +45,18 @@ def PlotGrid(title, xlabel, ylabel, zlabel, data, points, aspectmode):
     
     # add points to plots
     for key in points:
-        axXZ.plot(points[key][0], points[key][2], 'o', markersize=5)
-        axYZ.plot(points[key][1], points[key][2], 'o', markersize=5)
-        axXY.plot(points[key][0], points[key][1], 'o', markersize=5)
-        ax3D.plot([points[key][0]], [points[key][1]], [points[key][2]], 'o', markersize=5)
+        axXZ.plot(points[key][0], points[key][2], 'o', markersize=5, label=key)
+        axYZ.plot(points[key][1], points[key][2], 'o', markersize=5, label=key)
+        axXY.plot(points[key][0], points[key][1], 'o', markersize=5, label=key)
+        ax3D.plot([points[key][0]], [points[key][1]], [points[key][2]], 'o', markersize=5, label=key)
         
     # add data to plots
     for key in data:
-        axXZ.plot(data[key]['x'], data[key]['z'], '-')
-        axYZ.plot(data[key]['y'], data[key]['z'], '-')
-        axXY.plot(data[key]['x'], data[key]['y'], '-')
-        ax3D.plot(data[key]['x'], data[key]['y'], data[key]['z'], '-')
+        axXZ.plot(data[key]['x'], data[key]['z'], '-', label=key)
+        axYZ.plot(data[key]['y'], data[key]['z'], '-', label=key)
+        axXY.plot(data[key]['x'], data[key]['y'], '-', label=key)
+        ax3D.plot(data[key]['x'], data[key]['y'], data[key]['z'], '-', label=key)
+        
+    ax3D.legend(loc='center left', bbox_to_anchor=(1.2, 0.5))
         
 

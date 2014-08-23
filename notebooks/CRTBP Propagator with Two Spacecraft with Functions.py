@@ -20,7 +20,7 @@ from IPython.html.widgets import interact, interactive
 from IPython.display import clear_output, display, HTML
 
 from thesis_functions.initialconditions import InputDataDictionary, SetInitialConditions
-from thesis_functions.astro import FindOrbitCenter, ComputeLibrationPoints, stop_yEquals0, stop_zEquals0, linearDerivativesFunction, nonlinearDerivativesFunction, PropagateSatellite, BuildRICFrame, BuildVNBFrame
+from thesis_functions.astro import FindOrbitCenter, ComputeLibrationPoints, stop_yEquals0, stop_zEquals0, linearDerivativesFunction, nonlinearDerivativesFunction, PropagateSatellite, ComputeOffsets, ConvertOffsets, BuildRICFrame, BuildVNBFrame
 from thesis_functions.visualization import PlotGrid
 
 # <codecell>
@@ -116,80 +116,42 @@ def InitializeSecondSatellite(thetaindex, x1, y1, z1, xdot1, ydot1, zdot1, cente
 # <codecell>
 
 
-def ComputeOffsets(timespan, x1, y1, z1, xdot1, ydot1, zdot1, x2, y2, z2, xdot2, ydot2, zdot2):
-
-    # compute trajectory offset in RLP frame
-    dx = x1 - x2
-    dy = y1 - y2
-    dz = z1 - z2
-    #dxdot = xdot1 - xdot2
-    #dydot = ydot1 - ydot2
-    #dzdot = zdot1 - zdot2
-
-    # temporarily disabling plot
-    if (0 == 1):
-        
-        # compute total distance offset
-        distance = np.linalg.norm(np.array([dx, dy, dz]),2,0)
-
-        # plot total distance offset over time
-        figDeltaMag, axDeltaMag = plt.subplots()
-        axDeltaMag.plot(timespan, distance, 'o-')
-        figDeltaMag.suptitle('Total Distance Offset Over Time')
-
-    #figXY, axXDotYDot = plt.subplots()
-    #axXDotYDot.plot(timespan, xdot)
-    #axXDotYDot.plot(timespan, ydot)
-    
-    return dx, dy, dz
-
-# <codecell>
-
-
-def ConvertOffsets(dx, dy, dz, basis1, basis2, basis3):
-
-    # x,y,z are input offset vectors
-    # basis1,basis2,basis3 are basis vectors converting from the input frame to the output frame
-    # db1,db2,db3 are the output offset vectors
-    
-    # compute trajectory offset in new frame (e.g. RIC, VNB)
-
-    ## This approach is more intuitive:
-    # compute dot products
-    #db1 = np.zeros(len(dx))
-    #db2 = np.zeros(len(dx))
-    #db3 = np.zeros(len(dx))
-    #for ii in range(0, len(basis1)):
-    #    db1[ii] = np.dot([dx[ii], dy[ii], dz[ii]], basis1[ii])
-    #    db2[ii] = np.dot([dx[ii], dy[ii], dz[ii]], basis2[ii])
-    #    db3[ii] = np.dot([dx[ii], dy[ii], dz[ii]], basis3[ii])
-    
-    ## This approach might be faster:
-    # compute dot products
-    db1 = np.einsum('ij,ij->i', np.array([dx, dy, dz]).T, basis1)
-    db2 = np.einsum('ij,ij->i', np.array([dx, dy, dz]).T, basis2)
-    db3 = np.einsum('ij,ij->i', np.array([dx, dy, dz]).T, basis3)
-    
-    return db1, db2, db3
-
-# <codecell>
-
-
 # First satellite 
 
 ICs = InputDataDictionary()
 
-mu, timespan, initialstate1 = SetInitialConditions(ICs, ICset = 'Howell', ICtestcase = 0, numPoints = 200)
+mu, timespan, initialstate1 = SetInitialConditions(ICs, ICset = 'Barbee', ICtestcase = 0, numPoints = 200)
     
-L1, L2, L3, L4, L5 = ComputeLibrationPoints(mu)
+X1, X2, L1, L2, L3, L4, L5 = ComputeLibrationPoints(mu)
+
+# In nondimensional units, r12 = 1, M = 1, timeConst = Period/(2pi) = 1, G = 1
+r12 = 384400.0;
+timeConst = r12**(1.5)/mu**(0.5)
+
+# Re-dimensionalize
+#X1 = X1*r12;
+#X2 = X2*r12;
+#L1 = L1*r12;
+#L2 = L2*r12;
+#L3 = L3*r12;
+#L4 = L4*r12;
+#L5 = L5*r12;
 
 x1, y1, z1, xdot1, ydot1, zdot1 = PropagateSatellite(mu, timespan, initialstate1)
-    
+
+# Re-dimensionalize
+#x1 = x1*r12;
+#y1 = y1*r12;
+#z1 = z1*r12;
+#xdot1 = xdot1*r12/timeConst;
+#ydot1 = ydot1*r12/timeConst;
+#zdot1 = zdot1*r12/timeConst;
+
 center = FindOrbitCenter(x1, y1, z1);
 
 # Plot satellite 1 in RLP frame
 data = {'sat1': {'x':x1, 'y':y1, 'z':z1}}
-points = {'L1': L1, 'center': center}
+points = {'L1': L1, 'center': center, }
 PlotGrid('Satellite 1 in RLP Frame', 'X', 'Y', 'Z', data, points, 'equal')
     
 rVec, iVec, cVec = BuildRICFrame(x1, y1, z1, xdot1, ydot1, zdot1, center)
@@ -214,7 +176,7 @@ for thetaindex in np.arange(1, 5, 1): # VNB factor range
     initialstate2 = InitializeSecondSatellite(thetaindex, x1, y1, z1, xdot1, ydot1, zdot1, center);
     
     x2, y2, z2, xdot2, ydot2, zdot2 = PropagateSatellite(mu, timespan, initialstate2);
-    
+
     # Compute offsets in RLP frame
     dx, dy, dz = ComputeOffsets(timespan, x1, y1, z1, xdot1, ydot1, zdot1, x2, y2, z2, xdot2, ydot2, zdot2);
     
@@ -233,7 +195,7 @@ for thetaindex in np.arange(1, 5, 1): # VNB factor range
 
 # Plot both satellites in RLP
 #data = {'sat1': {'x':x1, 'y':y1, 'z':z1}, 'sat2': {'x':x2, 'y':y2, 'z':z2}}
-points = {'L1': L1, 'center': center}
+points = {'L1': L1, 'L2': L2, 'center': center, 'M2': X2}
 PlotGrid('Satellites 1 and 2 in RLP Frame', 'X', 'Y', 'Z', dataRLP, points, 'equal')
 
 # Plot offset (relative motion) between satellites 1 and 2 in RLP

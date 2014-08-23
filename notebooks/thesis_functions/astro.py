@@ -6,6 +6,7 @@
 
 import numpy as np
     
+from scipy.optimize import fsolve
 
 # <codecell>
 
@@ -27,42 +28,54 @@ def FindOrbitCenter(x, y, z):
 
 def ComputeLibrationPoints(mu):
     
-    # Compute the locations of the libration points
+    # Inputs: mu = m2/M = (mass of smaller body) / (total mass)
+    
+    # In nondimensional units, r12 = 1, M = 1, Period/(2pi) = 1, G = 1
+    
+    # Position of larger body along X axis:
+    X1 = np.array([-mu, 0, 0]);
+    
+    # Position of smaller body along X axis:
+    X2 = np.array([1.0-mu, 0, 0]);
+    
+    # Functions from notes from Brent Barbee's class ENAE601, 10/12/2011, and HW 4, 10/17/2011
+    def f_L1(x, mu):   
+        
+        p = 1.0 - mu - x
+        return (1.0 - mu)*(p**3.0)*(p**2.0 - 3.0*p + 3.0) - mu*(p**2.0 + p + 1.0)*(1.0 - p)**3.0
 
-    # ported this from Matlab code found at http://www.math.rutgers.edu/~jmireles/matLabPage.html - need to QA against a textbook
-
-    # In numpy.roots(p), p[0] corresponds to highest-order term in polynomial
-
-    l = 1.0 - mu
-
+    def f_L2(x, mu):    
+        
+        p = mu - 1.0 + x
+        return (1.0 - mu)*(p**3.0)*(p**2.0 + 3.0*p + 3.0) - mu*(p**2.0 + p + 1.0)*(1.0 - p)*(p + 1.0)**2.0
+    
+    def f_L3(x, mu):
+        
+        p = -x - mu
+        return (1.0 - mu)*(p**2.0 + p + 1.0)*(p - 1.0)*(p + 1.0)**2.0 + mu*(p**3.0)*(p**2.0 + 3.0*p + 3.0)
+        
+        
+    # Find roots of the functions with fsolve, providing an initial guess
+    l1 = fsolve(f_L1, 0.7, args=(mu,));
+    l2 = fsolve(f_L2, 1.2, args=(mu,));
+    l3 = fsolve(f_L3, -1.1, args=(mu,));
+    
     # L1
-    p_L1 = [1, 2.0*(mu-l), l**2.0 - 4.0*l*mu + mu**2.0, 2.0*mu*l*(l-mu) + mu-l, mu**2.0*l**2.0 + 2.0*(l**2.0 + mu*2.0), mu**3.0 - l**3.0]
-
-    L1 = np.real([i for i in np.roots(p_L1) if (i > -mu and i < l)])
-
-    L1 = np.append(L1, [0.0, 0.0])
-
+    L1 = np.array([l1[0], 0.0, 0.0]);
+    
     # L2
-    p_L2 = [1, 2.0*(mu-l), l**2.0 - 4.0*l*mu + mu**2.0, 2*mu*l*(l-mu) - (mu+l), mu**2.0*l**2.0 + 2.0*(l**2.0 - mu**2.0), -(mu**3.0 + l**3.0)]
-
-    L2 = np.real([i for i in np.roots(p_L2) if (i > -mu and i > l)])
-
-    L2 = np.append(L2, [0.0, 0.0])
-
+    L2 = np.array([l2[0], 0.0, 0.0]);
+    
     # L3
-    p_L3 = [1.0, 2.0*(mu-l), l**2.0 - 4.0*mu*l + mu**2.0, 2.0*mu*l*(l-mu) + (l+mu), mu**2.0*l**2.0 + 2*(mu**2 - l**2.0), l**3.0 + mu**3.0]
-
-    L3 = np.real([i for i in np.roots(p_L3) if i < -mu])
-
-    L3 = np.append(L3, [0.0, 0.0])
-
+    L3 = np.array([l3[0], 0.0, 0.0]);
+    
     # L4
-    L4 = [-mu + 0.5, np.sqrt(3.0)/2.0, 0.0]
+    L4 = np.array([0.5 - mu, np.sqrt(3.0)/2.0, 0.0]);
 
     # L5
-    L5 = [-mu + 0.5, -np.sqrt(3.0)/2.0, 0.0]
+    L5 = np.array([0.5 - mu, -np.sqrt(3.0)/2.0, 0.0]);
     
-    return L1, L2, L3, L4, L5
+    return X1, X2, L1, L2, L3, L4, L5;
 
 # <codecell>
 
@@ -95,7 +108,7 @@ def linearDerivativesFunction(inputstate, timespan):
               ydot,
               zdot,
               2.0*ydot + (2.0*BL1 + 1.0)*x,
-              -2.0*xdot - (BL1 - 1)*y,
+              -2.0*xdot - (BL1 - 1.0)*y,
               -BL1*z]
     
     return derivs
@@ -107,7 +120,7 @@ def nonlinearDerivativesFunction(inputstate, timespan, mu):
     
     # distances
     r1 = np.sqrt((mu+x)**2.0 + y**2.0 + z**2.0);
-    r2 = np.sqrt((1-mu-x)**2.0 + y**2.0 + z**2.0);
+    r2 = np.sqrt((1.0-mu-x)**2.0 + y**2.0 + z**2.0);
     
     # masses
     #m1 = 1 - mu;
@@ -117,11 +130,135 @@ def nonlinearDerivativesFunction(inputstate, timespan, mu):
     derivs = [xdot, 
               ydot,
               zdot, 
-              x + 2.0*ydot + (1 - mu)*(-mu - x)/(r1**3.0) + mu*(1 - mu - x)/(r2**3.0),
-              y - 2.0*xdot - (1 - mu)*y/(r1**3.0) - mu*y/(r2**3.0),
-              -(1 - mu)*z/(r1**3.0) - mu*z/(r2**3.0)]
+              x + 2.0*ydot + (1.0 - mu)*(-mu - x)/(r1**3.0) + mu*(1.0 - mu - x)/(r2**3.0),
+              y - 2.0*xdot - (1.0 - mu)*y/(r1**3.0) - mu*y/(r2**3.0),
+              -(1.0 - mu)*z/(r1**3.0) - mu*z/(r2**3.0)]
     
     return derivs
+
+def Relmo(x, y, z, mu):
+    
+    # set mu1, mu2 - the gravitational parameters of the larger and smaller bodies
+    mu1 = 1.0 - mu
+    mu2 = mu
+    
+    # Position of larger body along X axis:
+    X1 = np.array([-mu, 0, 0]);
+    
+    # Position of smaller body along X axis:
+    X2 = np.array([1.0 - mu, 0, 0]);
+    
+    # unit vectors from primary masses to target satellite
+    e1 = np.array([x-X1[0], y, z])
+    e2 = np.array([x-X2[0], y, z])
+    
+    # distances from primary masses to target satellite
+    r1 = np.sqrt((x-X1[0])**2.0 + y**2.0 + z**2.0);
+    r2 = np.sqrt((x-X2[0])**2.0 + y**2.0 + z**2.0);
+    
+    c1 = mu1/r1**3.0
+    c2 = mu2/r2**3.0
+    
+    # set up 3x3 identity matrix and zeroes matrix
+    I3 = np.eye(3)
+    Z3 = np.zeros((3,3))
+    
+    # In non-dimensional units, omega = sqrt(GM/(r^3)) = 1
+    w = 1.0;
+    
+    # Cross-product matrix
+    wx = np.array([[0.0,  -w, 0.0], 
+                   [  w, 0.0, 0.0],
+                   [0.0, 0.0, 0.0]])
+    
+    X = -(c1 + c2)*I3 + 3.0*c1*np.outer(e1, e1) + 3.0*c2*np.outer(e2, e2) - np.dot(wx, wx)
+    
+    mwx2 = -2.0*wx  # paper says -2[wx]T (which equals 2[wx]), but Phd says -2[wx]
+    
+    # Linearized system dynamics matrix
+    A = np.vstack([np.hstack([Z3, I3]),
+                   np.hstack([X,  mwx2])])
+    
+    return A
+    
+
+# This is from Luquette
+def nonlinearDerivsWithLinearRelmoSTM(inputstate, timespan, mu):
+    
+    # Position and velocity of target satellite in RLP frame
+    x, y, z, xdot, ydot, zdot = inputstate[0:6]
+    
+    # Identity matrix
+    Phi = inputstate[6:42].reshape(6,6)
+    
+    # Position of larger body along X axis:
+    X1 = np.array([-mu, 0, 0]);
+    
+    # Position of smaller body along X axis:
+    X2 = np.array([1.0 - mu, 0, 0]);
+    
+    # distances from primary masses to target satellite
+    r1 = np.sqrt((x-X1[0])**2.0 + y**2.0 + z**2.0);
+    r2 = np.sqrt((x-X2[0])**2.0 + y**2.0 + z**2.0);
+    
+    # Compute linearized system dynamics matrix for relmo
+    A = Relmo(x, y, z, mu);
+
+    # Compute nonlinear derivatives for target satellite in RLP frame
+    targetStateDerivs = [xdot, 
+                         ydot,
+                         zdot, 
+                         x + 2.0*ydot + (1 - mu)*(-mu - x)/(r1**3.0) + mu*(1 - mu - x)/(r2**3.0),
+                         y - 2.0*xdot - (1 - mu)*y/(r1**3.0) - mu*y/(r2**3.0),
+                         -(1 - mu)*z/(r1**3.0) - mu*z/(r2**3.0)]
+    
+    # Compute STM derivates using linearized relmo dynamics
+    PhiDot = np.dot(A, Phi)
+    
+    # Concatenate derivatives
+    derivs = np.concatenate((targetStateDerivs, PhiDot.reshape(1,36)[0]))
+    
+    return derivs
+
+
+# This is from Luquette
+def nonlinearDerivsWithLinearRelmo(inputstate, timespan, mu):
+    
+    # position and velocity of target satellite in RLP frame
+    x, y, z, xdot, ydot, zdot = inputstate[0:6]
+    
+    # offset position and velocity of chaser satellite wrt target satellite in RLP frame
+    chaserInputState = inputstate[6:12]
+    
+    # Position of larger body along X axis:
+    X1 = np.array([-mu, 0, 0]);
+    
+    # Position of smaller body along X axis:
+    X2 = np.array([1.0 - mu, 0, 0]);
+    
+    # distances from primary masses to target satellite
+    r1 = np.sqrt((x-X1[0])**2.0 + y**2.0 + z**2.0);
+    r2 = np.sqrt((x-X2[0])**2.0 + y**2.0 + z**2.0);
+    
+    # Compute linearized system dynamics matrix for relmo
+    A = Relmo(x, y, z, mu);
+
+    # Compute nonlinear derivatives for target satellite in RLP frame
+    targetStateDerivs = [xdot, 
+                         ydot,
+                         zdot, 
+                         x + 2.0*ydot + (1 - mu)*(-mu - x)/(r1**3.0) + mu*(1 - mu - x)/(r2**3.0),
+                         y - 2.0*xdot - (1 - mu)*y/(r1**3.0) - mu*y/(r2**3.0),
+                         -(1 - mu)*z/(r1**3.0) - mu*z/(r2**3.0)]
+    
+    # Compute derivates for offset of chaser wrt target in RLP frame using linearized relmo dynamics
+    chaserStateDerivs = np.dot(A, chaserInputState)
+    
+    # Concatenate derivatives
+    derivs = np.concatenate((targetStateDerivs, chaserStateDerivs))
+    
+    return derivs
+
 
 # <codecell>
 
@@ -149,6 +286,65 @@ def PropagateSatellite(mu, timespan, initialstate1):
     
     return x1, y1, z1, xdot1, ydot1, zdot1
    
+
+# <codecell>
+
+
+def ComputeOffsets(timespan, x1, y1, z1, xdot1, ydot1, zdot1, x2, y2, z2, xdot2, ydot2, zdot2):
+
+    # compute trajectory offset in RLP frame
+    dx = x1 - x2
+    dy = y1 - y2
+    dz = z1 - z2
+    #dxdot = xdot1 - xdot2
+    #dydot = ydot1 - ydot2
+    #dzdot = zdot1 - zdot2
+
+    # temporarily disabling plot
+    if (0 == 1):
+        
+        # compute total distance offset
+        distance = np.linalg.norm(np.array([dx, dy, dz]),2,0)
+
+        # plot total distance offset over time
+        figDeltaMag, axDeltaMag = plt.subplots()
+        axDeltaMag.plot(timespan, distance, 'o-')
+        figDeltaMag.suptitle('Total Distance Offset Over Time')
+
+    #figXY, axXDotYDot = plt.subplots()
+    #axXDotYDot.plot(timespan, xdot)
+    #axXDotYDot.plot(timespan, ydot)
+    
+    return dx, dy, dz
+
+# <codecell>
+
+
+def ConvertOffsets(dx, dy, dz, basis1, basis2, basis3):
+
+    # x,y,z are input offset vectors
+    # basis1,basis2,basis3 are basis vectors converting from the input frame to the output frame
+    # db1,db2,db3 are the output offset vectors
+    
+    # compute trajectory offset in new frame (e.g. RIC, VNB)
+
+    ## This approach is more intuitive:
+    # compute dot products
+    #db1 = np.zeros(len(dx))
+    #db2 = np.zeros(len(dx))
+    #db3 = np.zeros(len(dx))
+    #for ii in range(0, len(basis1)):
+    #    db1[ii] = np.dot([dx[ii], dy[ii], dz[ii]], basis1[ii])
+    #    db2[ii] = np.dot([dx[ii], dy[ii], dz[ii]], basis2[ii])
+    #    db3[ii] = np.dot([dx[ii], dy[ii], dz[ii]], basis3[ii])
+    
+    ## This approach might be faster:
+    # compute dot products
+    db1 = np.einsum('ij,ij->i', np.array([dx, dy, dz]).T, basis1)
+    db2 = np.einsum('ij,ij->i', np.array([dx, dy, dz]).T, basis2)
+    db3 = np.einsum('ij,ij->i', np.array([dx, dy, dz]).T, basis3)
+    
+    return db1, db2, db3
 
 # <codecell>
 
