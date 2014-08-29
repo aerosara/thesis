@@ -7,6 +7,8 @@
 import numpy as np
     
 from scipy.optimize import fsolve
+    
+import scipy.integrate as integrate
 
 # <codecell>
 
@@ -93,50 +95,55 @@ def stop_zEquals0(state, t):
     value = state[2]  # z = 0
     return value, isterminal, direction
 
+# <headingcell level=3>
+
+# Dynamics and ODE functions to integrate
+
 # <codecell>
 
 
 # Not being used - don't have a decent test case with good values for the input state and BL1 (aka c2)
-def linearDerivativesFunction(inputstate, timespan):
-    x, y, z, xdot, ydot, zdot = inputstate
-    
-    #BL1 = 3.329168
-    #BL1 = 4.06107
-    BL1 = 0.012155092
-    
-    derivs = [xdot,
-              ydot,
-              zdot,
-              2.0*ydot + (2.0*BL1 + 1.0)*x,
-              -2.0*xdot - (BL1 - 1.0)*y,
-              -BL1*z]
-    
-    return derivs
+#def linearDerivativesFunction(inputstate, timespan):
+#    x, y, z, xdot, ydot, zdot = inputstate
+#    
+#    #BL1 = 3.329168
+#    #BL1 = 4.06107
+#    BL1 = 0.012155092
+#    
+#    derivs = [xdot,
+#              ydot,
+#              zdot,
+#              2.0*ydot + (2.0*BL1 + 1.0)*x,
+#              -2.0*xdot - (BL1 - 1.0)*y,
+#              -BL1*z]
+#    
+#    return derivs
 
-# This full nonlinear version is what's being used
-def nonlinearDerivativesFunction(inputstate, timespan, mu):
-    
-    x, y, z, xdot, ydot, zdot = inputstate
-    
-    # distances
-    r1 = np.sqrt((mu+x)**2.0 + y**2.0 + z**2.0);
-    r2 = np.sqrt((1.0-mu-x)**2.0 + y**2.0 + z**2.0);
-    
-    # masses
-    #m1 = 1 - mu;
-    #m2 = mu;
-    #G = 1;
 
-    derivs = [xdot, 
-              ydot,
-              zdot, 
-              x + 2.0*ydot + (1.0 - mu)*(-mu - x)/(r1**3.0) + mu*(1.0 - mu - x)/(r2**3.0),
-              y - 2.0*xdot - (1.0 - mu)*y/(r1**3.0) - mu*y/(r2**3.0),
-              -(1.0 - mu)*z/(r1**3.0) - mu*z/(r2**3.0)]
+def ComputeNonlinearDerivs(x, y, z, xdot, ydot, zdot, mu):
     
-    return derivs
+    # Position of larger body along X axis:
+    X1 = np.array([-mu, 0, 0]);
+    
+    # Position of smaller body along X axis:
+    X2 = np.array([1.0 - mu, 0, 0]);
+    
+    # distances from primary masses to target satellite
+    r1 = np.sqrt((x-X1[0])**2.0 + y**2.0 + z**2.0);
+    r2 = np.sqrt((x-X2[0])**2.0 + y**2.0 + z**2.0);
 
-def Relmo(x, y, z, mu):
+    # Compute nonlinear derivatives for target satellite in RLP frame
+    targetStateDerivs = [xdot, 
+                         ydot,
+                         zdot, 
+                         x + 2.0*ydot + (1 - mu)*(-mu - x)/(r1**3.0) + mu*(1 - mu - x)/(r2**3.0),
+                         y - 2.0*xdot - (1 - mu)*y/(r1**3.0) - mu*y/(r2**3.0),
+                         -(1 - mu)*z/(r1**3.0) - mu*z/(r2**3.0)]
+    
+    return targetStateDerivs
+    
+
+def ComputeRelmoDynamicsMatrix(x, y, z, mu):
     
     # set mu1, mu2 - the gravitational parameters of the larger and smaller bodies
     mu1 = 1.0 - mu
@@ -180,40 +187,36 @@ def Relmo(x, y, z, mu):
                    np.hstack([X,  mwx2])])
     
     return A
+
+
+# This full nonlinear version is what's being used
+def odeintNonlinearDerivs(inputstate, timespan, mu):
     
+    x, y, z, xdot, ydot, zdot = inputstate
+    
+    # Compute nonlinear derivatives for the satellite in RLP frame
+    derivs = ComputeNonlinearDerivs(x, y, z, xdot, ydot, zdot, mu)
+    
+    return derivs
+
 
 # This is from Luquette
-def nonlinearDerivsWithLinearRelmoSTM(inputstate, timespan, mu):
+def odeintNonlinearDerivsWithLinearRelmoSTM(inputstate, timespan, mu):
     
     # Position and velocity of target satellite in RLP frame
     x, y, z, xdot, ydot, zdot = inputstate[0:6]
     
-    # Identity matrix
+    # This should always be the Identity matrix at t0
     Phi = inputstate[6:42].reshape(6,6)
     
-    # Position of larger body along X axis:
-    X1 = np.array([-mu, 0, 0]);
-    
-    # Position of smaller body along X axis:
-    X2 = np.array([1.0 - mu, 0, 0]);
-    
-    # distances from primary masses to target satellite
-    r1 = np.sqrt((x-X1[0])**2.0 + y**2.0 + z**2.0);
-    r2 = np.sqrt((x-X2[0])**2.0 + y**2.0 + z**2.0);
-    
     # Compute linearized system dynamics matrix for relmo
-    A = Relmo(x, y, z, mu);
-
-    # Compute nonlinear derivatives for target satellite in RLP frame
-    targetStateDerivs = [xdot, 
-                         ydot,
-                         zdot, 
-                         x + 2.0*ydot + (1 - mu)*(-mu - x)/(r1**3.0) + mu*(1 - mu - x)/(r2**3.0),
-                         y - 2.0*xdot - (1 - mu)*y/(r1**3.0) - mu*y/(r2**3.0),
-                         -(1 - mu)*z/(r1**3.0) - mu*z/(r2**3.0)]
+    A = ComputeRelmoDynamicsMatrix(x, y, z, mu);
     
     # Compute STM derivates using linearized relmo dynamics
     PhiDot = np.dot(A, Phi)
+    
+    # Compute nonlinear derivatives for target satellite in RLP frame
+    targetStateDerivs = ComputeNonlinearDerivs(x, y, z, xdot, ydot, zdot, mu)
     
     # Concatenate derivatives
     derivs = np.concatenate((targetStateDerivs, PhiDot.reshape(1,36)[0]))
@@ -222,7 +225,7 @@ def nonlinearDerivsWithLinearRelmoSTM(inputstate, timespan, mu):
 
 
 # This is from Luquette
-def nonlinearDerivsWithLinearRelmo(inputstate, timespan, mu):
+def odeintNonlinearDerivsWithLinearRelmo(inputstate, timespan, mu):
     
     # position and velocity of target satellite in RLP frame
     x, y, z, xdot, ydot, zdot = inputstate[0:6]
@@ -230,26 +233,11 @@ def nonlinearDerivsWithLinearRelmo(inputstate, timespan, mu):
     # offset position and velocity of chaser satellite wrt target satellite in RLP frame
     chaserInputState = inputstate[6:12]
     
-    # Position of larger body along X axis:
-    X1 = np.array([-mu, 0, 0]);
-    
-    # Position of smaller body along X axis:
-    X2 = np.array([1.0 - mu, 0, 0]);
-    
-    # distances from primary masses to target satellite
-    r1 = np.sqrt((x-X1[0])**2.0 + y**2.0 + z**2.0);
-    r2 = np.sqrt((x-X2[0])**2.0 + y**2.0 + z**2.0);
-    
     # Compute linearized system dynamics matrix for relmo
-    A = Relmo(x, y, z, mu);
-
+    A = ComputeRelmoDynamicsMatrix(x, y, z, mu);
+    
     # Compute nonlinear derivatives for target satellite in RLP frame
-    targetStateDerivs = [xdot, 
-                         ydot,
-                         zdot, 
-                         x + 2.0*ydot + (1 - mu)*(-mu - x)/(r1**3.0) + mu*(1 - mu - x)/(r2**3.0),
-                         y - 2.0*xdot - (1 - mu)*y/(r1**3.0) - mu*y/(r2**3.0),
-                         -(1 - mu)*z/(r1**3.0) - mu*z/(r2**3.0)]
+    targetStateDerivs = ComputeNonlinearDerivs(x, y, z, xdot, ydot, zdot, mu)
     
     # Compute derivates for offset of chaser wrt target in RLP frame using linearized relmo dynamics
     chaserStateDerivs = np.dot(A, chaserInputState)
@@ -260,17 +248,87 @@ def nonlinearDerivsWithLinearRelmo(inputstate, timespan, mu):
     return derivs
 
 
+# <headingcell level=3>
+
+# Waypoint Targeting
+
+# <codecell>
+
+
+# Compute required velocity at point 1 to take us to point 2 within time (t2-t1)
+# This is from Lian et al.
+def ComputeRequiredVelocity(initialstate1, initialRelativePosition, initialTime, targetRelativePosition, targetTime, mu):
+        
+    # initial state of the target SC and STM
+    # initial state for the STM is just the identity matrix mapping from t1 to t1
+    I6 = np.eye(6);
+    initialstateForSTM = np.concatenate((initialstate1, I6.reshape(1,36)[0]))
+
+    # array of time points to integrate over to compute the STM
+    timespan = np.linspace(initialTime, targetTime, 2)
+
+    # integrate first satellite and STM from t1 to t2
+    statesOverTime1 = integrate.odeint(odeintNonlinearDerivsWithLinearRelmoSTM, initialstateForSTM, timespan, (mu,))  # "extra arguments must be given in a tuple"
+
+    # transpose so that timepoints are columns and elements of the state are rows
+    statesOverTime1 = statesOverTime1.T
+
+    # select rows 7-42 (36 rows)
+    Phi = statesOverTime1[6:42]
+
+    # select the last column (last time point), and convert it into a 6x6 matrix
+    Phi = Phi[:,len(Phi[0])-1].reshape(6,6)
+
+    # pull out top left corner and top right corner
+    # these are the state transition matrices of the (position at time 2) with 
+    # respect to the (position at time 1) and (velocity at time 1)
+    Phi11 = Phi[:3, :3]
+    Phi12 = Phi[:3, 3:6]
+
+    # Invert Phi12 to get the (velocity at time 1) with respect to the (positions at times 1 and 2)
+    Phi12I = np.linalg.inv(Phi12)
+    
+    # Compute required velocity at point 1 to take us to point 2 within time (t2-t1)
+    # This is from Lian et al.
+    initialRelativeVelocity = np.dot(Phi12I, targetRelativePosition - np.dot(Phi11, initialRelativePosition))
+    
+    return initialRelativeVelocity
+
+
+def PropagateSatelliteAndChaser(mu, timespan, initialstate1, initialRelativeState):
+    
+    ## FIRST SATELLITE NONLINEAR AND SECOND SATELLITE LINEAR RELMO
+    
+    # initial state of first satellite in absolute RLP coordinates and second satellite wrt first
+    initialstateForRelmo = np.concatenate(( initialstate1, initialRelativeState ))
+
+    print 'initialstateForRelmo', initialstateForRelmo
+
+    # integrate first and second satellites and STM from t1 to t2
+    statesOverTime1 = integrate.odeint(odeintNonlinearDerivsWithLinearRelmo, initialstateForRelmo, timespan, (mu,))  # "extra arguments must be given in a tuple"
+
+    # transpose so that timepoints are columns and elements of the state are rows
+    statesOverTime1 = statesOverTime1.T
+
+    # target satellite position and velocity over time in RLP frame from integrating initial state with full nonlinear dynamics
+    primaryStatesOverTime = statesOverTime1[0:6]  # rows 1-6
+    x1, y1, z1, xdot1, ydot1, zdot1 = primaryStatesOverTime
+    
+    # offset between target and chaser satellite over time in RLP frame from integrating initial offset with linearized relmo dynamics
+    relativeStatesFromLinearRelmoOverTime = statesOverTime1[6:12] # rows 7-12
+    dx_LINEAR, dy_LINEAR, dz_LINEAR, dxdot_LINEAR, dydot_LINEAR, dzdot_LINEAR = relativeStatesFromLinearRelmoOverTime
+
+    return x1, y1, z1, xdot1, ydot1, zdot1, dx_LINEAR, dy_LINEAR, dz_LINEAR, dxdot_LINEAR, dydot_LINEAR, dzdot_LINEAR
+
 # <codecell>
 
 
 def PropagateSatellite(mu, timespan, initialstate1):
     
-    import scipy.integrate as integrate
-    
     mu = mu;
     
     # integrate first satellite
-    statesOverTime1 = integrate.odeint(nonlinearDerivativesFunction, initialstate1, timespan, (mu,))  # "extra arguments must be given in a tuple"
+    statesOverTime1 = integrate.odeint(odeintNonlinearDerivs, initialstate1, timespan, (mu,))  # "extra arguments must be given in a tuple"
 
     #timespan, statesOverTime1, EventTime, EventState, EventIndex = odelay(nonlinearDerivativesFunction, initialstate1, timespan, events=[stop_zEquals0])
 

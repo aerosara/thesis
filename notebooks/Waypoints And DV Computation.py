@@ -22,13 +22,18 @@ from IPython.display import clear_output, display, HTML
 from thesis_functions.initialconditions import InputDataDictionary, SetInitialConditions
 from thesis_functions.visualization import PlotGrid
 from thesis_functions.astro import FindOrbitCenter, ComputeLibrationPoints, stop_yEquals0, stop_zEquals0
-from thesis_functions.astro import linearDerivativesFunction, nonlinearDerivativesFunction, nonlinearDerivsWithLinearRelmoSTM, nonlinearDerivsWithLinearRelmo
+from thesis_functions.astro import ComputeNonlinearDerivs, ComputeRelmoDynamicsMatrix
+from thesis_functions.astro import odeintNonlinearDerivs, odeintNonlinearDerivsWithLinearRelmoSTM, odeintNonlinearDerivsWithLinearRelmo
+from thesis_functions.astro import ComputeRequiredVelocity, PropagateSatelliteAndChaser
 from thesis_functions.astro import PropagateSatellite, ComputeOffsets, ConvertOffsets, BuildRICFrame, BuildVNBFrame
 
 import scipy.integrate as integrate
 
-# <codecell>
+# <headingcell level=3>
 
+# Initial Conditions and Waypoints
+
+# <codecell>
 
 # First satellite 
 
@@ -37,107 +42,128 @@ ICs = InputDataDictionary()
 mu, timespan, initialstate1 = SetInitialConditions(ICs, ICset = 'Barbee', ICtestcase = 0, numPoints = 200)
 
 # In nondimensional units, r12 = 1, M = 1, timeConst = Period/(2pi) = 1, G = 1
-m1 = 5.97219e24;      # Earth
-m2 = 7.34767309e22;   # Moon
+m1 = 5.97219e24;      # Earth  # kg
+m2 = 7.34767309e22;   # Moon   # kg
 M = m1 + m2;
 G = 6.67384e-11/1e9;  # m3/(kg*s^2) >> converted to km3
-r12 = 384400.0;
-timeConst = r12**(1.5)/(G*M)**(0.5)
-print timeConst
-print 36000.0*24.0/timeConst
-timeConst = r12**(1.5)/mu**(0.5)
-print timeConst
-print 36000.0*24.0/timeConst
+r12 = 384400.0;       # km
 
-T = 2.0*np.pi*r12**(1.5)/(G*M)**(0.5)   # Period in seconds
+timeConst = r12**(1.5)/(G*M)**(0.5)  # units are seconds  # this is how you convert between dimensional time (seconds) and non-dimensional time
+print 'timeconst', timeConst
+#print 36000.0*24.0/timeConst
 
-print 'T', T
+#timeConst = r12**(1.5)/mu**(0.5)  
+#print 'timeconst', timeConst
+#print 36000.0*24.0/timeConst
+
+T = 2.0*np.pi*r12**(1.5)/(G*M)**(0.5)   # Period in seconds of Moon around Earth
+print 'Period of Moon around Earth in seconds', T
+
+
+# TODO: input waypoints in RIC or VNB frame
+# TODO: visualize results in RIC and VNB frames
+# TODO: get decent test cases in the Sun-Earth-Moon frame
 
 Waypoints = dict();
 Waypoints[0] = {'t': 0.0,
-                'r': [20.0/r12, 20.0/r12, 0.0]};
-Waypoints[1] = {'t': 36000.0*24.0/timeConst,
-                'r': [15.0/r12, -10.0/r12, 0.0]};  # in 10 hours, move 10 km
+                'r': [1000.0/r12, 0.0/r12, 0.0]};
+Waypoints[0] = {'t': 86400.0*2.88/timeConst,      # 2.88 days
+                'r': [275.0/r12, 0.0/r12, 0.0]};  # move 725 km
+Waypoints[0] = {'t': 86400.0*4.70/timeConst,      # 1.82 days
+                'r': [180.0/r12, 0.0/r12, 0.0]};  # move 95 km
+Waypoints[0] = {'t': 86400.0*5.31/timeConst,
+                'r': [100.0/r12, 0.0/r12, 0.0]};
+Waypoints[0] = {'t': 86400.0*5.67/timeConst,
+                'r': [15.0/r12, 0.0/r12, 0.0]};
+Waypoints[1] = {'t': 86400.0*6.03/timeConst,
+                'r': [5.0/r12, 0.0/r12, 0.0]};
+Waypoints[0] = {'t': 86400.0*6.64/timeConst,
+                'r': [0.030/r12, 0.0/r12, 0.0]};
+Waypoints[1] = {'t': 86400.0*7.0/timeConst,
+                'r': [0.0/r12, 0.0/r12, 0.0]};
+
 #Waypoints[0] = {'t': 0.0,
 #                'r': [0.002, 0.002, 0.0]};
 #Waypoints[1] = {'t': timespan[20],
 #                'r': [0.001, 0.001, 0.0]};
 
-print 'Waypoints', Waypoints
+for point in Waypoints:
+    print point, Waypoints[point]
 
-#timespanTest = np.array([Waypoints[0]['t'], Waypoints[1]['t']])
-timespanTest = np.linspace(Waypoints[0]['t'], Waypoints[1]['t'], 50)
+# Cheat sheet:
+# np.array([v1, v2])
+# np.linspace(v1, v2, numPoints)
+# np.concatenate(( a1, a2 ))
 
-print 'timespanTest', timespanTest
+print 'percentage of orbit covered:', (Waypoints[1]['t'] - Waypoints[0]['t'])/np.max(timespan)*100.0
     
 X1, X2, L1, L2, L3, L4, L5 = ComputeLibrationPoints(mu)
 
-I6 = np.eye(6);
+# <codecell>
 
-initialstateForSTM = np.concatenate((initialstate1, I6.reshape(1,36)[0]))
 
-# integrate first satellite and STM from t1 to t2
-statesOverTime1 = integrate.odeint(nonlinearDerivsWithLinearRelmoSTM, initialstateForSTM, timespanTest, (mu,))  # "extra arguments must be given in a tuple"
+## Compute required velocity to travel between waypoints
 
-print len(statesOverTime1), len(statesOverTime1[0])
-
-statesOverTime1 = statesOverTime1.T
-
-print len(statesOverTime1), len(statesOverTime1[0])
-
-# rows 7-42
-Phi = statesOverTime1[6:42]
-
-print len(Phi), len(Phi[0])
-
-# last column, converted into 6x6
-Phi = Phi[:,len(Phi[0])-1].reshape(6,6)
-print 'Phi', Phi
-
-# top left corner and top right corner
-Phi11 = Phi[:3, :3]
-Phi12 = Phi[:3, 3:6]
-
-print 'Phi11', Phi11
-print 'Phi12', Phi12
-
-Phi12I = np.linalg.inv(Phi12)
-
-print 'Phi12Inverse', Phi12I
-
-# Compute required velocity at point 0 to take us to point 1 within time (t1-t0)
-Waypoints[0]['v'] = np.dot(Phi12I, Waypoints[1]['r'] - np.dot(Phi11, Waypoints[0]['r']))
+# Compute required velocity at point 1 to take us to point 2 within time (t2-t1)
+# This is from Lian et al.
+# Method signature:
+# initialRelativeVelocity = ComputeRequiredVelocity(initialstate1, initialRelativePosition, initialTime, targetRelativePosition, targetTime)
+Waypoints[0]['v'] = ComputeRequiredVelocity(initialstate1, Waypoints[0]['r'], Waypoints[0]['t'], Waypoints[1]['r'], Waypoints[1]['t'], mu)
 
 print 'initial chaser relative velocity', Waypoints[0]['v']
 
-# integrate first and second satellites and STM from t1 to t2
-timespanTest = np.linspace(Waypoints[0]['t'], Waypoints[1]['t'], 50)
-initialstateForRelmo = np.concatenate((initialstate1, Waypoints[0]['r'], Waypoints[0]['v']))
+initialRelativeState = np.concatenate(( Waypoints[0]['r'], Waypoints[0]['v'] ))
 
-print 'initialstateForRelmo', initialstateForRelmo
+## Integrate first satellite with full nonlinear dynamics and second satellite with linear relmo dynamics
 
-statesOverTime1 = integrate.odeint(nonlinearDerivsWithLinearRelmo, initialstateForRelmo, timespanTest, (mu,))  # "extra arguments must be given in a tuple"
+# array of time points
+timespan = np.linspace(Waypoints[0]['t'], Waypoints[1]['t'], 500)
 
-print len(statesOverTime1), len(statesOverTime1[0])
+# target satellite position and velocity over time in RLP frame from integrating initial state with full nonlinear dynamics
+# offset between target and chaser satellite over time in RLP frame from integrating initial offset with linearized relmo dynamics
+x1, y1, z1, xdot1, ydot1, zdot1, dx_LINEAR, dy_LINEAR, dz_LINEAR, dxdot_LINEAR, dydot_LINEAR, dzdot_LINEAR = PropagateSatelliteAndChaser(mu, timespan, initialstate1, initialRelativeState)
 
-statesOverTime1 = statesOverTime1.T
+##  Integrate second satellite with full nonlinear dynamics
 
-print len(statesOverTime1), len(statesOverTime1[0])
+# initial state of second satellite in absolute RLP coordinates (not relative to first satellite)
+initialstate2 = np.array(initialstate1) - np.array(initialRelativeState)
 
-# target satellite position and velocity over time in RLP frame
-x1, y1, z1, xdot1, ydot1, zdot1 = statesOverTime1[0:6]  # rows 1-6
+# chaser satellite position and velocity over time in RLP frame from integrating initial state with full nonlinear dynamics
+x2, y2, z2, xdot2, ydot2, zdot2 = PropagateSatellite(mu, timespan, initialstate2);
 
-# offset between target and chaser satellite over time in RLP frame
-dx, dy, dz, dxdot, dydot, dzdot = statesOverTime1[6:12] # rows 7-12
+# Compute offsets in RLP frame based on nonlinear motion
+dx_NONLIN, dy_NONLIN, dz_NONLIN = ComputeOffsets(timespan, x1, y1, z1, xdot1, ydot1, zdot1, x2, y2, z2, xdot2, ydot2, zdot2);
 
-print 'dx', dx
-print 'dy', dy
+plot(dx_LINEAR*r12)
 
-plot(dx)
+print 'initialState1', initialstate1
+print 'relative initial state of 2nd wrt 1st', initialRelativeState
+print 'initialState2', initialstate2
+
+    
+
+# <headingcell level=3>
+
+# Integrate second satellite using full nonlinear dynamics
+
+# <codecell>
+
+
+# Compare linear relmo propagation to nonlinear dynamics
+print np.amax(np.absolute(dx_LINEAR)), np.amax(np.absolute(dy_LINEAR))
+plot((dx_NONLIN - dx_LINEAR)/np.amax(np.absolute(dx_LINEAR))*100.0, (dy_NONLIN - dy_LINEAR)/np.amax(np.absolute(dy_LINEAR))*100.0)
+
+# <headingcell level=3>
+
+# Visualizations
+
+# <codecell>
+
 
 # create empty dictionaries
 dataoffsetRLP = {};
-dataoffsetRLP['offsetRLP'] = {'x':dx, 'y':dy, 'z':dz}
+dataoffsetRLP['offsetRLPFromLinearRelmo'] = {'x':dx_LINEAR*r12, 'y':dy_LINEAR*r12, 'z':dz_LINEAR*r12}
+dataoffsetRLP['offsetRLPFromNonlinearDynamics'] = {'x':dx_NONLIN*r12, 'y':dy_NONLIN*r12, 'z':dz_NONLIN*r12}
 
 # Plot offset (relative motion) between satellites 1 and 2 in RLP
 points = {'zero': [0,0,0]}
@@ -149,6 +175,9 @@ PlotGrid('Offset between Satellites 1 and 2 in RLP Frame', 'X', 'Y', 'Z', dataof
 #points = {'L1': L1}
 #PlotGrid('Satellite 1 in RLP Frame', 'X', 'Y', 'Z', data, points, 'equal')
     
+
+# <codecell>
+
 
 # <codecell>
 
