@@ -302,8 +302,6 @@ def PropagateSatelliteAndChaser(mu, timespan, initialstate1, initialRelativeStat
     # initial state of first satellite in absolute RLP coordinates and second satellite wrt first
     initialstateForRelmo = np.concatenate(( initialstate1, initialRelativeState ))
 
-    print 'initialstateForRelmo', initialstateForRelmo
-
     # integrate first and second satellites and STM from t1 to t2
     statesOverTime1 = integrate.odeint(odeintNonlinearDerivsWithLinearRelmo, initialstateForRelmo, timespan, (mu,))  # "extra arguments must be given in a tuple"
 

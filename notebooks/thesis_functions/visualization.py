@@ -7,7 +7,7 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-def PlotGrid(title, xlabel, ylabel, zlabel, data, points, aspectmode):
+def CreatePlotGrid(title, xlabel, ylabel, zlabel, aspectmode):
     
     # plot
     fig, ((axXZ, axYZ), (axXY, ax3D)) = plt.subplots(2, 2)
@@ -42,6 +42,11 @@ def PlotGrid(title, xlabel, ylabel, zlabel, data, points, aspectmode):
     ax3D.yaxis.set_label_text(ylabel + ' axis')
     ax3D.zaxis.set_label_text(zlabel + ' axis')
     ax3D.set_aspect(aspectmode)
+    
+    return axXZ, axYZ, axXY, ax3D
+        
+        
+def SetPlotGridData(axXZ, axYZ, axXY, ax3D, data, points):
     
     # add points to plots
     for key in points:
