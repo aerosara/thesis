@@ -142,6 +142,15 @@ print e
 
 # <codecell>
 
+rVec = np.array([[ 0.02601457 , 0.0,          0.0        ]])
+print rVec
+mag = np.linalg.norm(rVec,2,None)
+mag = np.linalg.norm(rVec,2,1)[:,None]
+print mag
+print rVec/mag
+
+# <codecell>
+
 
 # <codecell>
 

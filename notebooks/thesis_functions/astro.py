@@ -386,20 +386,36 @@ def ConvertOffsets(dx, dy, dz, basis1, basis2, basis3):
 
     ## This approach is more intuitive:
     # compute dot products
-    #db1 = np.zeros(len(dx))
-    #db2 = np.zeros(len(dx))
-    #db3 = np.zeros(len(dx))
-    #for ii in range(0, len(basis1)):
-    #    db1[ii] = np.dot([dx[ii], dy[ii], dz[ii]], basis1[ii])
-    #    db2[ii] = np.dot([dx[ii], dy[ii], dz[ii]], basis2[ii])
-    #    db3[ii] = np.dot([dx[ii], dy[ii], dz[ii]], basis3[ii])
+    db1 = np.zeros(len(dx))
+    db2 = np.zeros(len(dx))
+    db3 = np.zeros(len(dx))
+    
+    for ii in range(0, len(basis1)):
+        db1[ii] = np.dot([dx[ii], dy[ii], dz[ii]], basis1[ii])
+        db2[ii] = np.dot([dx[ii], dy[ii], dz[ii]], basis2[ii])
+        db3[ii] = np.dot([dx[ii], dy[ii], dz[ii]], basis3[ii])
     
     ## This approach might be faster:
     # compute dot products
-    db1 = np.einsum('ij,ij->i', np.array([dx, dy, dz]).T, basis1)
-    db2 = np.einsum('ij,ij->i', np.array([dx, dy, dz]).T, basis2)
-    db3 = np.einsum('ij,ij->i', np.array([dx, dy, dz]).T, basis3)
+    #db1 = np.einsum('ij,ij->i', np.array([dx, dy, dz]).T, basis1)
+    #db2 = np.einsum('ij,ij->i', np.array([dx, dy, dz]).T, basis2)
+    #db3 = np.einsum('ij,ij->i', np.array([dx, dy, dz]).T, basis3)
     
+    return db1, db2, db3
+
+def ConvertOffset(dx, dy, dz, basis1, basis2, basis3):
+
+    # x,y,z are input offset vectors
+    # basis1,basis2,basis3 are basis vectors converting from the input frame to the output frame
+    # db1,db2,db3 are the output offset vectors
+    
+    # compute trajectory offset in new frame (e.g. RIC, VNB)
+
+    # compute dot products
+    db1 = np.dot([dx, dy, dz], basis1)
+    db2 = np.dot([dx, dy, dz], basis2)
+    db3 = np.dot([dx, dy, dz], basis3)
+
     return db1, db2, db3
 
 # <codecell>

@@ -7,7 +7,7 @@
 %pylab
 %pdb off
 
-# Can also do %pylab inline
+# Can do "%pylab" or "%pylab inline"
 
 # <headingcell level=3>
 
@@ -27,13 +27,13 @@ from thesis_functions.astro import FindOrbitCenter, ComputeLibrationPoints, stop
 from thesis_functions.astro import ComputeNonlinearDerivs, ComputeRelmoDynamicsMatrix
 from thesis_functions.astro import odeintNonlinearDerivs, odeintNonlinearDerivsWithLinearRelmoSTM, odeintNonlinearDerivsWithLinearRelmo
 from thesis_functions.astro import ComputeRequiredVelocity, PropagateSatelliteAndChaser
-from thesis_functions.astro import PropagateSatellite, ComputeOffsets, ConvertOffsets, BuildRICFrame, BuildVNBFrame
+from thesis_functions.astro import PropagateSatellite, ComputeOffsets, ConvertOffsets, ConvertOffset, BuildRICFrame, BuildVNBFrame
 
 import scipy.integrate as integrate
 
 # <headingcell level=3>
 
-# Initial Conditions and Waypoints
+# Initial Conditions
 
 # <codecell>
 
@@ -42,6 +42,26 @@ import scipy.integrate as integrate
 ICs = InputDataDictionary()
 
 mu, timespan, initialstate1 = SetInitialConditions(ICs, ICset = 'Barbee', ICtestcase = 0, numPoints = 200)
+
+X1, X2, L1, L2, L3, L4, L5 = ComputeLibrationPoints(mu)
+center = L1
+
+# Build instantaneous RIC and VNB frames
+#x1, y1, z1, xdot1, ydot1, zdot1 = initialstate1
+#x1 = np.array([initialstate1[0]])
+#y1 = np.array([initialstate1[1]])
+#z1 = np.array([initialstate1[2]])
+#xdot1 = np.array([initialstate1[3]])
+#ydot1 = np.array([initialstate1[4]])
+#zdot1 = np.array([initialstate1[5]])
+#rVec, iVec, cVec = BuildRICFrame(x1, y1, z1, xdot1, ydot1, zdot1, center)
+#vVec, nVec, bVec = BuildVNBFrame(x1, y1, z1, xdot1, ydot1, zdot1, center)
+
+# <headingcell level=3>
+
+# Define Waypoints
+
+# <codecell>
 
 # In nondimensional units, r12 = 1, M = 1, timeConst = Period/(2pi) = 1, G = 1
 m1 = 5.97219e24;      # Earth  # kg
@@ -58,7 +78,6 @@ print 'Period of Moon around Earth in seconds', T
 
 
 # TODO: input waypoints in RIC or VNB frame
-# TODO: visualize results in RIC and VNB frames
 # TODO: get decent test cases in the Sun-Earth-Moon frame
 
 Waypoints = dict();
@@ -81,46 +100,56 @@ Waypoints[4] = {'t': 86400.0*7.0/timeConst,
 Waypoints[5] = {'t': 86400.0*7.26/timeConst,
                 'r': [0.0, 0.0/r12, 0.0]};
 
-#Waypoints[0] = {'t': 0.0,
-#                'r': [0.002, 0.002, 0.0]};
-#Waypoints[1] = {'t': timespan[20],
-#                'r': [0.001, 0.001, 0.0]};
 
 S = [0, 1, 2, 3, 4]
 for currentPoint in S:
     nextPoint = currentPoint + 1;    
-    print currentPoint, Waypoints[currentPoint],'percentage of orbit covered getting to next point:', (Waypoints[nextPoint]['t'] - Waypoints[currentPoint]['t'])/np.max(timespan)*100.0
+    print currentPoint, Waypoints[currentPoint], 'percentage of orbit covered getting to next point:', (Waypoints[nextPoint]['t'] - Waypoints[currentPoint]['t'])/np.max(timespan)*100.0
 
+    
 # Cheat sheet:
 # np.array([v1, v2])
 # np.linspace(v1, v2, numPoints)
 # np.concatenate(( a1, a2 ))
 
-X1, X2, L1, L2, L3, L4, L5 = ComputeLibrationPoints(mu)
+# <headingcell level=3>
+
+# Travel between waypoints
 
 # <codecell>
 
 
 # Create plots
-fig1 = plt.figure()
-fig2 = plt.figure()
-ax1 = fig1.add_subplot(111)
-ax2 = fig2.add_subplot(111)
-ax1.set_title('dx_LINEAR vs timespan')
-ax2.set_title('Difference between LINEAR and NONLINEAR: dy vs dx')
-axXZ, axYZ, axXY, ax3D = CreatePlotGrid('Offset between Satellites 1 and 2 in RLP Frame', 'X', 'Y', 'Z', 'auto')
+#fig1 = plt.figure()
+#fig2 = plt.figure()
+#ax1 = fig1.add_subplot(111)
+#ax2 = fig2.add_subplot(111)
+#ax1.set_title('dx_LINEAR vs timespan')
+#ax2.set_title('Difference between LINEAR and NONLINEAR: dy vs dx')
+
+# Plots of offset in RLP frame
+axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP = CreatePlotGrid('Offset between Satellites 1 and 2 in RLP Frame', 'X', 'Y', 'Z', 'auto')
+axXZ_RIC, axYZ_RIC, axXY_RIC, ax3D_RIC = CreatePlotGrid('Offset between Satellites 1 and 2 in RIC Frame', 'R', 'I', 'C', 'auto')
+axXZ_VNB, axYZ_VNB, axXY_VNB, ax3D_VNB = CreatePlotGrid('Offset between Satellites 1 and 2 in VNB Frame', 'V', 'N', 'B', 'auto')
+
+# add zero point to plots
 points = {'zero': [0,0,0]}
-dataoffsetRLP = {}
-SetPlotGridData(axXZ, axYZ, axXY, ax3D, dataoffsetRLP, points)
+data = {}
+SetPlotGridData(axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP, data, points)
+SetPlotGridData(axXZ_RIC, axYZ_RIC, axXY_RIC, ax3D_RIC, data, points)
+SetPlotGridData(axXZ_VNB, axYZ_VNB, axXY_VNB, ax3D_VNB, data, points)
+
+# add all waypoints to RLP plot
 for w in Waypoints:
     points = {w: np.array(Waypoints[w]['r'])*r12}
-    SetPlotGridData(axXZ, axYZ, axXY, ax3D, dataoffsetRLP, points)
+    SetPlotGridData(axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP, data, points)
+
 points = {}
-    
+
 # Travel between waypoints
 for currentPoint in S:
 
-    nextPoint = currentPoint+1;
+    nextPoint = currentPoint + 1;
     
     ## Compute required velocity to travel between waypoints
 
@@ -154,42 +183,96 @@ for currentPoint in S:
     # Compute offsets in RLP frame based on nonlinear motion
     dx_NONLIN, dy_NONLIN, dz_NONLIN = ComputeOffsets(timespan, x1, y1, z1, xdot1, ydot1, zdot1, x2, y2, z2, xdot2, ydot2, zdot2);
     
-
-    # Record updated primary satellite initial state and updated chaser satellite waypoint for next iteration
+    ## Offsets in RIC and VNB
     
+    # Build RIC and VNB frames
+    rVec, iVec, cVec = BuildRICFrame(x1, y1, z1, xdot1, ydot1, zdot1, center)
+    vVec, nVec, bVec = BuildVNBFrame(x1, y1, z1, xdot1, ydot1, zdot1, center)
+
+    # Compute offsets in RIC frame
+    dr_LINEAR, di_LINEAR, dc_LINEAR = ConvertOffsets(dx_LINEAR, dy_LINEAR, dz_LINEAR, rVec, iVec, cVec);
+    dr_NONLIN, di_NONLIN, dc_NONLIN = ConvertOffsets(dx_NONLIN, dy_NONLIN, dz_NONLIN, rVec, iVec, cVec);
+
+    # Compute offsets in VNB frame
+    dv_LINEAR, dn_LINEAR, db_LINEAR = ConvertOffsets(dx_LINEAR, dy_LINEAR, dz_LINEAR, vVec, nVec, bVec);
+    dv_NONLIN, dn_NONLIN, db_NONLIN = ConvertOffsets(dx_NONLIN, dy_NONLIN, dz_NONLIN, vVec, nVec, bVec);   
+    
+    
+    ## Compute waypoint locations in RIC and VNB
+
+    # current point
+    dxW = Waypoints[currentPoint]['r'][0]
+    dyW = Waypoints[currentPoint]['r'][1]
+    dzW = Waypoints[currentPoint]['r'][2]
+    
+    # Convert waypoint to RIC frame
+    drW, diW, dcW = ConvertOffset(dxW, dyW, dzW, rVec[0], iVec[0], cVec[0]);
+
+    # Convert waypoint to VNB frame
+    dvW, dnW, dbW = ConvertOffset(dxW, dyW, dzW, vVec[0], nVec[0], bVec[0]);
+    
+    Waypoints[currentPoint]['r_RIC'] = [drW, diW, dcW]
+    Waypoints[currentPoint]['r_VNB'] = [dvW, dnW, dbW]
+
+    # next point
+    dxW = Waypoints[nextPoint]['r'][0]
+    dyW = Waypoints[nextPoint]['r'][1]
+    dzW = Waypoints[nextPoint]['r'][2]
+    
+    # Convert waypoint to RIC frame
+    drW, diW, dcW = ConvertOffset(dxW, dyW, dzW, rVec[-1], iVec[-1], cVec[-1]);
+
+    # Convert waypoint to VNB frame
+    dvW, dnW, dbW = ConvertOffset(dxW, dyW, dzW, vVec[-1], nVec[-1], bVec[-1]);
+    
+    Waypoints[nextPoint]['r_RIC'] = [drW, diW, dcW]
+    Waypoints[nextPoint]['r_VNB'] = [dvW, dnW, dbW]
+    
+    
+    ## Output that gets fed into next iteration
+    
+    # Record updated primary satellite initial state and updated chaser satellite waypoint for next iteration
     initialstate1 = np.array([ x1[-1], y1[-1], z1[-1], xdot1[-1], ydot1[-1], zdot1[-1] ])
     Waypoints[nextPoint]['r'] = np.array([ dx_NONLIN[-1], dy_NONLIN[-1], dz_NONLIN[-1] ])
     
     ## VISUALIZATIONS
 
-    ax1.plot(timespan, dx_LINEAR*r12)
+    #ax1.plot(timespan, dx_LINEAR*r12)
 
-    #print 'initialState1', initialstate1
-    #print 'relative initial state of 2nd wrt 1st', initialRelativeState
-    #print 'initialState2', initialstate2
-    
     # Compare linear relmo propagation to nonlinear dynamics
-    #print np.amax(np.absolute(dx_LINEAR)), np.amax(np.absolute(dy_LINEAR))
-
-    ax2.plot((dx_NONLIN - dx_LINEAR)/np.amax(np.absolute(dx_LINEAR))*100.0, (dy_NONLIN - dy_LINEAR)/np.amax(np.absolute(dy_LINEAR))*100.0)
+    #ax2.plot((dx_NONLIN - dx_LINEAR)/np.amax(np.absolute(dx_LINEAR))*100.0, (dy_NONLIN - dy_LINEAR)/np.amax(np.absolute(dy_LINEAR))*100.0)
     
     # create empty dictionaries
     dataoffsetRLP = {};
-    dataoffsetRLP['offsetRLPFromLinearRelmo'] = {'x':dx_LINEAR*r12, 'y':dy_LINEAR*r12, 'z':dz_LINEAR*r12}
-    dataoffsetRLP['offsetRLPFromNonlinearDynamics'] = {'x':dx_NONLIN*r12, 'y':dy_NONLIN*r12, 'z':dz_NONLIN*r12}
+    dataoffsetRLP['linear_' + str(currentPoint) + '_' + str(nextPoint)] = {'x':dx_LINEAR*r12, 'y':dy_LINEAR*r12, 'z':dz_LINEAR*r12}
+    dataoffsetRLP['nonlin_' + str(currentPoint) + '_' + str(nextPoint)] = {'x':dx_NONLIN*r12, 'y':dy_NONLIN*r12, 'z':dz_NONLIN*r12}
     
+    dataoffsetRIC = {};
+    dataoffsetRIC['linear_' + str(currentPoint) + '_' + str(nextPoint)] = {'x':dr_LINEAR*r12, 'y':di_LINEAR*r12, 'z':dc_LINEAR*r12}
+    dataoffsetRIC['nonlin_' + str(currentPoint) + '_' + str(nextPoint)] = {'x':dr_NONLIN*r12, 'y':di_NONLIN*r12, 'z':dc_NONLIN*r12}
+    
+    dataoffsetVNB = {};
+    dataoffsetVNB['linear_' + str(currentPoint) + '_' + str(nextPoint)] = {'x':dv_LINEAR*r12, 'y':dn_LINEAR*r12, 'z':db_LINEAR*r12}
+    dataoffsetVNB['nonlin_' + str(currentPoint) + '_' + str(nextPoint)] = {'x':dv_NONLIN*r12, 'y':dn_NONLIN*r12, 'z':db_NONLIN*r12}
+
+    # Plot offset (relative motion) between satellites 1 and 2 in RLP, RIC, and VNB frames
     points = {nextPoint: np.array(Waypoints[nextPoint]['r'])*r12}
-
-    # Plot offset (relative motion) between satellites 1 and 2 in RLP
-    SetPlotGridData(axXZ, axYZ, axXY, ax3D, dataoffsetRLP, points)
-
-
-    # Plot satellite 1 in RLP frame
-    #data = {'sat1': {'x':x1, 'y':y1, 'z':z1}}
-    #points = {'L1': L1}
-    #PlotGrid('Satellite 1 in RLP Frame', 'X', 'Y', 'Z', data, points, 'equal')
+    SetPlotGridData(axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP, dataoffsetRLP, points)
+    
+    points = {currentPoint: np.array(Waypoints[currentPoint]['r_RIC'])*r12,
+              nextPoint: np.array(Waypoints[nextPoint]['r_RIC'])*r12}
+    SetPlotGridData(axXZ_RIC, axYZ_RIC, axXY_RIC, ax3D_RIC, dataoffsetRIC, points)
+    
+    points = {currentPoint: np.array(Waypoints[currentPoint]['r_VNB'])*r12,
+              nextPoint: np.array(Waypoints[nextPoint]['r_VNB'])*r12}
+    SetPlotGridData(axXZ_VNB, axYZ_VNB, axXY_VNB, ax3D_VNB, dataoffsetVNB, points)
+    
+    points = {}
 
     
+
+# <codecell>
+
 
 # <codecell>
 
