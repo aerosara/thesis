@@ -45,22 +45,32 @@ def CreatePlotGrid(title, xlabel, ylabel, zlabel, aspectmode):
     
     return axXZ, axYZ, axXY, ax3D
         
-        
+     
+# Allowed colors:
+# b: blue
+# g: green
+# r: red
+# c: cyan
+# m: magenta
+# y: yellow
+# k: black
+# w: white
+    
 def SetPlotGridData(axXZ, axYZ, axXY, ax3D, data, points):
     
     # add points to plots
     for key in points:
-        axXZ.plot(points[key][0], points[key][2], 'o', markersize=5, label=key)
-        axYZ.plot(points[key][1], points[key][2], 'o', markersize=5, label=key)
-        axXY.plot(points[key][0], points[key][1], 'o', markersize=5, label=key)
-        ax3D.plot([points[key][0]], [points[key][1]], [points[key][2]], 'o', markersize=5, label=key)
+        axXZ.plot(points[key]['xyz'][0], points[key]['xyz'][2], 'o', markersize=5, label=key, color=points[key]['color'])
+        axYZ.plot(points[key]['xyz'][1], points[key]['xyz'][2], 'o', markersize=5, label=key, color=points[key]['color'])
+        axXY.plot(points[key]['xyz'][0], points[key]['xyz'][1], 'o', markersize=5, label=key, color=points[key]['color'])
+        ax3D.plot([points[key]['xyz'][0]], [points[key]['xyz'][1]], [points[key]['xyz'][2]], 'o', markersize=5, label=key, color=points[key]['color'])
         
     # add data to plots
     for key in data:
-        axXZ.plot(data[key]['x'], data[key]['z'], '-', label=key)
-        axYZ.plot(data[key]['y'], data[key]['z'], '-', label=key)
-        axXY.plot(data[key]['x'], data[key]['y'], '-', label=key)
-        ax3D.plot(data[key]['x'], data[key]['y'], data[key]['z'], '-', label=key)
+        axXZ.plot(data[key]['x'], data[key]['z'], '-', label=key, color=data[key]['color'])
+        axYZ.plot(data[key]['y'], data[key]['z'], '-', label=key, color=data[key]['color'])
+        axXY.plot(data[key]['x'], data[key]['y'], '-', label=key, color=data[key]['color'])
+        ax3D.plot(data[key]['x'], data[key]['y'], data[key]['z'], '-', label=key, color=data[key]['color'])
         
     ax3D.legend(loc='center left', bbox_to_anchor=(1.2, 0.5))
         

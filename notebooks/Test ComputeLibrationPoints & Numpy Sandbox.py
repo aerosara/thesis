@@ -151,6 +151,24 @@ print rVec/mag
 
 # <codecell>
 
+Waypoints = {}
+nextPoint = 0
+Waypoints['r_RLP_achieved'] = np.array([ 5.8, 3.4, 5.3 ])
+
+dxW = 0.0
+dyW = 0.0
+dzW = 0.0
+    
+# compute updated waypoint location in RIC and VNB
+#dxW = Waypoints['r_RLP_achieved'][0]
+#dyW = Waypoints['r_RLP_achieved'][1]
+#dzW = Waypoints['r_RLP_achieved'][2]
+#print dxW, dyW, dzW
+    
+# compute updated waypoint location in RIC and VNB
+[dxW, dyW, dzW] = Waypoints['r_RLP_achieved']
+
+print dxW, dyW, dzW
 
 # <codecell>
 
