@@ -44,6 +44,7 @@ ICs = InputDataDictionary()
 mu, timespan, initialstate1 = SetInitialConditions(ICs, ICset = 'Barbee', ICtestcase = 0, numPoints = 200)
 
 X1, X2, L1, L2, L3, L4, L5 = ComputeLibrationPoints(mu)
+
 center = L1
 
 # Build instantaneous RIC and VNB frames
@@ -56,6 +57,12 @@ center = L1
 #zdot1 = np.array([initialstate1[5]])
 #rVec, iVec, cVec = BuildRICFrame(x1, y1, z1, xdot1, ydot1, zdot1, center)
 #vVec, nVec, bVec = BuildVNBFrame(x1, y1, z1, xdot1, ydot1, zdot1, center)
+
+# Cheat sheet:
+# np.array([v1, v2])
+# np.array([rVec[0], iVec[0], cVec[0]])  # makes a 3x3 matrix
+# np.linspace(v1, v2, numPoints)
+# np.concatenate(( a1, a2 ))
 
 # <headingcell level=3>
 
@@ -81,36 +88,88 @@ print 'Period of Moon around Earth in seconds', T
 # TODO: get decent test cases in the Sun-Earth-Moon frame
 
 Waypoints = dict();
-Waypoints[0] = {'t': 0.0,
-                'r': [0.0, 1000.0/r12, 0.0]};
-Waypoints[0] = {'t': 86400.0*2.88/timeConst,      # 2.88 days
-                'r': [0.0, 275.0/r12, 0.0]};  # move 725 km  # 400% errors
-Waypoints[0] = {'t': 86400.0*4.70/timeConst,      # 1.82 days
-                'r': [0.0, 180.0/r12, 0.0]};  # move 95 km  # 400% errors
-Waypoints[0] = {'t': 86400.0*5.31/timeConst,
-                'r': [0.0, 100.0/r12, 0.0]};  # 40% errors
-Waypoints[1] = {'t': 86400.0*5.67/timeConst,
-                'r': [0.0, 15.0/r12, 0.0]};  # 8% errors
-Waypoints[2] = {'t': 86400.0*6.03/timeConst,
-                'r': [0.0, 5.0/r12, 0.0]};  # 10% errors
-Waypoints[3] = {'t': 86400.0*6.64/timeConst,
-                'r': [0.0, 1.0/r12, 0.0]};  # 
-Waypoints[4] = {'t': 86400.0*7.0/timeConst,
-                'r': [0.0, 0.030/r12, 0.0]};  # 
-Waypoints[5] = {'t': 86400.0*7.26/timeConst,
-                'r': [0.0, 0.0/r12, 0.0]};
+Waypoints[0] = {'t'    : 0.0,
+                'r_RIC': [0.0, 1000.0/r12, 0.0]};
+Waypoints[0] = {'t'    : 86400.0*2.88/timeConst,      # 2.88 days
+                'r_RIC': [0.0, 275.0/r12, 0.0]};  # move 725 km  # 400% errors
+Waypoints[0] = {'t'    : 86400.0*4.70/timeConst,      # 1.82 days
+                'r_RIC': [0.0, 180.0/r12, 0.0]};  # move 95 km  # 400% errors
+Waypoints[0] = {'t'    : 86400.0*5.31/timeConst,
+                'r_RIC': [0.0, 100.0/r12, 0.0]};  # 40% errors
+Waypoints[1] = {'t'    : 86400.0*5.67/timeConst,
+                'r_RIC': [0.0, 15.0/r12, 0.0]};  # 8% errors
+Waypoints[2] = {'t'    : 86400.0*6.03/timeConst,
+                'r_RIC': [0.0, 5.0/r12, 0.0]};  # 10% errors
+Waypoints[3] = {'t'    : 86400.0*6.64/timeConst,
+                'r_RIC': [0.0, 1.0/r12, 0.0]};  # 
+Waypoints[4] = {'t'    : 86400.0*7.0/timeConst,
+                'r_RIC': [0.0, 0.030/r12, 0.0]};  # 
+Waypoints[5] = {'t'    : 86400.0*7.26/timeConst,
+                'r_RIC': [0.0, 0.0/r12, 0.0]};
 
+
+# Build RIC-to-RLP frame (inverse of RLP-to-RIC frame)  (TODO)
+# TODO: Have to do this once we've propagated to each waypoint time
+
+initialState1ForSegment = initialstate1
 
 S = [0, 1, 2, 3, 4]
+#S = [0]
 for currentPoint in S:
     nextPoint = currentPoint + 1;    
     print currentPoint, Waypoints[currentPoint], 'percentage of orbit covered getting to next point:', (Waypoints[nextPoint]['t'] - Waypoints[currentPoint]['t'])/np.max(timespan)*100.0
-
     
-# Cheat sheet:
-# np.array([v1, v2])
-# np.linspace(v1, v2, numPoints)
-# np.concatenate(( a1, a2 ))
+    # array of time points
+    timespan = np.linspace(Waypoints[currentPoint]['t'], Waypoints[nextPoint]['t'], 500)
+
+    # chaser satellite position and velocity over time in RLP frame from integrating initial state with full nonlinear dynamics
+    x1, y1, z1, xdot1, ydot1, zdot1 = PropagateSatellite(mu, timespan, initialState1ForSegment);
+
+    # Build RIC and VNB frames
+    rVec, iVec, cVec = BuildRICFrame(x1, y1, z1, xdot1, ydot1, zdot1, center)
+    
+    if (currentPoint == S[0]):
+        
+        # this matrix converts from RLP coordinates to the RIC frame at the timestamp of the current (first) point
+        RLPtoRIC = np.array([rVec[0], iVec[0], cVec[0]])
+
+        # this matrix converts from RIC to RLP at the timestamp of the current (first) point
+        RICtoRLP = np.linalg.inv(RLPtoRIC)
+        RLPxVec = RICtoRLP[:,0]
+        RLPyVec = RICtoRLP[:,1]
+        RLPzVec = RICtoRLP[:,2]
+        
+        # current point
+        drW = Waypoints[currentPoint]['r_RIC'][0]
+        diW = Waypoints[currentPoint]['r_RIC'][1]
+        dcW = Waypoints[currentPoint]['r_RIC'][2]
+
+        # Convert current waypoint from RIC frame to RLP frame at the timestamp of the current (first) point
+        dxW, dyW, dzW = ConvertOffset(drW, diW, dcW, RLPxVec, RLPyVec, RLPzVec);
+        Waypoints[currentPoint]['r_RLP'] = [dxW, dyW, dzW]
+
+
+    # this matrix converts from RLP coordinates to the RIC frame at the timestamp of the next point
+    RLPtoRIC = np.array([rVec[-1], iVec[-1], cVec[-1]])
+    
+    # this matrix converts from RIC to RLP at the timestamp of the next point
+    RICtoRLP = np.linalg.inv(RLPtoRIC)
+    RLPxVec = RICtoRLP[:,0]
+    RLPyVec = RICtoRLP[:,1]
+    RLPzVec = RICtoRLP[:,2]
+        
+    # next point
+    drW = Waypoints[nextPoint]['r_RIC'][0]
+    diW = Waypoints[nextPoint]['r_RIC'][1]
+    dcW = Waypoints[nextPoint]['r_RIC'][2]
+
+    # Convert next waypoint from RIC frame to RLP frame at the timestamp of the next point
+    dxW, dyW, dzW = ConvertOffset(drW, diW, dcW, RLPxVec, RLPyVec, RLPzVec);
+    Waypoints[nextPoint]['r_RLP'] = [dxW, dyW, dzW]
+    
+    # Record updated primary satellite initial state for next segment
+    initialState1ForSegment = np.array([ x1[-1], y1[-1], z1[-1], xdot1[-1], ydot1[-1], zdot1[-1] ])
+    
 
 # <headingcell level=3>
 
@@ -141,10 +200,12 @@ SetPlotGridData(axXZ_VNB, axYZ_VNB, axXY_VNB, ax3D_VNB, data, points)
 
 # add all waypoints to RLP plot
 for w in Waypoints:
-    points = {w: np.array(Waypoints[w]['r'])*r12}
+    points = {w: np.array(Waypoints[w]['r_RLP'])*r12}
     SetPlotGridData(axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP, data, points)
 
 points = {}
+
+initialState1ForSegment = initialstate1
 
 # Travel between waypoints
 for currentPoint in S:
@@ -156,12 +217,12 @@ for currentPoint in S:
     # Compute required velocity at point 1 to take us to point 2 within time (t2-t1)
     # This is from Lian et al.
     # Method signature:
-    # initialRelativeVelocity = ComputeRequiredVelocity(initialstate1, initialRelativePosition, initialTime, targetRelativePosition, targetTime)
-    Waypoints[currentPoint]['v'] = ComputeRequiredVelocity(initialstate1, Waypoints[currentPoint]['r'], Waypoints[currentPoint]['t'], Waypoints[nextPoint]['r'], Waypoints[nextPoint]['t'], mu)
+    # initialRelativeVelocity = ComputeRequiredVelocity(initialState1ForSegment, initialRelativePosition, initialTime, targetRelativePosition, targetTime)
+    Waypoints[currentPoint]['v_RLP'] = ComputeRequiredVelocity(initialState1ForSegment, Waypoints[currentPoint]['r_RLP'], Waypoints[currentPoint]['t'], Waypoints[nextPoint]['r_RLP'], Waypoints[nextPoint]['t'], mu)
 
     #print 'initial chaser relative velocity', Waypoints[currentPoint]['v']
 
-    initialRelativeState = np.concatenate(( Waypoints[currentPoint]['r'], Waypoints[currentPoint]['v'] ))
+    initialRelativeState = np.concatenate(( Waypoints[currentPoint]['r_RLP'], Waypoints[currentPoint]['v_RLP'] ))
 
     ## Integrate first satellite with full nonlinear dynamics and second satellite with linear relmo dynamics
 
@@ -170,12 +231,12 @@ for currentPoint in S:
 
     # target satellite position and velocity over time in RLP frame from integrating initial state with full nonlinear dynamics
     # offset between target and chaser satellite over time in RLP frame from integrating initial offset with linearized relmo dynamics
-    x1, y1, z1, xdot1, ydot1, zdot1, dx_LINEAR, dy_LINEAR, dz_LINEAR, dxdot_LINEAR, dydot_LINEAR, dzdot_LINEAR = PropagateSatelliteAndChaser(mu, timespan, initialstate1, initialRelativeState)
+    x1, y1, z1, xdot1, ydot1, zdot1, dx_LINEAR, dy_LINEAR, dz_LINEAR, dxdot_LINEAR, dydot_LINEAR, dzdot_LINEAR = PropagateSatelliteAndChaser(mu, timespan, initialState1ForSegment, initialRelativeState)
 
     ##  Integrate second satellite with full nonlinear dynamics
 
     # initial state of second satellite in absolute RLP coordinates (not relative to first satellite)
-    initialstate2 = np.array(initialstate1) - np.array(initialRelativeState)
+    initialstate2 = np.array(initialState1ForSegment) - np.array(initialRelativeState)
 
     # chaser satellite position and velocity over time in RLP frame from integrating initial state with full nonlinear dynamics
     x2, y2, z2, xdot2, ydot2, zdot2 = PropagateSatellite(mu, timespan, initialstate2);
@@ -201,9 +262,9 @@ for currentPoint in S:
     ## Compute waypoint locations in RIC and VNB
 
     # current point
-    dxW = Waypoints[currentPoint]['r'][0]
-    dyW = Waypoints[currentPoint]['r'][1]
-    dzW = Waypoints[currentPoint]['r'][2]
+    dxW = Waypoints[currentPoint]['r_RLP'][0]
+    dyW = Waypoints[currentPoint]['r_RLP'][1]
+    dzW = Waypoints[currentPoint]['r_RLP'][2]
     
     # Convert waypoint to RIC frame
     drW, diW, dcW = ConvertOffset(dxW, dyW, dzW, rVec[0], iVec[0], cVec[0]);
@@ -215,9 +276,9 @@ for currentPoint in S:
     Waypoints[currentPoint]['r_VNB'] = [dvW, dnW, dbW]
 
     # next point
-    dxW = Waypoints[nextPoint]['r'][0]
-    dyW = Waypoints[nextPoint]['r'][1]
-    dzW = Waypoints[nextPoint]['r'][2]
+    dxW = Waypoints[nextPoint]['r_RLP'][0]
+    dyW = Waypoints[nextPoint]['r_RLP'][1]
+    dzW = Waypoints[nextPoint]['r_RLP'][2]
     
     # Convert waypoint to RIC frame
     drW, diW, dcW = ConvertOffset(dxW, dyW, dzW, rVec[-1], iVec[-1], cVec[-1]);
@@ -229,11 +290,11 @@ for currentPoint in S:
     Waypoints[nextPoint]['r_VNB'] = [dvW, dnW, dbW]
     
     
-    ## Output that gets fed into next iteration
+    ## Output that gets fed into next iteration/segment
     
-    # Record updated primary satellite initial state and updated chaser satellite waypoint for next iteration
-    initialstate1 = np.array([ x1[-1], y1[-1], z1[-1], xdot1[-1], ydot1[-1], zdot1[-1] ])
-    Waypoints[nextPoint]['r'] = np.array([ dx_NONLIN[-1], dy_NONLIN[-1], dz_NONLIN[-1] ])
+    # Record updated primary satellite initial state and updated chaser satellite waypoint for next segment
+    initialState1ForSegment = np.array([ x1[-1], y1[-1], z1[-1], xdot1[-1], ydot1[-1], zdot1[-1] ])
+    Waypoints[nextPoint]['r_RLP'] = np.array([ dx_NONLIN[-1], dy_NONLIN[-1], dz_NONLIN[-1] ])
     
     ## VISUALIZATIONS
 
@@ -256,7 +317,7 @@ for currentPoint in S:
     dataoffsetVNB['nonlin_' + str(currentPoint) + '_' + str(nextPoint)] = {'x':dv_NONLIN*r12, 'y':dn_NONLIN*r12, 'z':db_NONLIN*r12}
 
     # Plot offset (relative motion) between satellites 1 and 2 in RLP, RIC, and VNB frames
-    points = {nextPoint: np.array(Waypoints[nextPoint]['r'])*r12}
+    points = {nextPoint: np.array(Waypoints[nextPoint]['r_RLP'])*r12}
     SetPlotGridData(axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP, dataoffsetRLP, points)
     
     points = {currentPoint: np.array(Waypoints[currentPoint]['r_RIC'])*r12,

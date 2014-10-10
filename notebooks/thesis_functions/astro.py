@@ -265,7 +265,7 @@ def ComputeRequiredVelocity(initialstate1, initialRelativePosition, initialTime,
     initialstateForSTM = np.concatenate((initialstate1, I6.reshape(1,36)[0]))
 
     # array of time points to integrate over to compute the STM
-    timespan = np.linspace(initialTime, targetTime, 2)
+    timespan = np.linspace(initialTime, targetTime, 500)
 
     # integrate first satellite and STM from t1 to t2
     statesOverTime1 = integrate.odeint(odeintNonlinearDerivsWithLinearRelmoSTM, initialstateForSTM, timespan, (mu,))  # "extra arguments must be given in a tuple"
@@ -277,7 +277,7 @@ def ComputeRequiredVelocity(initialstate1, initialRelativePosition, initialTime,
     Phi = statesOverTime1[6:42]
 
     # select the last column (last time point), and convert it into a 6x6 matrix
-    Phi = Phi[:,len(Phi[0])-1].reshape(6,6)
+    Phi = Phi[:,-1].reshape(6,6)
 
     # pull out top left corner and top right corner
     # these are the state transition matrices of the (position at time 2) with 
