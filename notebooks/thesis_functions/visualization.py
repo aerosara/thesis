@@ -72,6 +72,6 @@ def SetPlotGridData(axXZ, axYZ, axXY, ax3D, data, points):
         axXY.plot(data[key]['x'], data[key]['y'], '-', label=key, color=data[key]['color'])
         ax3D.plot(data[key]['x'], data[key]['y'], data[key]['z'], '-', label=key, color=data[key]['color'])
         
-    ax3D.legend(loc='center left', bbox_to_anchor=(1.2, 0.5))
+    #ax3D.legend(loc='center left', bbox_to_anchor=(1.2, 0.5))
         
 

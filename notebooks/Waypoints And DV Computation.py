@@ -17,15 +17,16 @@
 
 # <headingcell level=3>
 
-# Import libraries and define derivative function(s) for ODE's
+# Import libraries
 
 # <codecell>
 
 
 import numpy as np
-from pycse import odelay
-from IPython.html.widgets import interact, interactive
-from IPython.display import clear_output, display, HTML
+import scipy.integrate as integrate
+#from pycse import odelay
+#from IPython.html.widgets import interact, interactive
+#from IPython.display import clear_output, display, HTML
 
 from thesis_functions.initialconditions import InputDataDictionary, SetInitialConditions
 from thesis_functions.visualization import CreatePlotGrid, SetPlotGridData
@@ -34,8 +35,6 @@ from thesis_functions.astro import ComputeNonlinearDerivs, ComputeRelmoDynamicsM
 from thesis_functions.astro import odeintNonlinearDerivs, odeintNonlinearDerivsWithLinearRelmoSTM, odeintNonlinearDerivsWithLinearRelmo
 from thesis_functions.astro import ComputeRequiredVelocity, PropagateSatelliteAndChaser
 from thesis_functions.astro import PropagateSatellite, ComputeOffsets, ConvertOffsets, ConvertOffset, BuildRICFrame, BuildVNBFrame
-
-import scipy.integrate as integrate
 
 # <headingcell level=3>
 
@@ -68,6 +67,9 @@ center = L1
 #rVec, iVec, cVec = BuildRICFrame(x1, y1, z1, xdot1, ydot1, zdot1, center)
 #vVec, nVec, bVec = BuildVNBFrame(x1, y1, z1, xdot1, ydot1, zdot1, center)
 
+# TODO: start target satellite from different points along its orbit.  
+#       Look at how delta-V changes; also maybe linear relmo will be a better approximation along other parts of the orbit.
+
 # <headingcell level=3>
 
 # Define Waypoints
@@ -90,7 +92,7 @@ print 'Period of Moon around Earth in seconds', T
 period = np.max(timespan) # Period of libration point orbit (in nondimensional time units)
 print 'Period of libration point orbit in seconds', period*timeConst
 
-# TODO: input waypoints in RIC or VNB frame
+# TODO: input waypoints in any frame (RLP, RIC, or VNB)
 # TODO: get decent test cases in the Sun-Earth-Moon frame
 # TODO: report/plot position error at each waypoint
 # TODO: report/plot delta-V at each waypoint
@@ -123,6 +125,8 @@ Waypoints[4] = {'t'    : 86400.0*7.0/timeConst,
 Waypoints[5] = {'t'    : 86400.0*7.26/timeConst,
                 'r_RIC': [0.0, 0.0/r12, 0.0]};
 
+# TODO: look at waypoints with different spacing, different approach directions, different amount of time between points
+
 # <headingcell level=3>
 
 # Convert Waypoints from RIC to RLP
@@ -131,6 +135,7 @@ Waypoints[5] = {'t'    : 86400.0*7.26/timeConst,
 
 
 # Build RIC-to-RLP frame (inverse of RLP-to-RIC frame) at each waypoint time and convert waypoints from RIC to RLP
+
 # TODO: would be nice to have a function that generically converts waypoints between frames (e.g. arguments = WaypointDictionary, inputframe, outputframe)
 
 initialState1ForSegment = initialstate1
@@ -154,7 +159,8 @@ for currentPoint in S:
     rVec, iVec, cVec = BuildRICFrame(x1, y1, z1, xdot1, ydot1, zdot1, center)
     vVec, nVec, bVec = BuildVNBFrame(x1, y1, z1, xdot1, ydot1, zdot1, center)
 
-    # for the first point only
+    ## for the first point only
+    
     if (currentPoint == S[0]):
         
         # TODO: clean up a little because there's very similar repeated code here
@@ -180,6 +186,8 @@ for currentPoint in S:
         Waypoints[currentPoint]['r_VNB'] = [dvW, dnW, dbW]
         # END REPEAT 1
 
+    ## for all points
+    
     # START REPEAT 2
     # this matrix converts from RLP coordinates to the RIC frame at the timestamp of the next point
     RLPtoRIC = np.array([rVec[-1], iVec[-1], cVec[-1]])
@@ -224,7 +232,6 @@ for currentPoint in S:
 # y: yellow
 # k: black
 # w: white
-    
 
 #fig1 = plt.figure()
 #fig2 = plt.figure()
@@ -240,13 +247,12 @@ axXZ_VNB, axYZ_VNB, axXY_VNB, ax3D_VNB = CreatePlotGrid('Offset between Satellit
 
 # add zero point to plots (this is location of target satellite)
 points = {}
-points['zero'] = {'xyz':[0,0,0], 'color':'k'}
-points = {}
-
 data = {}
+points['zero'] = {'xyz':[0,0,0], 'color':'k'}
 SetPlotGridData(axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP, data, points)
 SetPlotGridData(axXZ_RIC, axYZ_RIC, axXY_RIC, ax3D_RIC, data, points)
 SetPlotGridData(axXZ_VNB, axYZ_VNB, axXY_VNB, ax3D_VNB, data, points)
+points = {}
 
 # add all waypoints to RLP, RIC, and VNB plots
 for w in Waypoints:
@@ -270,9 +276,9 @@ points = {}
 
 initialState1ForSegment = initialstate1
 
-# assume starts exactly from first waypoint
+# assume starts exactly from first waypoint with same velocity as target satellite (for lack of any better velocity values at this point)
 Waypoints[0]['r_RLP_achieved'] = Waypoints[0]['r_RLP']
-Waypoints[0]['v_RLP_abs_premaneuver'] = np.array([ 0.0, 0.0, 0.0 ])
+Waypoints[0]['v_RLP_abs_premaneuver'] = initialstate1[3:6]
 
 # Travel between waypoints
 for currentPoint in S:
@@ -287,7 +293,7 @@ for currentPoint in S:
     # initialRelativeVelocity = ComputeRequiredVelocity(initialState1ForSegment, initialRelativePosition, initialTime, targetRelativePosition, targetTime)
     Waypoints[currentPoint]['v_RLP'] = ComputeRequiredVelocity(initialState1ForSegment, Waypoints[currentPoint]['r_RLP_achieved'], Waypoints[currentPoint]['t'], Waypoints[nextPoint]['r_RLP'], Waypoints[nextPoint]['t'], mu)
 
-    #print 'initial chaser relative velocity', Waypoints[currentPoint]['v']
+    #print 'initial chaser relative velocity', Waypoints[currentPoint]['v_RLP']
 
     initialRelativeState = np.concatenate(( Waypoints[currentPoint]['r_RLP_achieved'], Waypoints[currentPoint]['v_RLP'] ))
 
@@ -308,18 +314,6 @@ for currentPoint in S:
     # compute chaser satellite position and velocity over time in RLP frame by integrating initial state with full nonlinear dynamics
     x2, y2, z2, xdot2, ydot2, zdot2 = PropagateSatellite(mu, timespanForSegment, initialstate2);
     
-    # post-maneuver velocity
-    Waypoints[currentPoint]['v_RLP_abs_postmaneuver'] = np.array([ xdot2[0], ydot2[0], zdot2[0] ])
-    
-    # compute delta-V
-    Waypoints[currentPoint]['deltaV'] = Waypoints[currentPoint]['v_RLP_abs_postmaneuver'] - Waypoints[currentPoint]['v_RLP_abs_premaneuver']
-    
-    # pre-maneuver velocity
-    Waypoints[nextPoint]['v_RLP_abs_premaneuver'] = np.array([ xdot2[-1], ydot2[-1], zdot2[-1] ])
-    
-    # pre-maneuver relative velocity when arriving at next waypoint, based on linear propagation
-    #Waypoints[nextPoint]['v_RLP_pre_LINEAR'] = np.array([ dxdot_LINEAR[-1], dydot_LINEAR[-1], dzdot_LINEAR[-1] ])
-
     # Compute offsets in RLP frame based on nonlinear motion
     dx_NONLIN, dy_NONLIN, dz_NONLIN = ComputeOffsets(timespanForSegment, x1, y1, z1, xdot1, ydot1, zdot1, x2, y2, z2, xdot2, ydot2, zdot2);
     
@@ -337,22 +331,36 @@ for currentPoint in S:
     dv_LINEAR, dn_LINEAR, db_LINEAR = ConvertOffsets(dx_LINEAR, dy_LINEAR, dz_LINEAR, vVec, nVec, bVec);
     dv_NONLIN, dn_NONLIN, db_NONLIN = ConvertOffsets(dx_NONLIN, dy_NONLIN, dz_NONLIN, vVec, nVec, bVec);   
     
+    ## Compute delta-V
+    
+    # post-maneuver velocity at current waypoint
+    Waypoints[currentPoint]['v_RLP_abs_postmaneuver'] = np.array([ xdot2[0], ydot2[0], zdot2[0] ])
+    
+    # compute delta-V executed at current waypoint
+    Waypoints[currentPoint]['deltaV'] = Waypoints[currentPoint]['v_RLP_abs_postmaneuver'] - Waypoints[currentPoint]['v_RLP_abs_premaneuver']
+    
+    # pre-maneuver velocity for next waypoint (end of current propagation segment)
+    Waypoints[nextPoint]['v_RLP_abs_premaneuver'] = np.array([ xdot2[-1], ydot2[-1], zdot2[-1] ])
+    
+    # TODO: also compute the delta-V based only on the linear relmo propagation and compare the delta-V to the nonlinear one currently being computed
+    #      (this means we would need to propagate forward from the nominal waypoint instead of only propagating forward from the achieved waypoint)
+    # pre-maneuver relative velocity when arriving at next waypoint, based on linear propagation
+    #Waypoints[nextPoint]['v_RLP_pre_LINEAR'] = np.array([ dxdot_LINEAR[-1], dydot_LINEAR[-1], dzdot_LINEAR[-1] ])
+
     ## Output that gets fed into next iteration/segment
     
     # Record updated primary satellite initial state for next segment
     initialState1ForSegment = np.array([ x1[-1], y1[-1], z1[-1], xdot1[-1], ydot1[-1], zdot1[-1] ])
     
-    # Record updated chaser satellite waypoint for next segment
+    # Record updated/achieved chaser satellite waypoint for next segment
     Waypoints[nextPoint]['r_RLP_achieved'] = np.array([ dx_NONLIN[-1], dy_NONLIN[-1], dz_NONLIN[-1] ])
     
-    # compute updated waypoint location in RIC and VNB
+    # compute updated/achieved waypoint location in RIC and VNB
     [dxW, dyW, dzW] = Waypoints[nextPoint]['r_RLP_achieved']
     
-    # Convert waypoint to RIC and VNB frames
     drW, diW, dcW = ConvertOffset(dxW, dyW, dzW, rVec[-1], iVec[-1], cVec[-1]);
     dvW, dnW, dbW = ConvertOffset(dxW, dyW, dzW, vVec[-1], nVec[-1], bVec[-1]);
     
-    # originally planned waypoint location has already been drawn; this point is the achieved location
     Waypoints[nextPoint]['r_RIC_achieved'] = [drW, diW, dcW]
     Waypoints[nextPoint]['r_VNB_achieved'] = [dvW, dnW, dbW]
     
@@ -364,7 +372,7 @@ for currentPoint in S:
     # Compare linear relmo propagation to nonlinear dynamics
     #ax2.plot((dx_NONLIN - dx_LINEAR)/np.amax(np.absolute(dx_LINEAR))*100.0, (dy_NONLIN - dy_LINEAR)/np.amax(np.absolute(dy_LINEAR))*100.0)
     
-    # create empty dictionaries
+    # create data dictionaries
     dataoffsetRLP = {};
     dataoffsetRLP['linear'] = {'x':dx_LINEAR*r12, 'y':dy_LINEAR*r12, 'z':dz_LINEAR*r12, 'color':'g'}
     dataoffsetRLP['nonlin'] = {'x':dx_NONLIN*r12, 'y':dy_NONLIN*r12, 'z':dz_NONLIN*r12, 'color':'r'}
@@ -392,19 +400,22 @@ for currentPoint in S:
     points = {}
 
 
-# Final delta-V
+## final delta-V
 currentPoint = nextPoint
-# post-maneuver velocity is same as the target satellite's velocity
+
+# final post-maneuver velocity is same as the target satellite's velocity
 Waypoints[currentPoint]['v_RLP_abs_postmaneuver'] = np.array([ xdot1[-1], ydot1[-1], zdot1[-1] ])
-# compute delta-V
+
+# compute final delta-V
 Waypoints[currentPoint]['deltaV'] = Waypoints[currentPoint]['v_RLP_abs_postmaneuver'] - Waypoints[currentPoint]['v_RLP_abs_premaneuver']
 
 # <codecell>
 
 
+# compute delta-V magnitude and report to screen
 for w in Waypoints:
     Waypoints[w]['deltaVmag'] = np.linalg.norm(Waypoints[w]['deltaV'],2)*r12/timeConst*1000  # m/s
-    print Waypoints[w]['deltaV'], Waypoints[w]['deltaVmag']
+    print Waypoints[w]['deltaVmag'], Waypoints[w]['deltaV']
     
 
 # <codecell>

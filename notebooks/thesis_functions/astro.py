@@ -189,7 +189,6 @@ def ComputeRelmoDynamicsMatrix(x, y, z, mu):
     return A
 
 
-# This full nonlinear version is what's being used
 def odeintNonlinearDerivs(inputstate, timespan, mu):
     
     x, y, z, xdot, ydot, zdot = inputstate
@@ -200,7 +199,7 @@ def odeintNonlinearDerivs(inputstate, timespan, mu):
     return derivs
 
 
-# This is from Luquette
+# These derivs are from Luquette
 def odeintNonlinearDerivsWithLinearRelmoSTM(inputstate, timespan, mu):
     
     # Position and velocity of target satellite in RLP frame
@@ -256,7 +255,7 @@ def odeintNonlinearDerivsWithLinearRelmo(inputstate, timespan, mu):
 
 
 # Compute required velocity at point 1 to take us to point 2 within time (t2-t1)
-# This is from Lian et al.
+# This formula is from Lian et al.
 def ComputeRequiredVelocity(initialstate1, initialRelativePosition, initialTime, targetRelativePosition, targetTime, mu):
         
     # initial state of the target SC and STM
@@ -289,7 +288,7 @@ def ComputeRequiredVelocity(initialstate1, initialRelativePosition, initialTime,
     Phi12I = np.linalg.inv(Phi12)
     
     # Compute required velocity at point 1 to take us to point 2 within time (t2-t1)
-    # This is from Lian et al.
+    # This formula is from Lian et al.
     initialRelativeVelocity = np.dot(Phi12I, targetRelativePosition - np.dot(Phi11, initialRelativePosition))
     
     return initialRelativeVelocity
