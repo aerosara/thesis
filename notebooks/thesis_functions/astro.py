@@ -5,6 +5,7 @@
 
 
 import numpy as np
+import pandas as pd
     
 from scipy.optimize import fsolve
     
@@ -77,7 +78,14 @@ def ComputeLibrationPoints(mu):
     # L5
     L5 = np.array([0.5 - mu, -np.sqrt(3.0)/2.0, 0.0]);
     
-    return X1, X2, L1, L2, L3, L4, L5;
+    return pd.Series({
+        "X1": X1,
+        "X2": X2,
+        "L1": L1,
+        "L2": L2,
+        "L3": L3,
+        "L4": L4,
+        "L5": L5})
 
 # <codecell>
 
@@ -315,7 +323,23 @@ def PropagateSatelliteAndChaser(mu, timespan, initialstate1, initialRelativeStat
     relativeStatesFromLinearRelmoOverTime = statesOverTime1[6:12] # rows 7-12
     dx_LINEAR, dy_LINEAR, dz_LINEAR, dxdot_LINEAR, dydot_LINEAR, dzdot_LINEAR = relativeStatesFromLinearRelmoOverTime
 
-    return x1, y1, z1, xdot1, ydot1, zdot1, dx_LINEAR, dy_LINEAR, dz_LINEAR, dxdot_LINEAR, dydot_LINEAR, dzdot_LINEAR
+    target_satellite = pd.DataFrame({
+        "x": x1,
+        "y": y1,
+        "z": z1,
+        "x_dot": xdot1,
+        "y_dot": ydot1,
+        "z_dot": zdot1}, index=timespan)
+
+    offset = pd.DataFrame({
+        "x": dx_LINEAR,
+        "y": dy_LINEAR,
+        "z": dz_LINEAR,
+        "x": dxdot_LINEAR,
+        "y": dydot_LINEAR,
+        "z": dzdot_LINEAR}, index=timespan)
+
+    return target_satellite, offset
 
 # <codecell>
 
@@ -339,7 +363,15 @@ def PropagateSatellite(mu, timespan, initialstate1):
 
     x1, y1, z1, xdot1, ydot1, zdot1 = statesOverTime1.T
     
-    return x1, y1, z1, xdot1, ydot1, zdot1
+    # return x1, y1, z1, xdot1, ydot1, zdot1
+
+    return pd.DataFrame({
+        "x": x1,
+        "y": y1,
+        "z": z1,
+        "x_dot": xdot1,
+        "y_dot": ydot1,
+        "z_dot": zdot1}, index=timespan)
    
 
 # <codecell>
@@ -419,46 +451,32 @@ def ConvertOffset(dx, dy, dz, basis1, basis2, basis3):
 
 # <codecell>
 
+def BuildFrames(ephem, center):
 
-def BuildRICFrame(x1, y1, z1, xdot1, ydot1, zdot1, center):
-    
-    # build RIC frame based on satellite 1
+    r = ephem[["x", "y", "z"]] - center
+    v = ephem[["x_dot", "y_dot", "z_dot"]]
 
-    rVec = np.array([x1-center[0], y1-center[1], z1-center[2]]).T
+    # Build RCI frame vectors
+    c = np.cross(r, v)
+    i = np.cross(c, r)
 
-    vVec = np.array([xdot1, ydot1, zdot1]).T
+    r /= np.linalg.norm(r)
+    c /= np.linalg.norm(c)
+    i /= np.linalg.norm(i)
 
-    cVec = np.cross(rVec, vVec)
+    ric = np.dstack((r, i, c))
 
-    iVec = np.cross(cVec, rVec)
-    
-    # unitize RIC frame vectors
-    rVec = np.divide(rVec, np.linalg.norm(rVec,2,1)[:,None])
-    cVec = np.divide(cVec, np.linalg.norm(cVec,2,1)[:,None])
-    iVec = np.divide(iVec, np.linalg.norm(iVec,2,1)[:,None])
+    # Build VNB frame vectors
+    n = np.cross(r, v)
+    b = np.cross(v, n)
 
-    return rVec, iVec, cVec
+    v /= np.linalg.norm(v)
+    n /= np.linalg.norm(n)
+    b /= np.linalg.norm(b)
 
+    vnb = np.dstack((v, n, b))
 
-def BuildVNBFrame(x1, y1, z1, xdot1, ydot1, zdot1, center):
-    
-    # build VNB frame based on satellite 1
-
-    rVec = np.array([x1-center[0], y1-center[1], z1-center[2]]).T
-
-    vVec = np.array([xdot1, ydot1, zdot1]).T
-
-    nVec = np.cross(rVec, vVec)
-
-    bVec = np.cross(vVec, nVec)
-
-    # unitize VNB frame vectors
-    vVec = np.divide(vVec, np.linalg.norm(vVec,2,1)[:,None])
-    nVec = np.divide(nVec, np.linalg.norm(nVec,2,1)[:,None])
-    bVec = np.divide(bVec, np.linalg.norm(bVec,2,1)[:,None])
-        
-    return vVec, nVec, bVec
-
-# <codecell>
-
-
+    return pd.Panel(np.hstack((ric, vnb)),
+            items=ephem.index,
+            major_axis=[zip(["ric"]*3, list("ric")) + zip(["vnb"]*3, list("vnb"))],
+            minor_axis=list("xyz"))
