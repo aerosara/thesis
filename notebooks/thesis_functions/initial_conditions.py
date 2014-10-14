@@ -1,10 +1,19 @@
 # -*- coding: utf-8 -*-
 # <nbformat>3.0</nbformat>
 
+# <codecell>
+
+
 import numpy as np
 import pandas as pd
 
-_sharp_matrix = np.array([[0.994000E+00, 0.0, -0.21138987966945026683E+01, 0.54367954392601899690E+01],
+# <codecell>
+
+
+# From Sharp, A Collection of Restricted Three-Body Test Problems
+# For problems 1 to 15, mu = 0.012277471 and for problems 16 to 20, mu = 0.000953875
+# Columns are X, Z, Ydot, T
+sharp_matrix = np.array([ [0.994000E+00, 0.0, -0.21138987966945026683E+01, 0.54367954392601899690E+01],
                           [0.994000E+00, 0.0, -0.20317326295573368357E+01, 0.11124340337266085135E+02],
                           [0.994000E+00, 0.0, -0.20015851063790825224E+01, 0.17065216560157962559E+02],
                           [0.997000E+00, 0.0, -0.16251217072210773125E+01, 0.22929723423442969481E+02],
@@ -27,12 +36,10 @@ _sharp_matrix = np.array([[0.994000E+00, 0.0, -0.21138987966945026683E+01, 0.543
 
 # From Howell, Three-Dimensional, Periodic, 'Halo' Orbits
 
-# From Barbee, Notional Mission 4 (Earth-Moon)
+# From Barbee, Notional Mission 4 (Earth-Moon) # 12.135 days
 
-# From Sharp, A Collection of Restricted Three-Body Test Problems
-# For problems 1 to 15, mu = 0.012277471 and for problems 16 to 20, mu = 0.000953875
-
-initial_conditions = pd.DataFrame().\
+# Create 'initial_condition_sets' DataFrame which uses 'author' and 'test_case' as its indices
+initial_condition_sets = pd.DataFrame().\
         append(pd.DataFrame({
             'author':     'Howell',
             'test_case':  np.arange(2) + 1,
@@ -53,8 +60,9 @@ initial_conditions = pd.DataFrame().\
             'author':     'Sharp',
             'test_case':  np.arange(20) + 1,
             'mu':         np.concatenate((0.012277471 * np.ones(15), 0.000953875 * np.ones(5))),
-            'x':          _sharp_matrix[:, 0],
-            'z':          _sharp_matrix[:, 1],
-            'y_dot':      _sharp_matrix[:, 2],
-            't':          _sharp_matrix[:, 3]})).\
+            'x':          sharp_matrix[:, 0],
+            'z':          sharp_matrix[:, 1],
+            'y_dot':      sharp_matrix[:, 2],
+            't':          sharp_matrix[:, 3]})).\
         set_index(['author', 'test_case'])
+

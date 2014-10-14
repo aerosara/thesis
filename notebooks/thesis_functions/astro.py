@@ -110,24 +110,6 @@ def stop_zEquals0(state, t):
 # <codecell>
 
 
-# Not being used - don't have a decent test case with good values for the input state and BL1 (aka c2)
-#def linearDerivativesFunction(inputstate, timespan):
-#    x, y, z, xdot, ydot, zdot = inputstate
-#    
-#    #BL1 = 3.329168
-#    #BL1 = 4.06107
-#    BL1 = 0.012155092
-#    
-#    derivs = [xdot,
-#              ydot,
-#              zdot,
-#              2.0*ydot + (2.0*BL1 + 1.0)*x,
-#              -2.0*xdot - (BL1 - 1.0)*y,
-#              -BL1*z]
-#    
-#    return derivs
-
-
 def ComputeNonlinearDerivs(x, y, z, xdot, ydot, zdot, mu):
     
     # Position of larger body along X axis:
@@ -199,10 +181,10 @@ def ComputeRelmoDynamicsMatrix(x, y, z, mu):
 
 def odeintNonlinearDerivs(inputstate, timespan, mu):
     
-    x, y, z, xdot, ydot, zdot = inputstate
+    x, y, z, x_dot, y_dot, z_dot = inputstate
     
     # Compute nonlinear derivatives for the satellite in RLP frame
-    derivs = ComputeNonlinearDerivs(x, y, z, xdot, ydot, zdot, mu)
+    derivs = ComputeNonlinearDerivs(x, y, z, x_dot, y_dot, z_dot, mu)
     
     return derivs
 
@@ -330,30 +312,36 @@ def PropagateSatelliteAndChaser(mu, timespan, initialstate1, initialRelativeStat
         "x_dot": xdot1,
         "y_dot": ydot1,
         "z_dot": zdot1}, index=timespan)
+    
+    # reassign so that the data maintains the required order for its values
+    target_satellite = target_satellite[['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot']]
 
-    offset = pd.DataFrame({
+    offset_linear = pd.DataFrame({
         "x": dx_LINEAR,
         "y": dy_LINEAR,
         "z": dz_LINEAR,
-        "x": dxdot_LINEAR,
-        "y": dydot_LINEAR,
-        "z": dzdot_LINEAR}, index=timespan)
+        "x_dot": dxdot_LINEAR,
+        "y_dot": dydot_LINEAR,
+        "z_dot": dzdot_LINEAR}, index=timespan)
+    
+    # reassign so that the data maintains the required order for its values
+    offset_linear = offset_linear[['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot']]
 
-    return target_satellite, offset
+    return target_satellite, offset_linear
 
 # <codecell>
 
 
-def PropagateSatellite(mu, timespan, initialstate1):
+def PropagateSatellite(mu, timespan, initialstate):
     
     mu = mu;
     
     # integrate first satellite
-    statesOverTime1 = integrate.odeint(odeintNonlinearDerivs, initialstate1, timespan, (mu,))  # "extra arguments must be given in a tuple"
+    statesOverTime = integrate.odeint(odeintNonlinearDerivs, initialstate, timespan, (mu,))  # "extra arguments must be given in a tuple"
 
-    #timespan, statesOverTime1, EventTime, EventState, EventIndex = odelay(nonlinearDerivativesFunction, initialstate1, timespan, events=[stop_zEquals0])
+    #timespan, statesOverTime, EventTime, EventState, EventIndex = odelay(nonlinearDerivativesFunction, initialstate, timespan, events=[stop_zEquals0])
 
-    #print 'initialstate1 = ', initialstate1
+    #print 'initialstate = ', initialstate
     #print 't = ', t # timestamps corresponding to the output states over time
     #print 'statesOverTime = ', statesOverTime
     #print 'EventTime = ', EventTime
@@ -361,122 +349,95 @@ def PropagateSatellite(mu, timespan, initialstate1):
     #print 'EventIndex = ', EventIndex
     #print len(timespan)
 
-    x1, y1, z1, xdot1, ydot1, zdot1 = statesOverTime1.T
+    x, y, z, x_dot, y_dot, z_dot = statesOverTime.T
     
-    # return x1, y1, z1, xdot1, ydot1, zdot1
-
-    return pd.DataFrame({
-        "x": x1,
-        "y": y1,
-        "z": z1,
-        "x_dot": xdot1,
-        "y_dot": ydot1,
-        "z_dot": zdot1}, index=timespan)
+    ephem = pd.DataFrame({
+        "x": x,
+        "y": y,
+        "z": z,
+        "x_dot": x_dot,
+        "y_dot": y_dot,
+        "z_dot": z_dot}, index=timespan)
+    
+    # reassign so that the data maintains the required order for its values
+    ephem = ephem[['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot']]
+    
+    return ephem
    
 
 # <codecell>
 
 
-def ComputeOffsets(timespan, x1, y1, z1, xdot1, ydot1, zdot1, x2, y2, z2, xdot2, ydot2, zdot2):
+def ComputeOffsets(timespan, ephem1, ephem2):
 
     # compute trajectory offset in RLP frame
-    dx = x1 - x2
-    dy = y1 - y2
-    dz = z1 - z2
+    dx = ephem1.x - ephem2.x
+    dy = ephem1.y - ephem2.y
+    dz = ephem1.z - ephem2.z
     #dxdot = xdot1 - xdot2
     #dydot = ydot1 - ydot2
     #dzdot = zdot1 - zdot2
+    
+    offsets = pd.DataFrame({
+        "x": dx,
+        "y": dy,
+        "z": dz}, index=timespan)
+    
+    return offsets
 
-    # temporarily disabling plot
-    if (0 == 1):
+# <codecell>
+
+
+def ConvertOffset(input_offset, rotation_matrix):
+    
+    # compute trajectory offset in new frame (e.g. RIC, VNB)
         
-        # compute total distance offset
-        distance = np.linalg.norm(np.array([dx, dy, dz]),2,0)
-
-        # plot total distance offset over time
-        figDeltaMag, axDeltaMag = plt.subplots()
-        axDeltaMag.plot(timespan, distance, 'o-')
-        figDeltaMag.suptitle('Total Distance Offset Over Time')
-
-    #figXY, axXDotYDot = plt.subplots()
-    #axXDotYDot.plot(timespan, xdot)
-    #axXDotYDot.plot(timespan, ydot)
+    # input_offset is the input offset vector (dx, dy, dz)
+    # rotation_matrix is the matrix formed by the basis vectors (basis1,basis2,basis3) converting from the input frame to the output frame
+    # output_offset is the output offset vector (db1, db2, db3)
     
-    return dx, dy, dz
+    # compute dot products
+    output_offset = np.dot(input_offset, rotation_matrix)
+    
+    return output_offset
 
 # <codecell>
 
 
-def ConvertOffsets(dx, dy, dz, basis1, basis2, basis3):
-
-    # x,y,z are input offset vectors
-    # basis1,basis2,basis3 are basis vectors converting from the input frame to the output frame
-    # db1,db2,db3 are the output offset vectors
+def BuildRICFrame(state, center):
     
-    # compute trajectory offset in new frame (e.g. RIC, VNB)
-
-    ## This approach is more intuitive:
-    # compute dot products
-    db1 = np.zeros(len(dx))
-    db2 = np.zeros(len(dx))
-    db3 = np.zeros(len(dx))
+    # build RIC frame based on state
+    rVec = state[["x", "y", "z"]] - center  # this is a Series
+    vVec = state[["x_dot", "y_dot", "z_dot"]]
     
-    for ii in range(0, len(basis1)):
-        db1[ii] = np.dot([dx[ii], dy[ii], dz[ii]], basis1[ii])
-        db2[ii] = np.dot([dx[ii], dy[ii], dz[ii]], basis2[ii])
-        db3[ii] = np.dot([dx[ii], dy[ii], dz[ii]], basis3[ii])
+    cVec = np.cross(rVec, vVec)
+    iVec = np.cross(cVec, rVec)
     
-    ## This approach might be faster:
-    # compute dot products
-    #db1 = np.einsum('ij,ij->i', np.array([dx, dy, dz]).T, basis1)
-    #db2 = np.einsum('ij,ij->i', np.array([dx, dy, dz]).T, basis2)
-    #db3 = np.einsum('ij,ij->i', np.array([dx, dy, dz]).T, basis3)
+    # unitize RIC frame vectors
+    rVec = np.divide(rVec, np.linalg.norm(rVec))
+    iVec = np.divide(iVec, np.linalg.norm(iVec))
+    cVec = np.divide(cVec, np.linalg.norm(cVec))
     
-    return db1, db2, db3
+    RLPtoRIC = np.dstack((rVec, iVec, cVec)) # this is an ndarray
 
-def ConvertOffset(dx, dy, dz, basis1, basis2, basis3):
+    return RLPtoRIC
 
-    # x,y,z are input offset vectors
-    # basis1,basis2,basis3 are basis vectors converting from the input frame to the output frame
-    # db1,db2,db3 are the output offset vectors
+
+def BuildVNBFrame(state, center):
     
-    # compute trajectory offset in new frame (e.g. RIC, VNB)
+    # build VNB frame based on state
+    rVec = state[["x", "y", "z"]] - center
+    vVec = state[["x_dot", "y_dot", "z_dot"]]
 
-    # compute dot products
-    db1 = np.dot([dx, dy, dz], basis1)
-    db2 = np.dot([dx, dy, dz], basis2)
-    db3 = np.dot([dx, dy, dz], basis3)
+    nVec = np.cross(rVec, vVec)
+    bVec = np.cross(vVec, nVec)
 
-    return db1, db2, db3
+    # unitize VNB frame vectors
+    vVec /= np.linalg.norm(vVec)
+    nVec /= np.linalg.norm(nVec)
+    bVec /= np.linalg.norm(bVec)
+    
+    RLPtoVNB = np.dstack((vVec, nVec, bVec))
+        
+    return RLPtoVNB
 
-# <codecell>
-
-def BuildFrames(ephem, center):
-
-    r = ephem[["x", "y", "z"]] - center
-    v = ephem[["x_dot", "y_dot", "z_dot"]]
-
-    # Build RCI frame vectors
-    c = np.cross(r, v)
-    i = np.cross(c, r)
-
-    r /= np.linalg.norm(r)
-    c /= np.linalg.norm(c)
-    i /= np.linalg.norm(i)
-
-    ric = np.dstack((r, i, c))
-
-    # Build VNB frame vectors
-    n = np.cross(r, v)
-    b = np.cross(v, n)
-
-    v /= np.linalg.norm(v)
-    n /= np.linalg.norm(n)
-    b /= np.linalg.norm(b)
-
-    vnb = np.dstack((v, n, b))
-
-    return pd.Panel(np.hstack((ric, vnb)),
-            items=ephem.index,
-            major_axis=[zip(["ric"]*3, list("ric")) + zip(["vnb"]*3, list("vnb"))],
-            minor_axis=list("xyz"))

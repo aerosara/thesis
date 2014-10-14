@@ -16,12 +16,12 @@ bar.loc[0.1]
 # <codecell>
 
 
-In [135]: %paste
+
 foo = pd.DataFrame({
     "x": x,
     "y": y},
     index=[colors, time])
-## -- End pasted text --
+
 
 In [136]: foo
 Out[136]:
