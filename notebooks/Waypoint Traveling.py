@@ -311,11 +311,10 @@ for start, end in waypoint_time_intervals:
     ##  Integrate second satellite with full nonlinear dynamics
 
     # initial state of second satellite in absolute RLP coordinates (not relative to first satellite)
-    #chaser_initial_state_absolute_for_segment = np.array(target_initial_state_for_segment) - np.array(chaser_initial_state_relative) # remove this if code runs ok with version on next line
-    chaser_initial_state_absolute_for_segment = target_initial_state_for_segment - chaser_initial_state_relative
+    chaser_initial_state_absolute = target_initial_state_for_segment - chaser_initial_state_relative
 
     # compute chaser satellite position and velocity over time in RLP frame by integrating initial state with full nonlinear dynamics
-    chaser_ephem_for_segment = PropagateSatellite(mu, timespan_for_segment, chaser_initial_state_absolute_for_segment);
+    chaser_ephem_for_segment = PropagateSatellite(mu, timespan_for_segment, chaser_initial_state_absolute);
     
     # Compute offsets in RLP frame based on nonlinear motion
     offsets_nonlin_RLP = ComputeOffsets(timespan_for_segment, target_ephem_for_segment, chaser_ephem_for_segment);
@@ -344,9 +343,6 @@ for start, end in waypoint_time_intervals:
     
     # post-maneuver velocity at current waypoint
     waypoint_velocities.RLP_post_maneuver_absolute.loc[start] = chaser_ephem_for_segment.loc[start, ['x_dot', 'y_dot', 'z_dot']]
-    
-    # compute delta-V executed at current waypoint
-    waypoint_velocities.RLP_delta_v.loc[start] = waypoint_velocities.RLP_post_maneuver_absolute.loc[start] - waypoint_velocities.RLP_pre_maneuver_absolute.loc[start]
     
     # pre-maneuver velocity for next waypoint (end of current propagation segment)
     waypoint_velocities.RLP_pre_maneuver_absolute.loc[end] = chaser_ephem_for_segment.loc[end, ['x_dot', 'y_dot', 'z_dot']]
@@ -394,13 +390,11 @@ SetPlotGridData(axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP, waypoints.RLP_achieved*R
 SetPlotGridData(axXZ_RIC, axYZ_RIC, axXY_RIC, ax3D_RIC, waypoints.RIC_achieved*RLP_properties.r12, 'points', 'm')
 SetPlotGridData(axXZ_VNB, axYZ_VNB, axXY_VNB, ax3D_VNB, waypoints.VNB_achieved*RLP_properties.r12, 'points', 'm')
 
-## final delta-V
-
 # final post-maneuver velocity is same as the target satellite's velocity
 waypoint_velocities.RLP_post_maneuver_absolute.loc[end] = target_ephem_for_segment.loc[end, ['x_dot', 'y_dot', 'z_dot']]
 
-# compute final delta-V
-waypoint_velocities.RLP_delta_v.loc[end] = waypoint_velocities.RLP_post_maneuver_absolute.loc[end] - waypoint_velocities.RLP_pre_maneuver_absolute.loc[end]
+# compute delta-V's
+waypoint_velocities.RLP_delta_v = waypoint_velocities.RLP_post_maneuver_absolute - waypoint_velocities.RLP_pre_maneuver_absolute
 
 # <codecell>
 
@@ -419,6 +413,8 @@ waypoint_velocities.RLP_delta_v.loc[end] = waypoint_velocities.RLP_post_maneuver
 
 #waypoints.RLP_achieved.loc[end]
 #offsets_linear_RIC
+#waypoint_velocities.RLP_delta_v
+waypoint_velocities.RLP_post_maneuver_absolute - waypoint_velocities.RLP_pre_maneuver_absolute
 
 # <codecell>
 
