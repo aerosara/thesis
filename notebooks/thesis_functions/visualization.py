@@ -44,33 +44,32 @@ def CreatePlotGrid(title, xlabel, ylabel, zlabel, aspectmode):
     ax3D.set_aspect(aspectmode)
     
     return axXZ, axYZ, axXY, ax3D
-        
-     
-# Allowed colors:
-# b: blue
-# g: green
-# r: red
-# c: cyan
-# m: magenta
-# y: yellow
-# k: black
-# w: white
+
     
-def SetPlotGridData(axXZ, axYZ, axXY, ax3D, data, points):
+def SetPlotGridData(axXZ, axYZ, axXY, ax3D, data, style, color):
     
-    # add points to plots
-    for key in points:
-        axXZ.plot(points[key]['xyz'][0], points[key]['xyz'][2], 'o', markersize=5, label=key, color=points[key]['color'])
-        axYZ.plot(points[key]['xyz'][1], points[key]['xyz'][2], 'o', markersize=5, label=key, color=points[key]['color'])
-        axXY.plot(points[key]['xyz'][0], points[key]['xyz'][1], 'o', markersize=5, label=key, color=points[key]['color'])
-        ax3D.plot([points[key]['xyz'][0]], [points[key]['xyz'][1]], [points[key]['xyz'][2]], 'o', markersize=5, label=key, color=points[key]['color'])
+    # Allowed colors:
+    # b: blue
+    # g: green
+    # r: red
+    # c: cyan
+    # m: magenta
+    # y: yellow
+    # k: black
+    # w: white
+
+    if style == 'points':
+        markersize = 5
+        markertype = 'o'
+    elif style == 'line':
+        markersize = 1
+        markertype = '-'
         
-    # add data to plots
-    for key in data:
-        axXZ.plot(data[key]['x'], data[key]['z'], '-', label=key, color=data[key]['color'])
-        axYZ.plot(data[key]['y'], data[key]['z'], '-', label=key, color=data[key]['color'])
-        axXY.plot(data[key]['x'], data[key]['y'], '-', label=key, color=data[key]['color'])
-        ax3D.plot(data[key]['x'], data[key]['y'], data[key]['z'], '-', label=key, color=data[key]['color'])
+    # add data to plots 
+    axXZ.plot(data.x, data.z, markertype, markersize=markersize, color=color)
+    axYZ.plot(data.y, data.z, markertype, markersize=markersize, color=color)
+    axXY.plot(data.x, data.y, markertype, markersize=markersize, color=color)
+    ax3D.plot(data.x.values, data.y.values, data.z.values, markertype, markersize=markersize, color=color)
         
     #ax3D.legend(loc='center left', bbox_to_anchor=(1.2, 0.5))
         
