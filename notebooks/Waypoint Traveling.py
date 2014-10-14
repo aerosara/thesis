@@ -145,11 +145,6 @@ waypoints = pd.Panel(items = ['RIC', 'RLP', 'VNB',
                      major_axis = waypoint_times, # time points
                      minor_axis = list('xyz'))    # coordinate labels
 
-waypoint_velocities = pd.Panel(items = ['RLP_PreManeuverVelocity_absolute', 'RLP_PostManeuverVelocity_absolute',
-                                        'RLP_PreManeuverVelocity_relative', 'RLP_PostManeuverVelocity_relative', 'RLP_DeltaV'],
-                     major_axis = waypoint_times, # time points
-                     minor_axis = ['x_dot', 'y_dot', 'z_dot'])    # coordinate labels
-
 # Copy the RIC waypoint data into the panel
 waypoints['RIC'] = waypoint_RIC_coordinates
 
@@ -289,9 +284,16 @@ print waypoints.RLP
 target_initial_state_for_segment = target_initial_state.copy()
 chaser_initial_state_relative = pd.Series(index = ['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot'])
 
+# create Panel for waypoint velocities
+waypoint_velocities = pd.Panel(items = ['RLP_pre_maneuver_absolute', 'RLP_post_maneuver_absolute',
+                                        'RLP_pre_maneuver_relative', 'RLP_post_maneuver_relative',
+                                        'RLP_delta_v'],
+                     major_axis = waypoint_times, # time points
+                     minor_axis = ['x_dot', 'y_dot', 'z_dot'])    # coordinate labels
+
 # assume starts exactly from first waypoint with same velocity as target satellite (for lack of any better velocity values at this point)
 waypoints.RLP_achieved.iloc[0] = waypoints.RLP.iloc[0]
-waypoint_velocities.RLP_PreManeuverVelocity_absolute.iloc[0] = target_initial_state[['x_dot', 'y_dot', 'z_dot']]
+waypoint_velocities.RLP_pre_maneuver_absolute.iloc[0] = target_initial_state[['x_dot', 'y_dot', 'z_dot']]
 
 # Travel between waypoints
 for start, end in waypoint_time_intervals:
@@ -308,7 +310,7 @@ for start, end in waypoint_time_intervals:
     # initialRelativeVelocity = ComputeRequiredVelocity(initialState1ForSegment, initialRelativePosition, initialTime, targetRelativePosition, targetTime)
     chaser_initial_velocity_relative = ComputeRequiredVelocity(target_initial_state_for_segment, current_waypoint, start, next_waypoint, end, mu)
 
-    waypoint_velocities.RLP_PostManeuverVelocity_relative.loc[start] = chaser_initial_velocity_relative
+    waypoint_velocities.RLP_post_maneuver_relative.loc[start] = chaser_initial_velocity_relative
     
     #print 'initial chaser relative velocity', chaser_initial_velocity_relative
 
@@ -336,10 +338,10 @@ for start, end in waypoint_time_intervals:
     # Compute offsets in RLP frame based on nonlinear motion
     chaser_offset_nonlin_RLP = ComputeOffsets(timespan_for_segment, target_ephem_for_segment, chaser_ephem_for_segment);
     
-    offsets_linear_RIC = pd.DataFrame(index=timespan_for_segment)
-    offsets_nonlin_RIC = pd.DataFrame(index=timespan_for_segment)
-    offsets_linear_VNB = pd.DataFrame(index=timespan_for_segment)
-    offsets_nonlin_VNB = pd.DataFrame(index=timespan_for_segment)
+    offsets_linear_RIC = pd.DataFrame([['x', 'y', 'z']], index=timespan_for_segment)
+    offsets_nonlin_RIC = pd.DataFrame([['x', 'y', 'z']], index=timespan_for_segment)
+    offsets_linear_VNB = pd.DataFrame([['x', 'y', 'z']], index=timespan_for_segment)
+    offsets_nonlin_VNB = pd.DataFrame([['x', 'y', 'z']], index=timespan_for_segment)
     
     ## Offsets in RIC and VNB
     for t in timespan_for_segment:
@@ -363,13 +365,13 @@ for start, end in waypoint_time_intervals:
     ## Compute delta-V
     
     # post-maneuver velocity at current waypoint
-    waypoint_velocities.RLP_PostManeuverVelocity_absolute.loc[start] = chaser_ephem_for_segment.loc[start, ['x_dot', 'y_dot', 'z_dot']]
+    waypoint_velocities.RLP_post_maneuver_absolute.loc[start] = chaser_ephem_for_segment.loc[start, ['x_dot', 'y_dot', 'z_dot']]
     
     # compute delta-V executed at current waypoint
-    waypoint_velocities.RLP_DeltaV.loc[start] = waypoint_velocities.RLP_PostManeuverVelocity_absolute.loc[start] - waypoint_velocities.RLP_PreManeuverVelocity_absolute.loc[start]
+    waypoint_velocities.RLP_delta_v.loc[start] = waypoint_velocities.RLP_post_maneuver_absolute.loc[start] - waypoint_velocities.RLP_pre_maneuver_absolute.loc[start]
     
     # pre-maneuver velocity for next waypoint (end of current propagation segment)
-    waypoint_velocities.RLP_PreManeuverVelocity_absolute.loc[end] = chaser_ephem_for_segment.loc[end, ['x_dot', 'y_dot', 'z_dot']]
+    waypoint_velocities.RLP_pre_maneuver_absolute.loc[end] = chaser_ephem_for_segment.loc[end, ['x_dot', 'y_dot', 'z_dot']]
     
     # TODO: also compute the delta-V based only on the linear relmo propagation and compare the delta-V to the nonlinear one currently being computed
     #      (this means we would need to propagate forward from the nominal waypoint instead of only propagating forward from the achieved waypoint)
@@ -425,32 +427,31 @@ for start, end in waypoint_time_intervals:
 ## final delta-V
 
 # final post-maneuver velocity is same as the target satellite's velocity
-waypoint_velocities.RLP_PostManeuverVelocity_absolute.loc[end] = target_ephem_for_segment.loc[end, ['x_dot', 'y_dot', 'z_dot']]
+waypoint_velocities.RLP_post_maneuver_absolute.loc[end] = target_ephem_for_segment.loc[end, ['x_dot', 'y_dot', 'z_dot']]
 
 # compute final delta-V
-waypoint_velocities.RLP_DeltaV.loc[end] = waypoint_velocities.RLP_PostManeuverVelocity_absolute.loc[end] - waypoint_velocities.RLP_PreManeuverVelocity_absolute.loc[end]
+waypoint_velocities.RLP_delta_v.loc[end] = waypoint_velocities.RLP_post_maneuver_absolute.loc[end] - waypoint_velocities.RLP_pre_maneuver_absolute.loc[end]
 
 # <codecell>
 
 waypoints.RIC_achieved
 waypoints.RLP_achieved
-waypoint_velocities.RLP_PostManeuverVelocity_absolute
+waypoint_velocities.RLP_post_maneuver_absolute
 chaser_ephem_for_segment.loc[start, ['x_dot', 'y_dot', 'z_dot']]
-waypoint_velocities.RLP_PostManeuverVelocity_absolute
 chaser_offset_linear_RLP
 chaser_offset_nonlin_RLP
+offsets_linear_RIC
 
 # <codecell>
 
- 
-## final delta-V
-currentPoint = nextPoint
 
-# final post-maneuver velocity is same as the target satellite's velocity
-Waypoints[currentPoint]['v_RLP_abs_postmaneuver'] = np.array([ xdot1[-1], ydot1[-1], zdot1[-1] ])
+waypoint_delta_v = pd.Series(index=waypoint_times)
 
-# compute final delta-V
-Waypoints[currentPoint]['deltaV'] = Waypoints[currentPoint]['v_RLP_abs_postmaneuver'] - Waypoints[currentPoint]['v_RLP_abs_premaneuver']
+# compute delta-V magnitude and report to screen
+for t in waypoint_times:
+    waypoint_delta_v.loc[t] = np.linalg.norm(waypoint_velocities.RLP_delta_v.loc[t], 2)*RLP_properties.r12/RLP_properties.time_const*1000.0  # m/s
+    
+waypoint_delta_v
 
 # <headingcell level=3>
 
