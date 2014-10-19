@@ -64,6 +64,9 @@ def SetPlotGridData(axXZ, axYZ, axXY, ax3D, data, style, color):
     elif style == 'line':
         markersize = 1
         markertype = '-'
+    elif style == 'dotted':
+        markersize = 1
+        markertype = ':'
         
     # add data to plots 
     axXZ.plot(data.x, data.z, markertype, markersize=markersize, color=color)
