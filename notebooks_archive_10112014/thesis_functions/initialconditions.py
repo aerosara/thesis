@@ -8,7 +8,7 @@ import numpy as np
 # <codecell>
 
 
-def SetInitialConditions(ICs, ICset =/Users/sara/github/thesis/notebooks/thesis_functions/initial_conditions.py 'Howell', ICtestcase = 0, numPoints = 2000):
+def SetInitialConditions(ICs, ICset = 'Howell', ICtestcase = 0, numPoints = 2000):
     
     # user inputs 
     #ICset = 'Howell'  # 'Sharp' 'Howell' 'Barbee'

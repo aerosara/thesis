@@ -332,12 +332,117 @@ def PropagateSatelliteAndChaser(mu, timespan, initialstate1, initialRelativeStat
 # <codecell>
 
 
+import matplotlib.pyplot as plt
+
+def TargetRequiredVelocity(target_initial_state, chaser_velocity_initial_guess, current_waypoint, start, next_waypoint, end, mu):
+    
+    # all vectors in RLP
+    
+    #print 'next_waypoint'
+    #print next_waypoint
+    
+    perturbation = 0.00001
+    tolerance = 0.000000001
+    max_iterations = 5.0
+    
+    chaser_velocity_next_guess = chaser_velocity_initial_guess.copy()
+    
+    timespan = np.linspace(start, end, 500)
+    
+    iteration_count = 0.0
+    errors = np.array([100, 100, 100])
+    
+    while (np.any(np.abs(errors) > tolerance)) and (iteration_count < max_iterations):
+        
+        #print 'chaser_velocity_next_guess'
+        #print chaser_velocity_next_guess
+        
+        chaser_initial_state = pd.Series({
+                                        'x':     target_initial_state.x - current_waypoint.x,
+                                        'y':     target_initial_state.y - current_waypoint.y,
+                                        'z':     target_initial_state.z - current_waypoint.z,
+                                        'x_dot': chaser_velocity_next_guess.x_dot,
+                                        'y_dot': chaser_velocity_next_guess.y_dot,
+                                        'z_dot': chaser_velocity_next_guess.z_dot})
+
+        # reassign so that the series maintains the required order for its values
+        chaser_initial_state = chaser_initial_state[['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot']]
+
+        # propagate target and chaser each using full nonlinear dynamics
+        target_ephem = PropagateSatellite(mu, timespan, target_initial_state)
+        chaser_ephem = PropagateSatellite(mu, timespan, chaser_initial_state)
+
+        achieved_relative_position_nominal = target_ephem.loc[end, ['x', 'y', 'z']] - chaser_ephem.loc[end, ['x', 'y', 'z']]
+        #print 'achieved_relative_position_nominal'
+        #print achieved_relative_position_nominal
+        
+        partials_matrix = np.zeros((3,3))
+
+        for index in [3, 4, 5]:
+
+            # apply perturbation to current element of velocity vector
+            chaser_initial_state.iloc[index] += perturbation
+            
+            #print 'index', index
+
+            # propagate target and chaser each using full nonlinear dynamics
+            target_ephem = PropagateSatellite(mu, timespan, target_initial_state)
+            chaser_ephem = PropagateSatellite(mu, timespan, chaser_initial_state)
+
+            achieved_relative_position_perturbed = target_ephem.loc[end, ['x', 'y', 'z']] - chaser_ephem.loc[end, ['x', 'y', 'z']]
+            #print 'achieved_relative_position_perturbed'
+            #print achieved_relative_position_perturbed
+
+            partials_row = (achieved_relative_position_perturbed - achieved_relative_position_nominal)/perturbation
+            #print 'partials row'
+            #print partials_row
+
+            partials_matrix[index-3,:] = partials_row
+
+            chaser_initial_state.iloc[index] -= perturbation
+
+        #print 'partials matrix'
+        #print partials_matrix
+        
+        inverse_partials = np.linalg.inv(partials_matrix)
+
+        #print 'inverse_partials'
+        #print inverse_partials
+        
+        errors = next_waypoint - achieved_relative_position_nominal
+        
+        #print 'errors'
+        #print errors
+        
+        correction = np.dot(inverse_partials, errors)
+        
+        #print 'correction'
+        #print correction
+
+        #chaser_velocity_next_guess[['x_dot', 'y_dot', 'z_dot']] = chaser_initial_state[['x_dot', 'y_dot', 'z_dot']] + np.dot(inverse_partials, errors)
+        chaser_velocity_next_guess[['x_dot', 'y_dot', 'z_dot']] += correction
+        
+        iteration_count += 1.0
+        
+        #plt.plot([iteration_count], [np.linalg.norm(errors)])
+        #plt.show()
+    
+    chaser_initial_velocity_targeted = chaser_velocity_next_guess
+    print 'start time', start,  'end time', end, 'iteration count', iteration_count
+    
+    return chaser_initial_velocity_targeted
+
+# <codecell>
+
+
 def PropagateSatellite(mu, timespan, initialstate):
     
     mu = mu;
     
+    initialstate_internal = initialstate.copy() # so that initialstate is not modified outside this function # TODO: find other places where I need to be using copy()
+    
     # integrate first satellite
-    statesOverTime = integrate.odeint(odeintNonlinearDerivs, initialstate, timespan, (mu,))  # "extra arguments must be given in a tuple"
+    statesOverTime = integrate.odeint(odeintNonlinearDerivs, initialstate_internal, timespan, (mu,))  # "extra arguments must be given in a tuple"
 
     #timespan, statesOverTime, EventTime, EventState, EventIndex = odelay(nonlinearDerivativesFunction, initialstate, timespan, events=[stop_zEquals0])
 
