@@ -140,7 +140,8 @@ waypoint_times = np.array([#0.0, 2.88, 4.70,
 
 # Create data panel which will hold the waypoints in RIC, RLP, and VNB frames, indexed by time
 waypoints = pd.Panel(items = ['RIC', 'RLP', 'VNB', 
-                              'RIC_achieved', 'RLP_achieved', 'VNB_achieved'],
+                              'RIC_achieved_targeted_nonlin', 'RLP_achieved_targeted_nonlin', 'VNB_achieved_targeted_nonlin',
+                              'RIC_achieved_analytic_nonlin', 'RLP_achieved_analytic_nonlin', 'VNB_achieved_analytic_nonlin'],
                      major_axis = waypoint_times, # time points
                      minor_axis = list('xyz'))    # coordinate labels
 
@@ -274,15 +275,17 @@ chaser_initial_state_absolute_targeted = pd.Series(index = ['x', 'y', 'z', 'x_do
 chaser_initial_state_missed_maneuver   = target_initial_state.copy()  # this is just for first segment
 
 # create Panel for waypoint velocities
-waypoint_velocities = pd.Panel(items = ['RLP_pre_maneuver_absolute', 'RLP_post_maneuver_absolute',
-                                        'RLP_pre_maneuver_relative', 'RLP_post_maneuver_relative',
-                                        'RLP_delta_v'],
+# these velocities are all absolute (they are wrt the origin of the RLP frame, not wrt the target satellite)
+waypoint_velocities = pd.Panel(items = ['RLP_pre_maneuver_targeted_nonlin', 'RLP_post_maneuver_targeted_nonlin', 'RLP_delta_v_targeted_nonlin',
+                                        'RLP_pre_maneuver_analytic_linear', 'RLP_post_maneuver_analytic_linear', 'RLP_delta_v_analytic_linear'],
                      major_axis = waypoint_times, # time points
                      minor_axis = ['x_dot', 'y_dot', 'z_dot'])    # coordinate labels
 
 # assume starts exactly from first waypoint with same velocity as target satellite (for lack of any better velocity values at this point)
-waypoints.RLP_achieved.iloc[0] = waypoints.RLP.iloc[0]
-waypoint_velocities.RLP_pre_maneuver_absolute.iloc[0] = target_initial_state[['x_dot', 'y_dot', 'z_dot']]
+waypoints.RLP_achieved_targeted_nonlin.iloc[0] = waypoints.RLP.iloc[0]
+waypoints.RLP_achieved_analytic_nonlin.iloc[0] = waypoints.RLP.iloc[0]
+waypoint_velocities.RLP_pre_maneuver_targeted_nonlin.iloc[0] = target_initial_state[['x_dot', 'y_dot', 'z_dot']]
+waypoint_velocities.RLP_pre_maneuver_analytic_linear.iloc[0] = target_initial_state[['x_dot', 'y_dot', 'z_dot']]
 
 # create offset panel
 offsets = pd.Panel(items = ['RLP_analytic_linear', 'RLP_analytic_nonlin', 'RLP_targeted_nonlin', 'RLP_missed_maneuver',
@@ -300,7 +303,7 @@ for start, end in waypoint_time_intervals:
     offsets.major_axis = timespan_for_segment
 
     # Pull out the RLP vector of the current and next waypoint
-    current_waypoint = waypoints.RLP_achieved.loc[start]
+    current_waypoint = waypoints.RLP_achieved_targeted_nonlin.loc[start]
     next_waypoint = waypoints.RLP.loc[end]
     
     ## Compute required velocity to travel between waypoints
@@ -310,8 +313,6 @@ for start, end in waypoint_time_intervals:
     # Method signature:
     # initialRelativeVelocity = ComputeRequiredVelocity(initialState1ForSegment, initialRelativePosition, initialTime, targetRelativePosition, targetTime)
     chaser_initial_velocity_relative_analytic = ComputeRequiredVelocity(target_initial_state_for_segment, current_waypoint, start, next_waypoint, end, mu)
-    
-    #waypoint_velocities.RLP_post_maneuver_relative.loc[start] = chaser_initial_velocity_relative_analytic
     
     #print 'initial chaser relative velocity', chaser_initial_velocity_relative_analytic
 
@@ -370,10 +371,12 @@ for start, end in waypoint_time_intervals:
     ## Compute delta-V
     
     # post-maneuver velocity at current waypoint
-    waypoint_velocities.RLP_post_maneuver_absolute.loc[start] = chaser_ephem_for_segment_targeted.loc[start, ['x_dot', 'y_dot', 'z_dot']]
+    waypoint_velocities.RLP_post_maneuver_targeted_nonlin.loc[start] = chaser_ephem_for_segment_targeted.loc[start, ['x_dot', 'y_dot', 'z_dot']]
+    waypoint_velocities.RLP_post_maneuver_analytic_linear.loc[start] = chaser_initial_state_absolute_analytic[['x_dot', 'y_dot', 'z_dot']]
     
     # pre-maneuver velocity for next waypoint (end of current propagation segment)
-    waypoint_velocities.RLP_pre_maneuver_absolute.loc[end] = chaser_ephem_for_segment_targeted.loc[end, ['x_dot', 'y_dot', 'z_dot']]
+    waypoint_velocities.RLP_pre_maneuver_targeted_nonlin.loc[end] = chaser_ephem_for_segment_targeted.loc[end, ['x_dot', 'y_dot', 'z_dot']]
+    waypoint_velocities.RLP_pre_maneuver_analytic_linear.loc[end] = chaser_ephem_for_segment_targeted.loc[end, ['x_dot', 'y_dot', 'z_dot']]  # TODO: do I want to do this differently?  Currently using the targeted velocity as the "pre-maneuver" velocity for the analytic delta-V computation. This makes sense but other ways could also make sense.
     
     # TODO: also compute the delta-V based only on the linear relmo propagation and compare the delta-V to the nonlinear one currently being computed
     #      (this means we would need to propagate forward from the nominal waypoint instead of only propagating forward from the achieved waypoint)
@@ -388,15 +391,19 @@ for start, end in waypoint_time_intervals:
     chaser_initial_state_missed_maneuver = chaser_ephem_for_segment_targeted.iloc[-1] # use final state from previous segment
     
     # Record updated/achieved chaser satellite waypoint for next segment
-    waypoints.RLP_achieved.loc[end] = offsets.RLP_targeted_nonlin.loc[end, ['x', 'y', 'z']]   
+    waypoints.RLP_achieved_targeted_nonlin.loc[end] = offsets.RLP_targeted_nonlin.loc[end, ['x', 'y', 'z']]  
+    waypoints.RLP_achieved_analytic_nonlin.loc[end] = offsets.RLP_analytic_nonlin.loc[end, ['x', 'y', 'z']]   
     
     # Build RIC and VNB frames
     RLPtoRIC = BuildRICFrame(target_ephem_for_segment.loc[end], center)
     RLPtoVNB = BuildVNBFrame(target_ephem_for_segment.loc[end], center)
     
     # compute updated/achieved waypoint location in RIC and VNB
-    waypoints.RIC_achieved.loc[end] = ConvertOffset(waypoints.RLP_achieved.loc[end], RLPtoRIC)
-    waypoints.VNB_achieved.loc[end] = ConvertOffset(waypoints.RLP_achieved.loc[end], RLPtoVNB)
+    waypoints.RIC_achieved_targeted_nonlin.loc[end] = ConvertOffset(waypoints.RLP_achieved_targeted_nonlin.loc[end], RLPtoRIC)
+    waypoints.VNB_achieved_targeted_nonlin.loc[end] = ConvertOffset(waypoints.RLP_achieved_targeted_nonlin.loc[end], RLPtoVNB)
+    
+    waypoints.RIC_achieved_analytic_nonlin.loc[end] = ConvertOffset(waypoints.RLP_achieved_analytic_nonlin.loc[end], RLPtoRIC)
+    waypoints.VNB_achieved_analytic_nonlin.loc[end] = ConvertOffset(waypoints.RLP_achieved_analytic_nonlin.loc[end], RLPtoVNB)
     
     ## VISUALIZATIONS
 
@@ -422,15 +429,23 @@ for start, end in waypoint_time_intervals:
     SetPlotGridData(axXZ_VNB, axYZ_VNB, axXY_VNB, ax3D_VNB, offsets.VNB_missed_maneuver[['x', 'y', 'z']]*RLP_properties.r12, 'dotted', 'b')
     
 # add achieved waypoints to plots
-SetPlotGridData(axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP, waypoints.RLP_achieved*RLP_properties.r12, 'points', 'm')
-SetPlotGridData(axXZ_RIC, axYZ_RIC, axXY_RIC, ax3D_RIC, waypoints.RIC_achieved*RLP_properties.r12, 'points', 'm')
-SetPlotGridData(axXZ_VNB, axYZ_VNB, axXY_VNB, ax3D_VNB, waypoints.VNB_achieved*RLP_properties.r12, 'points', 'm')
+SetPlotGridData(axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP, waypoints.RLP_achieved_targeted_nonlin*RLP_properties.r12, 'points', 'm')
+SetPlotGridData(axXZ_RIC, axYZ_RIC, axXY_RIC, ax3D_RIC, waypoints.RIC_achieved_targeted_nonlin*RLP_properties.r12, 'points', 'm')
+SetPlotGridData(axXZ_VNB, axYZ_VNB, axXY_VNB, ax3D_VNB, waypoints.VNB_achieved_targeted_nonlin*RLP_properties.r12, 'points', 'm')
 
 # final post-maneuver velocity is same as the target satellite's velocity
-waypoint_velocities.RLP_post_maneuver_absolute.loc[end] = target_ephem_for_segment.loc[end, ['x_dot', 'y_dot', 'z_dot']]
+waypoint_velocities.RLP_post_maneuver_targeted_nonlin.loc[end] = target_ephem_for_segment.loc[end, ['x_dot', 'y_dot', 'z_dot']]
+waypoint_velocities.RLP_post_maneuver_analytic_linear.loc[end] = target_ephem_for_segment.loc[end, ['x_dot', 'y_dot', 'z_dot']]
 
 # compute delta-V's
-waypoint_velocities.RLP_delta_v = waypoint_velocities.RLP_post_maneuver_absolute - waypoint_velocities.RLP_pre_maneuver_absolute
+waypoint_velocities.RLP_delta_v_targeted_nonlin = waypoint_velocities.RLP_post_maneuver_targeted_nonlin - waypoint_velocities.RLP_pre_maneuver_targeted_nonlin
+waypoint_velocities.RLP_delta_v_analytic_linear = waypoint_velocities.RLP_post_maneuver_analytic_linear - waypoint_velocities.RLP_pre_maneuver_analytic_linear
+
+# <codecell>
+
+
+print 'waypoints.RLP_achieved_targeted_nonlin', display(HTML(waypoints.RLP_achieved_targeted_nonlin.to_html()))
+print 'waypoints.RLP_achieved_analytic_nonlin', display(HTML(waypoints.RLP_achieved_analytic_nonlin.to_html()))
 
 # <codecell>
 
@@ -454,18 +469,42 @@ waypoint_velocities.RLP_delta_v = waypoint_velocities.RLP_post_maneuver_absolute
 
 #offsets.RLP_targeted_nonlin[['x', 'y', 'z']]
 #current_waypoint
-exists(chaser_ephem_for_segment_targeted)
+
+#np.dot(waypoint_velocities.RLP_delta_v_targeted_nonlin.loc[t], waypoint_velocities.RLP_delta_v_analytic_linear.loc[t])
 
 # <codecell>
 
 
-waypoint_delta_v = pd.Series(index=waypoint_times)
+#waypoint_delta_v = pd.DataFrame(['RLP_targeted_nonlin', 'RLP_analytic_linear'], index=waypoint_times)
+
+waypoint_delta_v = pd.DataFrame({'RLP_targeted_nonlin': np.zeros((len(waypoint_times))),
+                                 'RLP_analytic_linear': np.zeros((len(waypoint_times))),
+                                 'magnitude_difference_between_targeted_and_analytic': np.zeros((len(waypoint_times))),
+                                 'angle_between_targeted_and_analytic': np.zeros((len(waypoint_times))),
+                                 'waypoint_achieved_magnitude_difference_between_targeted_and_analytic': np.zeros((len(waypoint_times)))}, # TODO: this is not the right data structure to keep this attribute in
+                                index=waypoint_times)
 
 # compute delta-V magnitude and report to screen
 for t in waypoint_times:
-    waypoint_delta_v.loc[t] = np.linalg.norm(waypoint_velocities.RLP_delta_v.loc[t], 2)*RLP_properties.r12/RLP_properties.time_const*1000.0  # m/s
     
-waypoint_delta_v
+    waypoint_delta_v.RLP_targeted_nonlin.loc[t] = np.linalg.norm(waypoint_velocities.RLP_delta_v_targeted_nonlin.loc[t], 2)*RLP_properties.r12/RLP_properties.time_const*1000.0  # m/s
+    waypoint_delta_v.RLP_analytic_linear.loc[t] = np.linalg.norm(waypoint_velocities.RLP_delta_v_analytic_linear.loc[t], 2)*RLP_properties.r12/RLP_properties.time_const*1000.0  # m/s
+    
+    waypoint_delta_v.angle_between_targeted_and_analytic.loc[t] = math.degrees(math.acos(
+                                                                            np.dot(waypoint_velocities.RLP_delta_v_targeted_nonlin.loc[t], waypoint_velocities.RLP_delta_v_analytic_linear.loc[t])/
+                                                                            (np.linalg.norm(waypoint_velocities.RLP_delta_v_targeted_nonlin.loc[t])*
+                                                                             np.linalg.norm(waypoint_velocities.RLP_delta_v_analytic_linear.loc[t]))))
+    
+    waypoint_delta_v.magnitude_difference_between_targeted_and_analytic.loc[t] = waypoint_delta_v.RLP_targeted_nonlin.loc[t] - waypoint_delta_v.RLP_analytic_linear.loc[t]
+    
+    waypoint_delta_v.waypoint_achieved_magnitude_difference_between_targeted_and_analytic.loc[t] = np.linalg.norm(waypoints.RLP_achieved_targeted_nonlin.loc[t] - waypoints.RLP_achieved_analytic_nonlin.loc[t])*RLP_properties.r12*1000 # meters
+    
+waypoint_delta_v[['angle_between_targeted_and_analytic', 'magnitude_difference_between_targeted_and_analytic', 'waypoint_achieved_magnitude_difference_between_targeted_and_analytic']]
+
+
+print 'waypoint_delta_v', display(HTML(waypoint_delta_v[['angle_between_targeted_and_analytic', 'magnitude_difference_between_targeted_and_analytic', 'waypoint_achieved_magnitude_difference_between_targeted_and_analytic']].to_html()))
+print 'waypoint_velocities.RLP_delta_v_targeted_nonlin', display(HTML(waypoint_velocities.RLP_delta_v_targeted_nonlin.to_html()))
+print 'waypoint_velocities.RLP_delta_v_analytic_linear', display(HTML(waypoint_velocities.RLP_delta_v_analytic_linear.to_html()))
 
 # <headingcell level=3>
 
