@@ -42,6 +42,7 @@ from thesis_functions.astro import ComputeNonlinearDerivs, ComputeRelmoDynamicsM
 from thesis_functions.astro import odeintNonlinearDerivs, odeintNonlinearDerivsWithLinearRelmoSTM, odeintNonlinearDerivsWithLinearRelmo
 from thesis_functions.astro import ComputeRequiredVelocity, PropagateSatelliteAndChaser, TargetRequiredVelocity 
 from thesis_functions.astro import PropagateSatellite, ComputeOffsets, ConvertOffset, BuildRICFrame, BuildVNBFrame
+from thesis_functions.astro import BuildRICFrames, BuildVNBFrames, ConvertOffsets
 
 # <headingcell level=3>
 
@@ -214,6 +215,10 @@ for start, end in waypoint_time_intervals:
 print 'waypoints.RLP', display(HTML(waypoints.RLP.to_html()))
 print 'waypoints.VNB', display(HTML(waypoints.VNB.to_html()))
 
+# <codecell>
+
+#target_initial_state.index
+
 # <headingcell level=3>
 
 # Set up plots
@@ -243,9 +248,9 @@ print 'waypoints.VNB', display(HTML(waypoints.VNB.to_html()))
 # allowed axis modes: 'auto' and 'equal'
 
 # Plots of offset in RLP, RIC, VNB frames
-axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP = CreatePlotGrid('Offset between Satellites 1 and 2 in RLP Frame', 'X', 'Y', 'Z', 'auto')
-axXZ_RIC, axYZ_RIC, axXY_RIC, ax3D_RIC = CreatePlotGrid('Offset between Satellites 1 and 2 in RIC Frame', 'R', 'I', 'C', 'auto')
-axXZ_VNB, axYZ_VNB, axXY_VNB, ax3D_VNB = CreatePlotGrid('Offset between Satellites 1 and 2 in VNB Frame', 'V', 'N', 'B', 'auto')
+axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP = CreatePlotGrid('Offset between Satellites 1 and 2 in RLP Frame', 'X', 'Y', 'Z', 'equal')
+axXZ_RIC, axYZ_RIC, axXY_RIC, ax3D_RIC = CreatePlotGrid('Offset between Satellites 1 and 2 in RIC Frame', 'R', 'I', 'C', 'equal')
+axXZ_VNB, axYZ_VNB, axXY_VNB, ax3D_VNB = CreatePlotGrid('Offset between Satellites 1 and 2 in VNB Frame', 'V', 'N', 'B', 'equal')
 
 # add all waypoints to RLP, RIC, and VNB plots
 SetPlotGridData(axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP, waypoints.RLP*RLP_properties.r12, 'points', 'c')
@@ -271,8 +276,7 @@ target_initial_state_for_segment = target_initial_state.copy()
 chaser_initial_state_relative_analytic = pd.Series(index = ['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot'])
 chaser_initial_state_absolute_analytic = pd.Series(index = ['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot'])
 chaser_initial_state_absolute_targeted = pd.Series(index = ['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot'])
-#chaser_initial_state_missed_maneuver   = pd.Series(index = ['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot'])
-chaser_initial_state_missed_maneuver   = target_initial_state.copy()  # this is just for first segment
+chaser_initial_state_missed_maneuver   = target_initial_state.copy()
 
 # create Panel for waypoint velocities
 # these velocities are all absolute (they are wrt the origin of the RLP frame, not wrt the target satellite)
@@ -349,25 +353,24 @@ for start, end in waypoint_time_intervals:
     offsets.RLP_targeted_nonlin = ComputeOffsets(timespan_for_segment, target_ephem_for_segment, chaser_ephem_for_segment_targeted)
     offsets.RLP_missed_maneuver = ComputeOffsets(timespan_for_segment, target_ephem_for_segment, chaser_ephem_for_segment_missed_maneuver)
     
-    # Offsets in RIC and VNB
-    for t in timespan_for_segment:
-        
-        # Build RIC and VNB frames
-        RLPtoRIC = BuildRICFrame(target_ephem_for_segment.loc[t], center)
-        RLPtoVNB = BuildVNBFrame(target_ephem_for_segment.loc[t], center)
+    
+    ## Build RIC and VNB frames
+    RLPtoRIC = BuildRICFrames(target_ephem_for_segment, center)
+    RLPtoVNB = BuildVNBFrames(target_ephem_for_segment, center)
 
-        # Compute offsets in RIC frame
-        offsets.RIC_analytic_linear.loc[t] = ConvertOffset(offsets.RLP_analytic_linear.loc[t, ['x', 'y', 'z']], RLPtoRIC);
-        offsets.RIC_analytic_nonlin.loc[t] = ConvertOffset(offsets.RLP_analytic_nonlin.loc[t, ['x', 'y', 'z']], RLPtoRIC);
-        offsets.RIC_targeted_nonlin.loc[t] = ConvertOffset(offsets.RLP_targeted_nonlin.loc[t, ['x', 'y', 'z']], RLPtoRIC);
-        offsets.RIC_missed_maneuver.loc[t] = ConvertOffset(offsets.RLP_missed_maneuver.loc[t, ['x', 'y', 'z']], RLPtoRIC);
+    # Compute offsets in RIC frame
+    offsets.RIC_analytic_linear = ConvertOffsets(offsets.RLP_analytic_linear, RLPtoRIC);
+    offsets.RIC_analytic_nonlin = ConvertOffsets(offsets.RLP_analytic_nonlin, RLPtoRIC);
+    offsets.RIC_targeted_nonlin = ConvertOffsets(offsets.RLP_targeted_nonlin, RLPtoRIC);
+    offsets.RIC_missed_maneuver = ConvertOffsets(offsets.RLP_missed_maneuver, RLPtoRIC);
 
-        # Compute offsets in VNB frame
-        offsets.VNB_analytic_linear.loc[t] = ConvertOffset(offsets.RLP_analytic_linear.loc[t, ['x', 'y', 'z']], RLPtoVNB);
-        offsets.VNB_analytic_nonlin.loc[t] = ConvertOffset(offsets.RLP_analytic_nonlin.loc[t, ['x', 'y', 'z']], RLPtoVNB);
-        offsets.VNB_targeted_nonlin.loc[t] = ConvertOffset(offsets.RLP_targeted_nonlin.loc[t, ['x', 'y', 'z']], RLPtoVNB);
-        offsets.VNB_missed_maneuver.loc[t] = ConvertOffset(offsets.RLP_missed_maneuver.loc[t, ['x', 'y', 'z']], RLPtoVNB);
-
+    # Compute offsets in VNB frame
+    offsets.VNB_analytic_linear = ConvertOffsets(offsets.RLP_analytic_linear, RLPtoVNB);
+    offsets.VNB_analytic_nonlin = ConvertOffsets(offsets.RLP_analytic_nonlin, RLPtoVNB);
+    offsets.VNB_targeted_nonlin = ConvertOffsets(offsets.RLP_targeted_nonlin, RLPtoVNB);
+    offsets.VNB_missed_maneuver = ConvertOffsets(offsets.RLP_missed_maneuver, RLPtoVNB);
+    
+    
     ## Compute delta-V
     
     # post-maneuver velocity at current waypoint
@@ -391,8 +394,8 @@ for start, end in waypoint_time_intervals:
     chaser_initial_state_missed_maneuver = chaser_ephem_for_segment_targeted.iloc[-1] # use final state from previous segment
     
     # Record updated/achieved chaser satellite waypoint for next segment
-    waypoints.RLP_achieved_targeted_nonlin.loc[end] = offsets.RLP_targeted_nonlin.loc[end, ['x', 'y', 'z']]  
-    waypoints.RLP_achieved_analytic_nonlin.loc[end] = offsets.RLP_analytic_nonlin.loc[end, ['x', 'y', 'z']]   
+    waypoints.RLP_achieved_targeted_nonlin.loc[end] = offsets.RLP_targeted_nonlin.loc[end]  
+    waypoints.RLP_achieved_analytic_nonlin.loc[end] = offsets.RLP_analytic_nonlin.loc[end]   
     
     # Build RIC and VNB frames
     RLPtoRIC = BuildRICFrame(target_ephem_for_segment.loc[end], center)
@@ -413,20 +416,20 @@ for start, end in waypoint_time_intervals:
     #ax2.plot((dx_NONLIN - dx_LINEAR)/np.amax(np.absolute(dx_LINEAR))*100.0, (dy_NONLIN - dy_LINEAR)/np.amax(np.absolute(dy_LINEAR))*100.0)
     
     # plot offsets (relative motion) between satellites 1 and 2 in RLP, RIC, and VNB frames
-    SetPlotGridData(axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP, offsets.RLP_analytic_linear[['x', 'y', 'z']]*RLP_properties.r12, 'line', 'g')
-    SetPlotGridData(axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP, offsets.RLP_analytic_nonlin[['x', 'y', 'z']]*RLP_properties.r12, 'line', 'r')
-    SetPlotGridData(axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP, offsets.RLP_targeted_nonlin[['x', 'y', 'z']]*RLP_properties.r12, 'line', 'b')
-    SetPlotGridData(axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP, offsets.RLP_missed_maneuver[['x', 'y', 'z']]*RLP_properties.r12, 'dotted', 'b')
+    SetPlotGridData(axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP, offsets.RLP_analytic_linear*RLP_properties.r12, 'line', 'g')
+    SetPlotGridData(axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP, offsets.RLP_analytic_nonlin*RLP_properties.r12, 'line', 'r')
+    SetPlotGridData(axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP, offsets.RLP_targeted_nonlin*RLP_properties.r12, 'line', 'b')
+    SetPlotGridData(axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP, offsets.RLP_missed_maneuver*RLP_properties.r12, 'dotted', 'b')
     
-    SetPlotGridData(axXZ_RIC, axYZ_RIC, axXY_RIC, ax3D_RIC, offsets.RIC_analytic_linear[['x', 'y', 'z']]*RLP_properties.r12, 'line', 'g')
-    SetPlotGridData(axXZ_RIC, axYZ_RIC, axXY_RIC, ax3D_RIC, offsets.RIC_analytic_nonlin[['x', 'y', 'z']]*RLP_properties.r12, 'line', 'r')
-    SetPlotGridData(axXZ_RIC, axYZ_RIC, axXY_RIC, ax3D_RIC, offsets.RIC_targeted_nonlin[['x', 'y', 'z']]*RLP_properties.r12, 'line', 'b')
-    SetPlotGridData(axXZ_RIC, axYZ_RIC, axXY_RIC, ax3D_RIC, offsets.RIC_missed_maneuver[['x', 'y', 'z']]*RLP_properties.r12, 'dotted', 'b')
+    SetPlotGridData(axXZ_RIC, axYZ_RIC, axXY_RIC, ax3D_RIC, offsets.RIC_analytic_linear*RLP_properties.r12, 'line', 'g')
+    SetPlotGridData(axXZ_RIC, axYZ_RIC, axXY_RIC, ax3D_RIC, offsets.RIC_analytic_nonlin*RLP_properties.r12, 'line', 'r')
+    SetPlotGridData(axXZ_RIC, axYZ_RIC, axXY_RIC, ax3D_RIC, offsets.RIC_targeted_nonlin*RLP_properties.r12, 'line', 'b')
+    SetPlotGridData(axXZ_RIC, axYZ_RIC, axXY_RIC, ax3D_RIC, offsets.RIC_missed_maneuver*RLP_properties.r12, 'dotted', 'b')
     
-    SetPlotGridData(axXZ_VNB, axYZ_VNB, axXY_VNB, ax3D_VNB, offsets.VNB_analytic_linear[['x', 'y', 'z']]*RLP_properties.r12, 'line', 'g')
-    SetPlotGridData(axXZ_VNB, axYZ_VNB, axXY_VNB, ax3D_VNB, offsets.VNB_analytic_nonlin[['x', 'y', 'z']]*RLP_properties.r12, 'line', 'r')
-    SetPlotGridData(axXZ_VNB, axYZ_VNB, axXY_VNB, ax3D_VNB, offsets.VNB_targeted_nonlin[['x', 'y', 'z']]*RLP_properties.r12, 'line', 'b')
-    SetPlotGridData(axXZ_VNB, axYZ_VNB, axXY_VNB, ax3D_VNB, offsets.VNB_missed_maneuver[['x', 'y', 'z']]*RLP_properties.r12, 'dotted', 'b')
+    SetPlotGridData(axXZ_VNB, axYZ_VNB, axXY_VNB, ax3D_VNB, offsets.VNB_analytic_linear*RLP_properties.r12, 'line', 'g')
+    SetPlotGridData(axXZ_VNB, axYZ_VNB, axXY_VNB, ax3D_VNB, offsets.VNB_analytic_nonlin*RLP_properties.r12, 'line', 'r')
+    SetPlotGridData(axXZ_VNB, axYZ_VNB, axXY_VNB, ax3D_VNB, offsets.VNB_targeted_nonlin*RLP_properties.r12, 'line', 'b')
+    SetPlotGridData(axXZ_VNB, axYZ_VNB, axXY_VNB, ax3D_VNB, offsets.VNB_missed_maneuver*RLP_properties.r12, 'dotted', 'b')
     
 # add achieved waypoints to plots
 SetPlotGridData(axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP, waypoints.RLP_achieved_targeted_nonlin*RLP_properties.r12, 'points', 'm')
@@ -471,6 +474,28 @@ print 'waypoints.RLP_achieved_analytic_nonlin', display(HTML(waypoints.RLP_achie
 #current_waypoint
 
 #np.dot(waypoint_velocities.RLP_delta_v_targeted_nonlin.loc[t], waypoint_velocities.RLP_delta_v_analytic_linear.loc[t])
+#np.linalg.norm(waypoint_velocities.RLP_delta_v_analytic_linear.loc[t])
+#waypoint_velocities.RLP_delta_v_targeted_nonlin
+
+#offsets.RLP_analytic_linear.loc[t].iloc[0:3] #, ['x', 'y', 'z']]
+#offsets.RLP_analytic_linear.loc[:,['x', 'y', 'z']]
+
+#test = pd.Series({
+#    'x':     initial_condition_set.x,
+#    'y':     0.0,
+#    'z':     initial_condition_set.z,
+#    'x_dot': 0.0,
+#    'y_dot': initial_condition_set.y_dot,
+#    'z_dot': 0.0})
+#print test
+
+#test.reindex_axis(index=['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot'], axis=0)
+#test.reindex(index=['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot'])
+#print test
+
+# reassign so that the series maintains the required order for its values
+#test = test[['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot']]
+#df.reindex(index=[date1, date2, date3], columns=['A', 'B', 'C'])
 
 # <codecell>
 
@@ -592,10 +617,6 @@ print 'waypoint_velocities.RLP_delta_v_analytic_linear', display(HTML(waypoint_v
 #     target_ephem_cumulative.loc["RLP", timespan_for_segment] = target_ephem_for_segment.values
 #     chaser_ephem_cumulative.loc["RLP", timespan_for_segment] = chaser_ephem_for_segment.values
 #     chaser_ephem_cumulative.loc["RLP_LINEAR", timespan_for_segment] = (target_ephem_for_segment + linear_offset_for_segment).values
-
-# <codecell>
-
-RLP_properties.r12
 
 # <codecell>
 

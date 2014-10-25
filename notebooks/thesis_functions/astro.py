@@ -326,7 +326,7 @@ def PropagateSatelliteAndChaser(mu, timespan, initialstate1, initialRelativeStat
     
     # reassign so that the data maintains the required order for its values
     offset_linear = offset_linear[['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot']]
-
+    
     return target_satellite, offset_linear
 
 # <codecell>
@@ -343,7 +343,7 @@ def TargetRequiredVelocity(target_initial_state, chaser_velocity_initial_guess, 
     
     perturbation = 0.00001
     tolerance = 0.000000001
-    max_iterations = 5.0
+    max_iterations = 10.0
     
     chaser_velocity_next_guess = chaser_velocity_initial_guess.copy()
     
@@ -506,6 +506,23 @@ def ConvertOffset(input_offset, rotation_matrix):
     
     return output_offset
 
+
+def ConvertOffsets(input_offset, rotation_matrix):
+    
+    # compute trajectory offset in new frame (e.g. RIC, VNB)
+        
+    # input_offset is the input offset vector (dx, dy, dz)
+    # rotation_matrix is the matrix formed by the basis vectors (basis1,basis2,basis3) converting from the input frame to the output frame
+    # output_offset is the output offset vector (db1, db2, db3)
+    
+    # input_offset is Nx3
+    # rotation_matrix is Nx3x3
+    # want output_offset to be Nx3
+    
+    output_offset = np.einsum('ij,ijk->ik', input_offset, rotation_matrix)
+    
+    return output_offset
+
 # <codecell>
 
 
@@ -519,14 +536,13 @@ def BuildRICFrame(state, center):
     iVec = np.cross(cVec, rVec)
     
     # unitize RIC frame vectors
-    rVec = np.divide(rVec, np.linalg.norm(rVec))
-    iVec = np.divide(iVec, np.linalg.norm(iVec))
-    cVec = np.divide(cVec, np.linalg.norm(cVec))
+    rVec /= np.linalg.norm(rVec)
+    iVec /= np.linalg.norm(iVec)
+    cVec /= np.linalg.norm(cVec)
     
     RLPtoRIC = np.dstack((rVec, iVec, cVec)) # this is an ndarray
-
+    
     return RLPtoRIC
-
 
 def BuildVNBFrame(state, center):
     
@@ -544,5 +560,60 @@ def BuildVNBFrame(state, center):
     
     RLPtoVNB = np.dstack((vVec, nVec, bVec))
         
+    return RLPtoVNB
+
+
+def BuildRICFrames(ephem, center):
+    
+    # build RIC frame based on state
+    rVec = (ephem[["x", "y", "z"]] - center).values     # this is a 500x3 ndarray
+    vVec = (ephem[["x_dot", "y_dot", "z_dot"]]).values
+    
+    cVec = np.cross(rVec, vVec)
+    iVec = np.cross(cVec, rVec)
+    
+    # unitize RIC frame vectors
+    rVec /= np.linalg.norm(rVec, axis=1)[:, np.newaxis]
+    iVec /= np.linalg.norm(iVec, axis=1)[:, np.newaxis]
+    cVec /= np.linalg.norm(cVec, axis=1)[:, np.newaxis]
+    # need newaxis or else get 'ValueError: operands could not be broadcast together with shapes (500,3) (500) (500,3)'
+    
+    RLPtoRIC_matrices = np.dstack((rVec, iVec, cVec)) # this is an ndarray
+    
+    # TODO: do something like this so that the input can be a series or a dataframe
+    #if type(ephem) == pd.Series:
+    #    items = 1
+    #elif type(ephem) == pd.DataFrame:
+    #    items = ephem.index
+    
+    RLPtoRIC = pd.Panel(RLPtoRIC_matrices,
+                        items=ephem.index, 
+                        major_axis=list("RIC"),
+                        minor_axis=list("xyz"))
+    
+    return RLPtoRIC
+
+
+def BuildVNBFrames(ephem, center):
+    
+    # build VNB frame based on state
+    rVec = (ephem[["x", "y", "z"]] - center).values
+    vVec = (ephem[["x_dot", "y_dot", "z_dot"]]).values
+
+    nVec = np.cross(rVec, vVec)
+    bVec = np.cross(vVec, nVec)
+
+    # unitize VNB frame vectors
+    vVec /= np.linalg.norm(vVec, axis=1)[:, np.newaxis]
+    nVec /= np.linalg.norm(nVec, axis=1)[:, np.newaxis]
+    bVec /= np.linalg.norm(bVec, axis=1)[:, np.newaxis]
+    
+    RLPtoVNB_matrices = np.dstack((vVec, nVec, bVec))
+        
+    RLPtoVNB = pd.Panel(RLPtoVNB_matrices,
+                        items=ephem.index, 
+                        major_axis=list("VNB"),
+                        minor_axis=list("xyz"))
+    
     return RLPtoVNB
 
