@@ -72,7 +72,7 @@ target_initial_state = pd.Series({
     'z_dot': 0.0})
 
 # reassign so that the series maintains the required order for its values
-target_initial_state = target_initial_state[['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot']]
+target_initial_state = target_initial_state.loc[['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot']]
 
 # TODO: start target satellite from different points along its orbit.  
 #       Look at how delta-V changes; also maybe linear relmo will be a better approximation along other parts of the orbit.
@@ -288,8 +288,8 @@ waypoint_velocities = pd.Panel(items = ['RLP_pre_maneuver_targeted_nonlin', 'RLP
 # assume starts exactly from first waypoint with same velocity as target satellite (for lack of any better velocity values at this point)
 waypoints.RLP_achieved_targeted_nonlin.iloc[0] = waypoints.RLP.iloc[0]
 waypoints.RLP_achieved_analytic_nonlin.iloc[0] = waypoints.RLP.iloc[0]
-waypoint_velocities.RLP_pre_maneuver_targeted_nonlin.iloc[0] = target_initial_state[['x_dot', 'y_dot', 'z_dot']]
-waypoint_velocities.RLP_pre_maneuver_analytic_linear.iloc[0] = target_initial_state[['x_dot', 'y_dot', 'z_dot']]
+waypoint_velocities.RLP_pre_maneuver_targeted_nonlin.iloc[0] = target_initial_state.loc[['x_dot', 'y_dot', 'z_dot']]
+waypoint_velocities.RLP_pre_maneuver_analytic_linear.iloc[0] = target_initial_state.loc[['x_dot', 'y_dot', 'z_dot']]
 
 # create offset panel
 offsets = pd.Panel(items = ['RLP_analytic_linear', 'RLP_analytic_nonlin', 'RLP_targeted_nonlin', 'RLP_missed_maneuver',
@@ -320,8 +320,8 @@ for start, end in waypoint_time_intervals:
     
     #print 'initial chaser relative velocity', chaser_initial_velocity_relative_analytic
 
-    chaser_initial_state_relative_analytic[['x', 'y', 'z']] = current_waypoint
-    chaser_initial_state_relative_analytic[['x_dot', 'y_dot', 'z_dot']] = chaser_initial_velocity_relative_analytic
+    chaser_initial_state_relative_analytic.loc[['x', 'y', 'z']] = current_waypoint
+    chaser_initial_state_relative_analytic.loc[['x_dot', 'y_dot', 'z_dot']] = chaser_initial_velocity_relative_analytic
 
     ## Integrate first satellite with full nonlinear dynamics and second satellite with linear relmo dynamics
 
@@ -338,9 +338,9 @@ for start, end in waypoint_time_intervals:
     chaser_initial_state_absolute_targeted = target_initial_state_for_segment - chaser_initial_state_relative_analytic
     
     # This is the stuff for the targeter
-    chaser_velocity_initial_guess = chaser_initial_state_absolute_analytic[['x_dot', 'y_dot', 'z_dot']].copy()
+    chaser_velocity_initial_guess = chaser_initial_state_absolute_analytic.loc[['x_dot', 'y_dot', 'z_dot']].copy()
     chaser_initial_velocity_targeted = TargetRequiredVelocity(target_initial_state_for_segment, chaser_velocity_initial_guess, current_waypoint, start, next_waypoint, end, mu)
-    chaser_initial_state_absolute_targeted[['x_dot', 'y_dot', 'z_dot']] = chaser_initial_velocity_targeted.copy()
+    chaser_initial_state_absolute_targeted.loc[['x_dot', 'y_dot', 'z_dot']] = chaser_initial_velocity_targeted.copy()
     # end of targeter stuff
     
     # compute chaser satellite position and velocity over time in RLP frame by integrating initial state with full nonlinear dynamics
@@ -375,7 +375,7 @@ for start, end in waypoint_time_intervals:
     
     # post-maneuver velocity at current waypoint
     waypoint_velocities.RLP_post_maneuver_targeted_nonlin.loc[start] = chaser_ephem_for_segment_targeted.loc[start, ['x_dot', 'y_dot', 'z_dot']]
-    waypoint_velocities.RLP_post_maneuver_analytic_linear.loc[start] = chaser_initial_state_absolute_analytic[['x_dot', 'y_dot', 'z_dot']]
+    waypoint_velocities.RLP_post_maneuver_analytic_linear.loc[start] = chaser_initial_state_absolute_analytic.loc[['x_dot', 'y_dot', 'z_dot']]
     
     # pre-maneuver velocity for next waypoint (end of current propagation segment)
     waypoint_velocities.RLP_pre_maneuver_targeted_nonlin.loc[end] = chaser_ephem_for_segment_targeted.loc[end, ['x_dot', 'y_dot', 'z_dot']]

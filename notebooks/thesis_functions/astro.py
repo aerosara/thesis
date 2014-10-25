@@ -314,7 +314,7 @@ def PropagateSatelliteAndChaser(mu, timespan, initialstate1, initialRelativeStat
         "z_dot": zdot1}, index=timespan)
     
     # reassign so that the data maintains the required order for its values
-    target_satellite = target_satellite[['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot']]
+    target_satellite = target_satellite.loc[:, ['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot']]
 
     offset_linear = pd.DataFrame({
         "x": dx_LINEAR,
@@ -325,7 +325,7 @@ def PropagateSatelliteAndChaser(mu, timespan, initialstate1, initialRelativeStat
         "z_dot": dzdot_LINEAR}, index=timespan)
     
     # reassign so that the data maintains the required order for its values
-    offset_linear = offset_linear[['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot']]
+    offset_linear = offset_linear.loc[:, ['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot']]
     
     return target_satellite, offset_linear
 
@@ -366,7 +366,7 @@ def TargetRequiredVelocity(target_initial_state, chaser_velocity_initial_guess, 
                                         'z_dot': chaser_velocity_next_guess.z_dot})
 
         # reassign so that the series maintains the required order for its values
-        chaser_initial_state = chaser_initial_state[['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot']]
+        chaser_initial_state = chaser_initial_state.loc[['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot']]
 
         # propagate target and chaser each using full nonlinear dynamics
         target_ephem = PropagateSatellite(mu, timespan, target_initial_state)
@@ -420,7 +420,7 @@ def TargetRequiredVelocity(target_initial_state, chaser_velocity_initial_guess, 
         #print correction
 
         #chaser_velocity_next_guess[['x_dot', 'y_dot', 'z_dot']] = chaser_initial_state[['x_dot', 'y_dot', 'z_dot']] + np.dot(inverse_partials, errors)
-        chaser_velocity_next_guess[['x_dot', 'y_dot', 'z_dot']] += correction
+        chaser_velocity_next_guess.loc[['x_dot', 'y_dot', 'z_dot']] += correction
         
         iteration_count += 1.0
         
@@ -465,7 +465,7 @@ def PropagateSatellite(mu, timespan, initialstate):
         "z_dot": z_dot}, index=timespan)
     
     # reassign so that the data maintains the required order for its values
-    ephem = ephem[['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot']]
+    ephem = ephem.loc[:, ['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot']]
     
     return ephem
    
@@ -529,8 +529,8 @@ def ConvertOffsets(input_offset, rotation_matrix):
 def BuildRICFrame(state, center):
     
     # build RIC frame based on state
-    rVec = state[["x", "y", "z"]] - center  # this is a Series
-    vVec = state[["x_dot", "y_dot", "z_dot"]]
+    rVec = state.loc[["x", "y", "z"]] - center  # this is a Series
+    vVec = state.loc[["x_dot", "y_dot", "z_dot"]]
     
     cVec = np.cross(rVec, vVec)
     iVec = np.cross(cVec, rVec)
@@ -547,8 +547,8 @@ def BuildRICFrame(state, center):
 def BuildVNBFrame(state, center):
     
     # build VNB frame based on state
-    rVec = state[["x", "y", "z"]] - center
-    vVec = state[["x_dot", "y_dot", "z_dot"]]
+    rVec = state.loc[["x", "y", "z"]] - center
+    vVec = state.loc[["x_dot", "y_dot", "z_dot"]]
 
     nVec = np.cross(rVec, vVec)
     bVec = np.cross(vVec, nVec)
@@ -566,8 +566,8 @@ def BuildVNBFrame(state, center):
 def BuildRICFrames(ephem, center):
     
     # build RIC frame based on state
-    rVec = (ephem[["x", "y", "z"]] - center).values     # this is a 500x3 ndarray
-    vVec = (ephem[["x_dot", "y_dot", "z_dot"]]).values
+    rVec = (ephem.loc[:, ["x", "y", "z"]] - center).values     # this is a 500x3 ndarray
+    vVec = (ephem.loc[:, ["x_dot", "y_dot", "z_dot"]]).values
     
     cVec = np.cross(rVec, vVec)
     iVec = np.cross(cVec, rVec)
@@ -597,8 +597,8 @@ def BuildRICFrames(ephem, center):
 def BuildVNBFrames(ephem, center):
     
     # build VNB frame based on state
-    rVec = (ephem[["x", "y", "z"]] - center).values
-    vVec = (ephem[["x_dot", "y_dot", "z_dot"]]).values
+    rVec = (ephem.loc[:, ["x", "y", "z"]] - center).values
+    vVec = (ephem.loc[:, ["x_dot", "y_dot", "z_dot"]]).values
 
     nVec = np.cross(rVec, vVec)
     bVec = np.cross(vVec, nVec)
