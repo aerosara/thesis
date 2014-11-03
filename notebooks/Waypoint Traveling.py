@@ -58,7 +58,7 @@ from thesis_functions.astro import BuildRICFrames, BuildVNBFrames, ConvertOffset
 # Barbee's initial conditions are a planar (Lyapunov) orbit at Earth/Moon L1
 
 # Each initial_condition_set has attributes: author, test_case, mu, x, z, y_dot, t
-initial_condition_set = initial_condition_sets.loc["Barbee", 1]
+initial_condition_set = initial_condition_sets.loc['Barbee', 1]
 
 mu = initial_condition_set.mu
 
@@ -77,9 +77,8 @@ target_initial_state = target_initial_state.loc[['x', 'y', 'z', 'x_dot', 'y_dot'
 # TODO: start target satellite from different points along its orbit.  
 #       Look at how delta-V changes; also maybe linear relmo will be a better approximation along other parts of the orbit.
 
-initial_condition_sets
-# initial_condition_sets.loc['Barbee']
-# initial_condition_sets.loc['Barbee', 1].x
+#initial_condition_sets
+initial_condition_sets.loc['Barbee']
 
 # <codecell>
 
@@ -88,20 +87,37 @@ initial_condition_sets
 # X1 and X2 are positions of larger and smaller bodies along X axis
 RLP_properties = ComputeLibrationPoints(mu)
 
-# The FindOrbitCenter function doesn't work if you only propagate a partial orbit, so just treat L1 as the center
+# The FindOrbitCenter function doesn't work if you only propagate a partial orbit, so just treat L1/L2 as the center
 center = RLP_properties.L1
+#center = RLP_properties.L2
 
-# In nondimensional units, r12 = 1, M = 1, timeConst = Period/(2pi) = 1, G = 1
-RLP_properties['m1']  = 5.97219e24        # Earth (kg)
-RLP_properties['m2']  = 7.34767309e22     # Moon (kg)
-RLP_properties['r12'] = 384400.0          # km
-RLP_properties['G']   = 6.67384e-11/1e9   # m3/(kg*s^2) >> converted to km3
-RLP_properties['M']   = RLP_properties.m1 + RLP_properties.m2
+system = 'Earth-Moon'
+#system = 'Sun-Earth'
+
+if (system == 'Earth-Moon'):
+    
+    # In nondimensional units, r12 = 1, M = 1, timeConst = Period/(2pi) = 1, G = 1
+    RLP_properties['m1']  = 5.97219e24        # Earth (kg)
+    RLP_properties['m2']  = 7.34767309e22     # Moon (kg)
+    RLP_properties['r12'] = 384400.0          # km
+    RLP_properties['G']   = 6.67384e-11/1e9   # m3/(kg*s^2) >> converted to km3
+    RLP_properties['M']   = RLP_properties.m1 + RLP_properties.m2
+    
+elif (system == 'Sun-Earth'):
+    
+    # In nondimensional units, r12 = 1, M = 1, timeConst = Period/(2pi) = 1, G = 1
+    RLP_properties['m1']  = 1.988435e30  #1.989e30                      # Sun (kg)
+    RLP_properties['m2']  = 5.9721986e24 + 7.34767309e22    # Earth + Moon (kg)
+    RLP_properties['r12'] = 149597870.7                   # km
+    RLP_properties['G']   = 6.67384e-11/1e9               # m3/(kg*s^2) >> converted to km3
+    RLP_properties['M']   = RLP_properties.m1 + RLP_properties.m2
+
+#TU_SE_days = 58.1313429643148; % days = 5022548.03211679872 seconds
 
 # This is how you convert between dimensional time (seconds) and non-dimensional time 
 RLP_properties['time_const'] = RLP_properties.r12**(1.5) / (RLP_properties.G * RLP_properties.M)**(0.5) # (units are seconds)
 
-# Period in seconds of Moon around Earth
+# Period in seconds of secondary around primary
 RLP_properties['T'] = 2.0 * np.pi * RLP_properties.time_const   
 
 # Period of libration point orbit (in nondimensional time units)
@@ -117,7 +133,6 @@ RLP_properties
 # <codecell>
 
 # TODO: input waypoints in any frame (RLP, RIC, or VNB)
-# TODO: get decent test cases in the Sun-Earth-Moon frame
 # TODO: report/plot position error at each waypoint
 # TODO: report/plot delta-V at each waypoint
 
@@ -248,9 +263,9 @@ print 'waypoints.VNB', display(HTML(waypoints.VNB.to_html()))
 # allowed axis modes: 'auto' and 'equal'
 
 # Plots of offset in RLP, RIC, VNB frames
-axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP = CreatePlotGrid('Offset between Satellites 1 and 2 in RLP Frame', 'X', 'Y', 'Z', 'equal')
-axXZ_RIC, axYZ_RIC, axXY_RIC, ax3D_RIC = CreatePlotGrid('Offset between Satellites 1 and 2 in RIC Frame', 'R', 'I', 'C', 'equal')
-axXZ_VNB, axYZ_VNB, axXY_VNB, ax3D_VNB = CreatePlotGrid('Offset between Satellites 1 and 2 in VNB Frame', 'V', 'N', 'B', 'equal')
+axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP = CreatePlotGrid('Offset between Satellites 1 and 2 in RLP Frame', 'X', 'Y', 'Z', 'auto')
+axXZ_RIC, axYZ_RIC, axXY_RIC, ax3D_RIC = CreatePlotGrid('Offset between Satellites 1 and 2 in RIC Frame', 'R', 'I', 'C', 'auto')
+axXZ_VNB, axYZ_VNB, axXY_VNB, ax3D_VNB = CreatePlotGrid('Offset between Satellites 1 and 2 in VNB Frame', 'V', 'N', 'B', 'auto')
 
 # add all waypoints to RLP, RIC, and VNB plots
 SetPlotGridData(axXZ_RLP, axYZ_RLP, axXY_RLP, ax3D_RLP, waypoints.RLP*RLP_properties.r12, 'points', 'c')
@@ -447,8 +462,8 @@ waypoint_velocities.RLP_delta_v_analytic_linear = waypoint_velocities.RLP_post_m
 # <codecell>
 
 
-print 'waypoints.RLP_achieved_targeted_nonlin', display(HTML(waypoints.RLP_achieved_targeted_nonlin.to_html()))
 print 'waypoints.RLP_achieved_analytic_nonlin', display(HTML(waypoints.RLP_achieved_analytic_nonlin.to_html()))
+print 'waypoints.RLP_achieved_targeted_nonlin', display(HTML(waypoints.RLP_achieved_targeted_nonlin.to_html()))
 
 # <codecell>
 

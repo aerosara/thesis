@@ -36,7 +36,19 @@ sharp_matrix = np.array([ [0.994000E+00, 0.0, -0.21138987966945026683E+01, 0.543
 
 # From Howell, Three-Dimensional, Periodic, 'Halo' Orbits
 
-# From Barbee, Notional Mission 4 (Earth-Moon) # 12.135 days
+# Barbee IC #1 is from Barbee, Notional Mission 4 (Earth-Moon L1).  
+#    Period = 12.135 days
+#    mu = 0.012277471
+# Barbee ICs #2-5 are from Barbee, Notional Mission 6 (Sun-Earth L2).  
+#    The period for each of these is about 179.866605474505 days.  
+#    Computed nondimensional T in matrix below as period/(TU=58.1313429643148 days).  
+#    mu = 3.04009784138267e-06
+# Columns are X, Z, Ydot, T
+barbee_matrix = np.array([ [0.862307159058101, 0.0,                -0.187079489569182,  2.79101343456226],    # Earth-Moon L1, Notional Mission 4, Lyapunov (planar) orbit
+                           [1.00816973209311,  0.0016377237781099,  0.0104999399086454, 3.09414158184716],    # Small
+                           [1.00776865686578,  0.00233960542594808, 0.0119353025972439, 3.09414158184716],    # Medium
+                           [1.00760154218772,  0.00267383478206151, 0.0123860358265127, 3.09414158184716],    # Large
+                           [1.00733415870283,  0.00307491000939761, 0.0131599241389739, 3.09414158184716] ])  # Greater
 
 # Create 'initial_condition_sets' DataFrame which uses 'author' and 'test_case' as its indices
 initial_condition_sets = pd.DataFrame().\
@@ -50,12 +62,12 @@ initial_condition_sets = pd.DataFrame().\
             't':          [1.300177*2.0, 1.300177*2.0]})).\
         append(pd.DataFrame({
             'author':     'Barbee',
-            'test_case':  [1],
-            'mu':         [0.012277471],
-            'x':          [0.862307159058101],
-            'z':          [0.0],
-            'y_dot':      [-0.187079489569182],
-            't':          [2.79101343456226]})).\
+            'test_case':  np.arange(5) + 1,
+            'mu':         np.concatenate((0.012277471 * np.ones(1), 3.04009784138267e-06 * np.ones(4))),
+            'x':          barbee_matrix[:, 0],
+            'z':          barbee_matrix[:, 1],
+            'y_dot':      barbee_matrix[:, 2],
+            't':          barbee_matrix[:, 3]})).\
         append(pd.DataFrame({
             'author':     'Sharp',
             'test_case':  np.arange(20) + 1,
