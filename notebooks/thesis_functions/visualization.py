@@ -43,10 +43,12 @@ def CreatePlotGrid(title, xlabel, ylabel, zlabel, aspectmode):
     ax3D.zaxis.set_label_text(zlabel + ' axis')
     ax3D.set_aspect(aspectmode)
     
-    return axXZ, axYZ, axXY, ax3D
+    axis_array = ((axXZ, axYZ), (axXY, ax3D))
+    
+    return axis_array
 
     
-def SetPlotGridData(axXZ, axYZ, axXY, ax3D, data, style, color):
+def SetPlotGridData(axis_array, data, style, color):
     
     # Allowed colors:
     # b: blue
@@ -57,6 +59,8 @@ def SetPlotGridData(axXZ, axYZ, axXY, ax3D, data, style, color):
     # y: yellow
     # k: black
     # w: white
+    
+    ((axXZ, axYZ), (axXY, ax3D)) = axis_array
 
     if style == 'points':
         markersize = 5
