@@ -1,0 +1,219 @@
+\documentclass[]{article}
+\usepackage{amsmath}
+
+%opening
+\title{Libration Point Orbit Rendezvous}
+\author{Sara Case}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+	
+	Abstract goes here.
+
+\end{abstract}
+
+\section{Introduction}
+
+Previous libration point missions include ISEE-3, ACE, WIND, SOHO, which all went to the Sun-Earth L1 point (give more details).  The James Webb Space Telescope is planned to launch in 2018, and will go to the Sun-Earth L2 point.  So far, all libration point missions have consisted of a single satellite which operates independently of any other satellite.  There is research on deploying a formation of satellites to fly together around libration points (give examples)].  However, not much research has been performed regarding rendezvous with libration point orbits.
+
+Libration point orbit rendezvous would be a critical component for many possible satellite scenarios.  If a large satellite needs to be launched in components and assembled in orbit, the individual components would need to perform rendezvous and docking in order to assemble themselves.  If a valuable space asset such as a telescope requires an on-orbit repair, the satellite servicing crew will need to rendezvous with the object.  A libration point could be a useful place to build a space station (refer to a paper about this), and in that case rendezvous capabilities would be important during the construction of the station as well as every crew and cargo mission to visit the station.
+
+Satellite rendezvous in low-Earth orbit is well-studied, due to many years of experience operating the International Space Station (cite rendezvous ISS paper?) and other applications.  The Hill's / Clohessy-Wiltshire equations can be used to estimate the relative motion of a chaser vehicle with respect to a target vehicle in a circular orbit.  These equations of relative motion can be used to compute the estimated delta-V (instantaneous change in velocity) to travel between waypoints defining an approach trajectory (mention r-bar, v-bar?).  However, for libration point orbits, the dynamical environment is quite different and the same equations of motion can not be used.
+
+Luquette has developed linearized equations of relative motion for formation flying in libration point orbits.  Lian et al. have used these linearized dynamics to compute impulses for a chaser satellite to travel between waypoints in order to approach a target orbiting a libration point.  This paper discusses the results of this technique, and presents an additional step in which the shooting method is used to refine the computed delta-V for use in nonlinear propagation.
+
+\section{Dynamics}
+
+\subsection{Circular Restricted Three-Body Dynamics}
+The circular restricted three body problem (CRTBP) deals with two larger objects orbiting each other and a third object of infinitesimal mass.  Examples include a man-made satellite orbiting in the Sun-Jupiter system, or the Earth-Moon system.  When dealing with the Sun-Earth system, the second body is often modeled by treating the Earth and Moon as a single object at the Earth-Moon barycenter; this is called the Sun-Earth/Moon system.
+
+The nonlinear equations of motion for a satellite in the CRTBP are:
+
+\begin{equation} \label{eq:CRTBP}
+\begin{aligned}
+\ddot{x} &= x + 2\dot{y} + \frac{(1 - \mu)(-\mu - x)}{r_1^3} + \frac{\mu(1 - \mu - x)}{r_2^3} \\
+\ddot{y} &= y - 2\dot{x} - \frac{(1 - \mu)y}{r_1^3} - \frac{\mu y}{r_2^3} \\
+\ddot{z} &= \frac{-(1 - \mu)z}{r_1^3} - \frac{\mu z}{r_2^3}
+\end{aligned}
+\end{equation}
+
+where \(r_1\) and \(r_2\) are the distances from the larger and smaller bodies to the target satellite:
+
+\begin{equation*}
+\begin{aligned}
+r_1 &= \sqrt{(x-\mathbf{X_1}(0))^2 + y^2 + z^2} \\
+r_2 &= \sqrt{(x-\mathbf{X_2}(0))^2 + y^2 + z^2)}
+\end{aligned}
+\end{equation*}
+
+and \(\mathbf{X_1}\) and \(\mathbf{X_2}\) are the positions of the larger and smaller bodies along the rotating RTBP frame X-axis:
+
+\begin{equation*}
+\begin{aligned}
+\mathbf{X_1} &= \begin{bmatrix}
+						-\mu \\ 0 \\ 0 
+						\end{bmatrix} \\
+\mathbf{X_2} &= \begin{bmatrix}
+						1 - \mu \\ 0 \\ 0
+						\end{bmatrix}
+\end{aligned}
+\end{equation*}
+
+\subsection{Linearized CRTBP Relative Motion Dynamics}
+Luquette has derived linearized equations of relative motion of a chaser satellite with respect to a target satellite orbiting in the restricted three body problem (RTBP).  He provides the equations of motion in two reference frames: the inertial frame as well as the rotating (RTBP) frame.  These equations of motion are valid anywhere in the RTBP system; they are not assumed to be near any specific libration point.
+
+The equations of relative motion of a chaser satellite with respect to a target satellite, given in the RTBP reference frame, are:
+
+(not including SRP; assuming no thrust)
+
+(should I also include the inertial version of the relmo EOM's from Luquette?  I only used the rotating frame version, but maybe the inertial version should also be provided for completeness)
+
+\begin{equation} \label{eq:RelmoDerivs}
+\dot{\boldsymbol{\xi}}_R = \mathbf{A}_R(t)\boldsymbol{\xi}_R
+\end{equation}
+
+where \(\boldsymbol{\xi}_R\) is the state of the chaser vehicle with respect to the target vehicle in the rotating frame (come up with different symbols to use than x and xdot because already used x above):
+
+\begin{equation*}
+\boldsymbol{\xi}_R = \begin{bmatrix}
+									\mathbf{x}_R \\
+									\dot{\mathbf{x}}_R
+									\end{bmatrix}
+\end{equation*}
+
+\(\mathbf{A}_R(t)\) is the 6\(\times\)6 linearized relative motion dynamics matrix in the rotating frame: (note in the paper I'm citing, he says \(-2 [\boldsymbol{\omega} \times]^T\), but in his PhD it just says \(-2 [\boldsymbol{\omega} \times]\) which seems to be correct)
+
+\begin{equation} \label{eq:RelmoDynMatrix}
+\mathbf{A}_R(t) = \begin{bmatrix}
+								\mathbf{0}          & \mathbf{I_3} \\
+								\mathbf{\Xi}_R(t) & -2 [\boldsymbol{\omega} \times]
+								\end{bmatrix}
+\end{equation}
+
+where  (better notation for outer product?)
+
+\begin{equation*}
+\mathbf{\Xi}_R(t) = -(c_1 + c_2)\mathbf{I_3} 
+								+ 3c_1[\mathbf{\hat{r}_1}(t) \mathbf{\hat{r}_1}(t)^T] 
+								+ 3c_2[\mathbf{\hat{r}_2}(t) \mathbf{\hat{r}_2}(t)^T] 
+								+ [\boldsymbol{\dot{\omega}} \times] 
+								- [\boldsymbol{\omega}\times][\boldsymbol{\omega}\times]
+\end{equation*}
+
+and
+
+\begin{equation*}
+\begin{aligned}
+c_1 &= \frac{1- \mu}{r_1^3} \\
+c_2 &= \frac{\mu}{r_2^3}
+\end{aligned}
+\end{equation*}
+
+Note that \(\boldsymbol{\omega}\) is the rotation rate of the rotating RTBP frame with respect to the inertial frame:
+\begin{equation*}
+\boldsymbol{\omega} = \begin{bmatrix}
+					0 \\ 
+					0 \\
+					\omega
+					\end{bmatrix}
+\end{equation*}
+
+And  \([\boldsymbol{\omega}\times]\) is the cross-product matrix of \(\boldsymbol{\omega}\), so we get:
+\begin{equation*}
+[\boldsymbol{\omega}\times] = \begin{bmatrix}
+								0           & -\omega & 0 \\ 
+								\omega & 0             & 0 \\
+								0           & 0             & 0
+								\end{bmatrix}
+\end{equation*}
+
+If we assume that the rotation rate is constant (that is, assume we can use the CRTBP where the massive bodies are in circular orbits around each other), then the \(\boldsymbol{\dot{\omega}}\) term cancels to zero.
+
+(Another note to possibly mention:) In non-dimensional units, \(\omega = \sqrt{GM/r^3} = 1\)
+
+In order to integrate a chaser satellite's trajectory using the equations of relative motion given in Equation \ref{eq:RelmoDerivs}, the integration state vector must contain the absolute state of the target satellite in the CRTBP frame (with respect to the origin of the CRTBP frame) and the relative state of the chaser satellite in the CRTBP frame (with the origin located at the target satellite).  The target satellite's state over time can be integrated using the classical CRTBP equations of motion as given in Equation \ref{eq:CRTBP}, which must be done concurrently with the integration of the relative motion of the chaser so that the time-dependent linearized relative motion dynamics matrix \(\mathbf{A}_R(t)\) given in Equation \ref{eq:RelmoDynMatrix} can be computed.
+
+\section{Traveling Between Waypoints with Impulsive Delta-V's}
+
+\subsection{Using Linearized Dynamics Matrix to Compute STM and Delta-V}
+
+The linearized relative motion dynamics matrix given in Equation \ref{eq:RelmoDynMatrix} can also be used to numerically accumulate a State Transition Matrix (STM) of the chaser satellite with respect to the target satellite over time:
+
+\begin{equation} \label{eq:STM}
+\dot{\boldsymbol{\Phi}} = \mathbf{A}_R(t)\boldsymbol{\Phi}
+\end{equation}
+
+The initial ``state vector" for the STM passed to the integration process should be the \(6\times6\) identity matrix, \(\mathbf{I_6}\).  When integrated from the initial state at time \(t_1\) to a future time \(t_2\), this accumulated State Transition Matrix represents the relative position and velocity of the chaser at time \(t_2\) with respect to its relative position and velocity at time \(t_1\).  More explicitly:
+
+(need to make notation consistent; should it be r, v or x, xdot, or xi, xidot, or what)
+
+\begin{equation}
+\begin{bmatrix}
+		\mathbf{r}_{i+1} \\
+		\mathbf{v}_{i+1}
+		\end{bmatrix}
+= 
+\begin{bmatrix}
+		\boldsymbol{\Phi}_{11} & \boldsymbol{\Phi}_{12} \\
+		\boldsymbol{\Phi}_{21} & \boldsymbol{\Phi}_{22}
+		\end{bmatrix}
+\begin{bmatrix}
+		\mathbf{r}_i\\
+		\mathbf{v}_i
+		\end{bmatrix}
+\end{equation}
+
+This can be used to compute the instantaneous change in velocity (delta-V) required for the chaser satellite to travel from waypoint 1 to waypoint 2.  (Like you do with Hills/CW)
+
+\begin{equation}
+\mathbf{v}_i^+ = \boldsymbol{\Phi}_{12}^{-1}(\mathbf{r}_{i+1} - \boldsymbol{\Phi}_{11}\mathbf{r}_i)
+\end{equation}
+
+Application of linearized CRTBP relmo dynamics matrix to compute STM and delta-V’s
+
+Explain how you have to propagate the target and the chaser together 
+
+Invert Phi12 to get the (velocity at time 1) with respect to the (positions at times 1 and 2) / Compute required velocity at point 1 to take us to point 2 within time (t2-t1)
+
+a la Hills/CW (Lian et al)...  Lian used the equations with J2000 reference axes and equations of motion written in J2000, I'm using RLP
+
+\subsection{Shooting Method with Nonlinear Dynamics}
+Use of linear estimate of delta-V as input (initial guess) into shooting method with nonlinear CRTBP dynamics
+
+\subsection{Definition of Waypoint Reference Frames}
+Location of libration point in libration point frame is given as...
+
+Definition of RIC and VNB frames wrt libration point
+
+
+\section{Results}
+
+Provide initial conditions (initial state)
+
+Provide waypoints (position and time) in some reference frame
+
+\subsection{Performance of Linear Delta-V Estimate}
+Evaluation of performance of linear estimate of delta-V (wrt physical points achieved)
+
+See how it doesn’t quite reach the waypoints that you set
+
+\subsection{Performance of Shooting Method}
+
+Evaluation of difference in delta-V between linear estimate and nonlinear value
+
+\subsection{Rendezvous Approach Directions}
+Show cases where we approach from different directions (+/-R, +/-I, +/-C), approach at different clock angles around the halo
+
+Evaluate relative cost of approaching in different ways
+
+
+\section{Conclusions}
+
+\begin{thebibliography}{99}
+	\bibitem[label]{cite_key}
+\end{thebibliography}
+
+\end{document}
