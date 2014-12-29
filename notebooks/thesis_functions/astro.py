@@ -305,6 +305,7 @@ def PropagateSatelliteAndChaser(mu, timespan, initialstate1, initialRelativeStat
     relativeStatesFromLinearRelmoOverTime = statesOverTime1[6:12] # rows 7-12
     dx_LINEAR, dy_LINEAR, dz_LINEAR, dxdot_LINEAR, dydot_LINEAR, dzdot_LINEAR = relativeStatesFromLinearRelmoOverTime
 
+    # set up target satellite "ephemeris" DataFrame
     target_satellite = pd.DataFrame({
         "x": x1,
         "y": y1,
@@ -316,6 +317,7 @@ def PropagateSatelliteAndChaser(mu, timespan, initialstate1, initialRelativeStat
     # reassign so that the data maintains the required order for its values
     target_satellite = target_satellite.loc[:, ['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot']]
 
+    # set up chaser satellite offset "ephemeris" DataFrame
     offset_linear = pd.DataFrame({
         "x": dx_LINEAR,
         "y": dy_LINEAR,
