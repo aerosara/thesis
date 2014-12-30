@@ -1,6 +1,10 @@
 \documentclass[]{article}
 \usepackage{amsmath}
 \usepackage{enumitem}
+\usepackage{graphicx}
+\graphicspath{ {./Images/} }
+\usepackage{booktabs}
+\usepackage{textcomp}
 
 %opening
 \title{Libration Point Orbit Rendezvous}
@@ -18,7 +22,7 @@
 
 \section{Introduction}
 
-Previous libration point missions include ISEE-3, ACE, WIND, SOHO, which all went to the Sun-Earth L1 point (give more details).  Several spacecraft have been deployed to the Sun-Earth L2 point, and the James Webb Space Telescope is planned to launch to that point in 2018.  (Maybe mention other planned missions; including DSCOVR!)  So far, all libration point missions have consisted of a single satellite which operates independently of any other satellite.  There is research on deploying a formation of satellites to fly together around libration points (give examples)].  However, not much research has been performed regarding rendezvous with libration point orbits.
+Previous libration point missions include ISEE-3, ACE, WIND, SOHO, which all went to the Sun-Earth L1 point (give more details).  Several spacecraft have been deployed to the Sun-Earth L2 point, and the James Webb Space Telescope is planned to launch to that point in 2018.  (Maybe mention other planned missions; including DSCOVR!)  So far, all libration point missions have consisted of a single satellite which operates independently of any other satellite.  There is research on deploying a formation of satellites to fly together around libration points (give examples).  However, not much research has been performed regarding rendezvous with libration point orbits.
 
 Libration point orbit rendezvous would be a critical component for many possible satellite scenarios.  If a large satellite needs to be launched in components and assembled in orbit, the individual components would need to perform rendezvous and docking in order to assemble themselves.  If a valuable space asset such as a telescope requires an on-orbit repair, the satellite servicing crew will need to rendezvous with the object.  A libration point could be a useful place to build a space station (refer to a paper about this), and in that case rendezvous capabilities would be important during the construction of the station as well as every crew and cargo mission to visit the station.
 
@@ -72,7 +76,7 @@ The equations of relative motion of a chaser satellite with respect to a target 
 
 (not including SRP; assuming no thrust)
 
-(should I also include the inertial version of the relmo EOM's from Luquette?  I only used the rotating frame version, but maybe the inertial version should also be provided for completeness)
+(should I also include the inertial version of the relmo EOM's from Luquette?  I only used the rotating frame version, but maybe the inertial version should also be provided for completeness.  Could simply say that the inertial version doesn't have the \(\omega\) terms and all the vectors are in the inertial frame instead of CRTBP.)
 
 \begin{equation} \label{eq:RelmoDerivs}
 \dot{\boldsymbol{\xi}}_R = \mathbf{A}_R(t)\boldsymbol{\xi}_R
@@ -173,13 +177,13 @@ The initial ``state vector" for the STM passed to the integration process should
 
 This can be used to compute the required velocity \(\mathbf{v}_i^+\) for the chaser satellite to travel from waypoint \(\mathbf{r}_i\) to waypoint \(\mathbf{r}_{i+1}\) in time (\(t_{i+1} - t_i\)).  (Like you do with Hills/CW.)  Lian et. al. used this approach in paper 1 and paper 2.  Lian et. al. used the equations with J2000 reference axes and equations of motion written in J2000, rather than the rotating frame (RTBP) version being used here.
 
-\begin{equation}
+\begin{equation} \label{eq:RequiredVelocity}
 \mathbf{v}_i^+ = \boldsymbol{\Phi}_{12}^{-1}(\mathbf{r}_{i+1} - \boldsymbol{\Phi}_{11}\mathbf{r}_i)
 \end{equation}
 
 The instantaneous change in velocity (\(\Delta V\)) for this maneuver is then simply the difference between the required velocity and the velocity that the chaser satellite had before the maneuver:
 
-\begin{equation}
+\begin{equation} \label{eq:DeltaV}
 \Delta \mathbf{v}_i = \mathbf{v}_i^+ - \mathbf{v}_i^-
 \end{equation}
 
@@ -187,7 +191,7 @@ The instantaneous change in velocity (\(\Delta V\)) for this maneuver is then si
 
 The approach described above for computing \(\Delta V\) is based on the linearized equations of relative motion developed by Luquette.  Of course, the true dynamical environment in the CRTBP is nonlinear, as seen in Equation \ref{eq:CRTBP}.
 
-The linear-based estimate of \(\Delta V\) can be ``corrected" for the nonlinear propagation model using the shooting method.  The linear-based estimated velocity is used as an initial guess for the iterative process.  Each of the three components of the velocity vector is varied in order to achieve convergence on the desired three-dimensional waypoint \(\mathbf{w}_{desired}\) within some specified tolerance.
+The linear-based estimate of \(\Delta V\) can be ``corrected" for the nonlinear propagation model using the shooting method.  The linear-based estimated velocity is used as an initial guess for the iterative differential correction process.  Each of the three components of the velocity vector is varied in order to achieve convergence on the desired three-dimensional waypoint \(\mathbf{w}_{desired}\) within some specified tolerance.
 
 \begin{enumerate}[leftmargin=!,labelindent=12pt,itemindent=0pt, label=Step \arabic*:]
 
@@ -203,7 +207,7 @@ The linear-based estimate of \(\Delta V\) can be ``corrected" for the nonlinear 
 	
 	\item Gather the results into a partial derivatives matrix, \(\mathbf{M}\):
 	
-	\begin{equation}
+	\begin{equation} \label{eq:ShootingMethodPartialDerivs}
 	\mathbf{M} = \left[ \frac{d\mathbf{w}}{d\mathbf{v}} \right]
 	= \begin{bmatrix}
 	\frac{dw_x}{dv_x} & \frac{dw_y}{dv_x} & \frac{dw_z}{dv_x} \\[0.3em]
@@ -214,7 +218,7 @@ The linear-based estimate of \(\Delta V\) can be ``corrected" for the nonlinear 
 	
 	\item Compute an updated guess for the velocity:
 	
-	\begin{equation}
+	\begin{equation} \label{eq:ShootingMethodUpdate}
 	\mathbf{v}_i^+ = \mathbf{v}_i^+ + [\mathbf{M}]^{-1}(\mathbf{w}_{desired} - \mathbf{w}_{i+1 achieved})
 	\end{equation}
 	
@@ -226,11 +230,11 @@ Repeat steps 1 through 7 until all three components of \(\mathbf{w}_{achieved}\)
 
 \subsection{Definition of Waypoint Reference Frames}
 
-In this work, local reference frames are defined with respect to the target satellite's orbit around its libration point.  Each of these frames will rotate once for each full orbit around the libration point.
+In this work, two local reference frames are defined with respect to the target satellite's orbit around its libration point.  Each of these frames will rotate once for each full orbit of the target around the libration point.
 
 The two libration points of most interest for this work are \(L_1\) and \(L_2\).  The position of \(L_1\) in the CRTBP frame is found by computing the real root \(l_1\) of this polynomial in \(x\):
 
-\begin{equation}
+\begin{equation} \label{eq:L1}
 (1 - \mu)(p^3)(p^2 - 3p + 3) - \mu(p^2 + p + 1)(1 - p)^3 = 0
 \end{equation}
 
@@ -242,7 +246,7 @@ p = 1 - \mu - x
 
 The coordinates of \(L_1\) are then \([l_1, 0, 0]\) in the CRTBP frame.  Likewise, the position of \(L_2\) in the CRTBP frame is found by computing the real root \(l_2\) of this polynomial in \(x\):
 
-\begin{equation}
+\begin{equation} \label{eq:L2}
 (1 - \mu)(p^3)(p^2 + 3p + 3) - \mu(p^2 + p + 1)(1 - p)(p + 1)^2 = 0
 \end{equation}
 
@@ -254,20 +258,21 @@ p = \mu - 1 + x
 
 The coordinates of \(L_2\) are then \([l_2, 0, 0]\) in the CRTBP frame.
 
-Local RIC and VNB frames are then defined with the origin of both of these frames located at the target satellite's position.  The RIC, or ``radial-intrack-crosstrack," frame as has its first primary axis the vector pointing from the libration point radially out to the target satellite.  For example, in the case of a target satellite orbiting \(L_1\):
+Local RIC and VNB reference frames are then defined with the origin of both of these frames located at the target satellite's position.  The RIC, or ``radial-intrack-crosstrack," frame as has its first primary axis the vector pointing from the libration point radially out to the target satellite.  For example, in the case of a target satellite orbiting \(L_1\), the fundamental \(\mathbf{\hat{R}}\), \(\mathbf{\hat{I}}\), and \(\mathbf{\hat{C}}\) axes of the RIC frame are defined as:
 
-\begin{equation}
+\begin{equation} \label{eq:RIC}
 \begin{aligned}
 \mathbf{\hat{R}} &= \widehat{\mathbf{x} - \mathbf{L}_1} \\
 \mathbf{\hat{C}} &= \widehat{\mathbf{R} \times \mathbf{\dot{x}}} \\
-\mathbf{\hat{I}} &= \widehat{\mathbf{C} \times \mathbf{R}}
+\mathbf{\hat{I}} \, &= \widehat{\mathbf{C} \times \mathbf{R}}
 \end{aligned}
 \end{equation}
 
-The VNB, or ``velocity-normal-binormal," frame has as its first primary axis the target satellite's velocity vector (in the CRTBP frame):
+where \(\mathbf{x}\) and \(\mathbf{\dot{x}}\) are the target satellite's position and velocity vectors in the CRTBP frame.
 
+The VNB, or ``velocity-normal-binormal," frame has as its first primary axis the target satellite's velocity vector.  In the case of a target satellite orbiting \(L_1\), the fundamental \(\mathbf{\hat{V}}\), \(\mathbf{\hat{N}}\), and \(\mathbf{\hat{B}}\) axes of the VNB frame are defined as:
 
-\begin{equation}
+\begin{equation} \label{eq:VNB}
 \begin{aligned}
 \mathbf{\hat{V}} &= \mathbf{\dot{\hat{x}}} \\
 \mathbf{\hat{N}} &= \widehat{\mathbf{R} \times \mathbf{V}}  \\
@@ -277,24 +282,128 @@ The VNB, or ``velocity-normal-binormal," frame has as its first primary axis the
 
 \section{Results}
 
-Provide initial conditions (initial state)
-
-Provide waypoints (position and time) in some reference frame
-
 \subsection{Performance of Linear \(\Delta V\) Estimate}
+
+To begin evaluating the performance of the techniques presented above, consider the following scenario.  The target satellite is in a planar Lyapunov orbit around the Earth-Moon L1 point with the initial conditions presented in Table \ref{tab:IC_1}.  For this test, the rendezvous starts with the target satellite on the CRTBP +X-axis, that is, crossing the XZ-plane.
+
+\begin{table}[h] \label{tab:IC_1}
+	\begin{center}
+		\begin{tabular}{l l}
+			\toprule
+			Parameter   & Value \\
+			\midrule
+			X                & 0.862307159058101 \\
+			Z                & 0.0 \\
+			\(\dot{Y}\) & -0.187079489569182 \\
+			Period        & 2.79101343456226 \\
+			\bottomrule
+		\end{tabular}
+		\caption{Initial Conditions of the Target Satellite in the CRTBP Frame}
+	\end{center}
+\end{table}
+
+Maybe show plot here of Lyapunov orbit of target in CRTBP.
+
+The initial conditions in Table \ref{tab:IC_1} are provided in non-dimensional units.  To convert between non-dimensional and dimensional units, the relevant properties of the Earth-Moon CRTBP system are presented in Table \ref{tab:Environment_1}.
+
+\begin{table}[h] \label{tab:Environment_1}
+	\begin{center}
+		\begin{tabular}{l l}
+			\toprule
+			Parameter   & Value \\
+			\midrule
+			Earth mass (kg) & 5.97219e24 \\
+			Moon mass (kg) & 7.34767309e22 \\
+			Mass ratio \(\mu\)      & 0.012277471 \\
+			Combined mass (kg), or 1 MU & 6.045667e+24 \\
+			\(r_{12}\) (km), or 1 DU & 384400.0 \\
+			Time Constant (s), or 1 TU & 375201.9 \\
+			Period of Moon around Earth (s) & 2\(\pi\)TU \\
+			\bottomrule
+		\end{tabular}
+		\caption{Earth-Moon CRTBP Parameters}
+	\end{center}
+\end{table}
+
+Three waypoints are defined for the chaser satellite to travel along on its rendezvous with the target, with a final ``waypoint'' located at the target satellite itself.  The waypoints are presented in Table \ref{tab:Waypoints_1} in the RIC reference frame.  The waypoints are converted into the CRTBP frame for the propagation.  Note that these waypoints represent an approach along the \(\mathbf{I}\) axis of the RIC frame.  
+
+\begin{table}[h] \label{tab:Waypoints_1}
+	\begin{center}
+		\begin{tabular}{ccccc}
+			\toprule
+			Waypoint   & Time (days) & R (km) & I (km) & C (km) \\
+			\midrule
+			1 & 0.00 & 0.0 & 15.0 & 0.0 \\
+			2 & 0.36 & 0.0 & 5.0 & 0.0 \\
+			3 & 0.97 & 0.0 & 1.0 & 0.0 \\
+			4 & 1.59 & 0.0 & 0.0 & 0.0 \\
+			\bottomrule
+		\end{tabular}
+		\caption{Waypoints in RIC Frame}
+	\end{center}
+\end{table}
+
+Figure \ref{fig:RIC_1} shows the result of propagating the target and chaser satellite through a rendezvous using these waypoints.  The integration is done in the CRTBP frame, and the results are converted to the RIC frame for the plot, with the target spacecraft at the origin and the chaser spacecraft offset shown in kilometers.  The green curve shows the path of the chaser satellite when propagated using the linear relative motion dynamics as given in Equation \ref{eq:RelmoDerivs}, with the application of impulsive \(\Delta V\)'s as computed using Equation \ref{eq:RequiredVelocity}.  The red curve shows the result when the chaser satellite is propagated using the nonlinear CRTBP dynamics as shown in Equation \ref{eq:CRTBP}; the nominal \(\Delta V\)'s as computed using the linear model are still applied.  It is easily seen that the nominally planned maneuvers do not bring the chaser precisely to the desired waypoints when propagating with the nonlinear model.  Finally, the blue curve shows the result when the chaser satellite is propagated using the nonlinear CRTBP dynamics when the \(\Delta V\)'s have been corrected through the iterative shooting method process as shown in Equation \ref{eq:ShootingMethodUpdate}.  The path does not precisely match the original green curve due to the different dynamical models in use; however, each waypoint is achieved successfully.
+
+\begin{figure}[h] \label{fig:RIC_1}
+	\begin{center}
+		\includegraphics[width=0.9\textwidth]{RIC_1}
+		\caption{Relative Motion of a Chaser Satellite with respect to a Target}
+	\end{center}
+\end{figure}
+
+The results for this case are also summarized in Table \ref{tab:Results_1}.  The chaser satellite was assumed to start precisely from waypoint 1 with its pre-maneuver velocity at waypoint 1 equal to the target satellite's initial velocity in the CRTBP frame.  The final maneuver at waypoint 4 is computed to make the chaser's velocity equal the target satellite's velocity for a complete rendezvous.
+
+We can note that, while the difference in \(\Delta V\) is quite small between the linear computation and the targeted computation, on the order of millimeters/second, the angular difference between the two \(\Delta V\) vectors reaches almost \(6\textdegree\) at waypoint 3.  These differences result in achieved position errors on the order of hundreds of meters
+
 Evaluation of performance of linear estimate of \(\Delta V\) (wrt physical points achieved)
 
-See how it doesn’t quite reach the waypoints that you set
+Table has each waypoint, final position error, linear delta-V.  Include a line for the total dV.
+
+\begin{table}[h] \label{tab:Results_1}
+	\begin{center}
+		\begin{tabular}{c p{1cm} p{1cm} p{1.5cm} p{1.5cm} p{1.5cm} p{1.5cm}}
+			\toprule
+			Waypoint   & Linear \(\Delta V\) (m/s) & Targeted \(\Delta V\) (m/s) & \(\Delta V\) Angle Difference (deg) & \(\Delta V\) Magnitude Difference (m/s) & Linear Position Error (m) & Targeted Position Error (m) \\
+			\midrule
+			1 & 0.346 &	0.345 &	0.466 &	-0.001 &	N/A &	N/A \\
+			2 & 0.293 &	0.295 &	2.609 &	0.002 &	91.394 &	0.011 \\
+			3 & 0.064 &	0.059 &	5.890 &	-0.005 &	470.653 &	0.063 \\
+			4 & 0.019 &	0.018 &	0.445 &	-0.001 &	107.663 &	0.056 \\
+			Total & XX  & XX &  & XX &  & \\
+			\bottomrule
+		\end{tabular}
+		\caption{Waypoints in RIC Frame}
+	\end{center}
+\end{table}
 
 \subsection{Performance of Shooting Method}
 
+Follow procedure in section 3.2 to correct the linear delta-V for the nonlinear propagation.  Provide info on parameters used: perturbation and tolerance.
+
+Note that we use the *new* achieved waypoint to re-compute the linear dV estimate for the next waypoint before then targeting the next waypoint
+
 Evaluation of difference in \(\Delta V\) between linear estimate and nonlinear value
 
+Show results in a plot and in a table.  Table has each waypoint, final targeted position error, linear dV, targeted dV, dV difference.  Include a line for the total dV.
+
+Maybe talk about measuring the "excursion" of the trajectory (perpendicular to the vector from one waypoint to the next)
+
 \subsection{Rendezvous Approach Directions}
-Show cases where we approach from different directions (+/-R, +/-I, +/-C), approach at different clock angles around the halo
+
+Show cases where we approach from different directions (+/-R, +/-I, +/-C)
+
+Show cases where we approach at different clock angles around the halo
 
 Evaluate relative cost of approaching in different ways
 
+Distance (maybe percentage of orbit covered?) where this technique doesn't work
+
+Seems like shorter times maybe gives better behavior of the linear dV estimate?  Longer time = more need to use the targeter?
+
+Show what happens if you miss a maneuver
+
+Kinda interesting to show in RLP, VNB
 
 \section{Conclusions}
 

@@ -4,8 +4,21 @@
 # <codecell>
 
 
+import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import rcParams
 from mpl_toolkits.mplot3d import Axes3D
+
+# font size
+rcParams['axes.labelsize'] = 10
+rcParams['xtick.labelsize'] = 10
+rcParams['ytick.labelsize'] = 10
+rcParams['legend.fontsize'] = 10
+
+# typeface
+rcParams['font.family'] = 'serif'
+rcParams['font.serif'] = ['Computer Modern Roman']
+rcParams['text.usetex'] = True
 
 def CreatePlotGrid(title, xlabel, ylabel, zlabel, aspectmode):
     
@@ -43,12 +56,33 @@ def CreatePlotGrid(title, xlabel, ylabel, zlabel, aspectmode):
     ax3D.zaxis.set_label_text(zlabel + ' axis')
     ax3D.set_aspect(aspectmode)
     
-    axis_array = ((axXZ, axYZ), (axXY, ax3D))
+    # for publishing in paper
+    
+    # this script for setting width & height is from http://damon-is-a-geek.com/publication-ready-the-first-time-beautiful-reproducible-plots-with-matplotlib.html
+    WIDTH = 345.0  # the LaTeX result from \the\textwidth
+    FACTOR = 0.90  # the fraction of the width you'd like the figure to occupy
+    fig_width_pt  = WIDTH * FACTOR
+    inches_per_pt = 1.0 / 72.27
+    golden_ratio  = (np.sqrt(5) - 1.0) / 2.0  # because it looks good
+    fig_width_in  = fig_width_pt * inches_per_pt  # figure width in inches
+    fig_height_in = fig_width_in * golden_ratio   # figure height in inches
+    fig_dims      = [fig_width_in, fig_height_in] # fig dims as a list
+
+    # XY Plane
+    fig1, (ax1) = plt.subplots(1,1);
+    fig1.figsize = fig_dims
+    
+    ax1.set_title(xlabel + ylabel + ' Plane')
+    ax1.xaxis.set_label_text(ylabel + ' axis')
+    ax1.yaxis.set_label_text(xlabel + ' axis')
+    ax1.set_aspect(aspectmode)
+    
+    axis_array = ((axXZ, axYZ), (axXY, ax3D), ax1)
     
     return axis_array
 
     
-def SetPlotGridData(axis_array, data, style, color):
+def SetPlotGridData(axis_array, data, style, color, label):
     
     # Allowed colors:
     # b: blue
@@ -60,7 +94,7 @@ def SetPlotGridData(axis_array, data, style, color):
     # k: black
     # w: white
     
-    ((axXZ, axYZ), (axXY, ax3D)) = axis_array
+    ((axXZ, axYZ), (axXY, ax3D), ax1) = axis_array
 
     if style == 'points':
         markersize = 5
@@ -77,7 +111,21 @@ def SetPlotGridData(axis_array, data, style, color):
     axYZ.plot(data.y, data.z, markertype, markersize=markersize, color=color)
     axXY.plot(data.x, data.y, markertype, markersize=markersize, color=color)
     ax3D.plot(data.x.values, data.y.values, data.z.values, markertype, markersize=markersize, color=color)
+    
+    ax1.plot(data.y, data.x, markertype, markersize=markersize, color=color, label=label)
         
-    #ax3D.legend(loc='center left', bbox_to_anchor=(1.2, 0.5))
+    #ax1.legend()
+    #ax1.legend(loc='center left', bbox_to_anchor=(1.2, 0.5))
         
+def ConfigurePlotLegend(axis_array):
+    
+    ((axXZ, axYZ), (axXY, ax3D), ax1) = axis_array
+    
+    handles, labels = ax1.get_legend_handles_labels()
+    
+    ax1.legend([handles[1], handles[2], handles[3]], [labels[1], labels[2], labels[3]], loc='lower right')
+    #'Linear Propagation, Linear dV', 'Nonlinear Propagation, Linear dV', 'Nonlinear Propagation, Targeted dV''])
+    
+    #plt.savefig('..\LaTeX\Images\RIC.pdf', format='pdf')
+    
 
