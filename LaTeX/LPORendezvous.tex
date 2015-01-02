@@ -1,13 +1,14 @@
-\documentclass[]{article}
-\usepackage{amsmath}
-\usepackage{enumitem}
-\usepackage{graphicx}
-\graphicspath{ {./Images/} }
-\usepackage{booktabs}
-\usepackage{textcomp}
+\documentclass[a4paper]{article}
+\usepackage{amsmath} % for multi-line equations
+\usepackage{enumitem} % for bullet points
+\usepackage{graphicx} % for displaying images
+\graphicspath{ {./Images/} } % search path for images
+\usepackage{booktabs} % for making tables
+\usepackage{textcomp} % for degree symbol
+\usepackage{fullpage} % for reducing page margins
 
 %opening
-\title{Libration Point Orbit Rendezvous}
+\title{Libration Point Orbit Rendezvous Technique Using Linearized Relative Motion Dynamics and Nonlinear Differential Correction}
 \author{Sara Case}
 
 \begin{document}
@@ -282,9 +283,9 @@ The VNB, or ``velocity-normal-binormal," frame has as its first primary axis the
 
 \section{Results}
 
-\subsection{Performance of Linear \(\Delta V\) Estimate}
+\subsection{Performance of Linear \(\Delta V\) Estimate and Shooting Method}
 
-To begin evaluating the performance of the techniques presented above, consider the following scenario.  The target satellite is in a planar Lyapunov orbit around the Earth-Moon L1 point with the initial conditions presented in Table \ref{tab:IC_1}.  For this test, the rendezvous starts with the target satellite on the CRTBP +X-axis, that is, crossing the XZ-plane.
+To begin evaluating the performance of the techniques presented above, consider the following scenario.  The target satellite is in a planar Lyapunov orbit around the Earth-Moon L1 point as shown in Figure \ref{fig:FullOrbit_1}.  The target satellite's initial conditions are presented in Table \ref{tab:IC_1}.  For this test, the rendezvous starts with the target satellite on the CRTBP +X-axis, that is, crossing the XZ-plane.
 
 \begin{table}[h] \label{tab:IC_1}
 	\begin{center}
@@ -302,7 +303,12 @@ To begin evaluating the performance of the techniques presented above, consider 
 	\end{center}
 \end{table}
 
-Maybe show plot here of Lyapunov orbit of target in CRTBP.
+\begin{figure}[h] \label{fig:FullOrbit_1}
+	\begin{center}
+		\includegraphics[width=0.9\textwidth]{Target_Full_Orbit_1}
+		\caption{Target Satellite Orbit in Earth-Moon L1 CRTBP Frame}
+	\end{center}
+\end{figure}
 
 The initial conditions in Table \ref{tab:IC_1} are provided in non-dimensional units.  To convert between non-dimensional and dimensional units, the relevant properties of the Earth-Moon CRTBP system are presented in Table \ref{tab:Environment_1}.
 
@@ -343,7 +349,7 @@ Three waypoints are defined for the chaser satellite to travel along on its rend
 	\end{center}
 \end{table}
 
-Figure \ref{fig:RIC_1} shows the result of propagating the target and chaser satellite through a rendezvous using these waypoints.  The integration is done in the CRTBP frame, and the results are converted to the RIC frame for the plot, with the target spacecraft at the origin and the chaser spacecraft offset shown in kilometers.  The green curve shows the path of the chaser satellite when propagated using the linear relative motion dynamics as given in Equation \ref{eq:RelmoDerivs}, with the application of impulsive \(\Delta V\)'s as computed using Equation \ref{eq:RequiredVelocity}.  The red curve shows the result when the chaser satellite is propagated using the nonlinear CRTBP dynamics as shown in Equation \ref{eq:CRTBP}; the nominal \(\Delta V\)'s as computed using the linear model are still applied.  It is easily seen that the nominally planned maneuvers do not bring the chaser precisely to the desired waypoints when propagating with the nonlinear model.  Finally, the blue curve shows the result when the chaser satellite is propagated using the nonlinear CRTBP dynamics when the \(\Delta V\)'s have been corrected through the iterative shooting method process as shown in Equation \ref{eq:ShootingMethodUpdate}.  The path does not precisely match the original green curve due to the different dynamical models in use; however, each waypoint is achieved successfully.
+Figure \ref{fig:RIC_1} shows the result of propagating the target and chaser satellite through a rendezvous using these waypoints.  The integration is done in the CRTBP frame, and the results are converted to the RIC frame for the plot, with the target spacecraft at the origin and the chaser spacecraft offset with respect to the target shown in kilometers.  The green curve shows the path of the chaser satellite when propagated using the linear relative motion dynamics as given in Equation \ref{eq:RelmoDerivs}, with the application of impulsive \(\Delta V\)'s as computed using Equation \ref{eq:RequiredVelocity}.  The red curve shows the result when the chaser satellite is propagated using the nonlinear CRTBP dynamics as shown in Equation \ref{eq:CRTBP}; the nominal \(\Delta V\)'s as computed using the linear model are still applied.  It is easily seen that the nominally planned maneuvers do not bring the chaser precisely to the desired waypoints when propagating with the nonlinear model.  Finally, the blue curve shows the result when the chaser satellite is propagated using the nonlinear CRTBP dynamics when the \(\Delta V\)'s have been corrected through the iterative shooting method process as shown in Equation \ref{eq:ShootingMethodUpdate}.  The path does not precisely match the original green curve due to the different dynamical models in use; however, each waypoint is achieved successfully.  (Also note that the image axes are not scaled equally.)
 
 \begin{figure}[h] \label{fig:RIC_1}
 	\begin{center}
@@ -352,13 +358,11 @@ Figure \ref{fig:RIC_1} shows the result of propagating the target and chaser sat
 	\end{center}
 \end{figure}
 
-The results for this case are also summarized in Table \ref{tab:Results_1}.  The chaser satellite was assumed to start precisely from waypoint 1 with its pre-maneuver velocity at waypoint 1 equal to the target satellite's initial velocity in the CRTBP frame.  The final maneuver at waypoint 4 is computed to make the chaser's velocity equal the target satellite's velocity for a complete rendezvous.
+The results for this case are also summarized in Table \ref{tab:Results_1}.  To compute the \(\Delta V\) values, the chaser satellite was assumed to start precisely from waypoint 1 with its pre-maneuver velocity at waypoint 1 equal to the target satellite's initial velocity in the CRTBP frame.  The final maneuver at waypoint 4 is computed to make the chaser's velocity equal to the target satellite's velocity to complete the rendezvous.
 
-We can note that, while the difference in \(\Delta V\) is quite small between the linear computation and the targeted computation, on the order of millimeters/second, the angular difference between the two \(\Delta V\) vectors reaches almost \(6\textdegree\) at waypoint 3.  These differences result in achieved position errors on the order of hundreds of meters
+We can note that, while the difference in \(\Delta V\) magnitude is quite small between the linear computation and the targeted computation, on the order of millimeters/second, the angular difference between the two \(\Delta V\) vectors reaches almost 6\textdegree at waypoint 3.  These differences result in achieved position errors on the order of hundreds of meters at each waypoint when the linear estimate is applied in the nonlinear frame; the errors are reduced to the order of centimeters when the shooting method is applied.
 
-Evaluation of performance of linear estimate of \(\Delta V\) (wrt physical points achieved)
-
-Table has each waypoint, final position error, linear delta-V.  Include a line for the total dV.
+For the tuning parameters of the shooting method, the perturbation value for the velocity components was set to 1e-5 DU/TU (or SU for speed units) or about 1.0 centimeters/second.  The tolerance on the achieved waypoints was set to 1e-9 DU or about 0.38 meters.  The maximum number of allowed iterations was set to 10; if the desired tolerance is not achieved within 10 iterations, the process will continue with the value achieved by the \(10^{th}\) iteration.
 
 \begin{table}[h] \label{tab:Results_1}
 	\begin{center}
@@ -377,17 +381,7 @@ Table has each waypoint, final position error, linear delta-V.  Include a line f
 	\end{center}
 \end{table}
 
-\subsection{Performance of Shooting Method}
-
-Follow procedure in section 3.2 to correct the linear delta-V for the nonlinear propagation.  Provide info on parameters used: perturbation and tolerance.
-
-Note that we use the *new* achieved waypoint to re-compute the linear dV estimate for the next waypoint before then targeting the next waypoint
-
-Evaluation of difference in \(\Delta V\) between linear estimate and nonlinear value
-
-Show results in a plot and in a table.  Table has each waypoint, final targeted position error, linear dV, targeted dV, dV difference.  Include a line for the total dV.
-
-Maybe talk about measuring the "excursion" of the trajectory (perpendicular to the vector from one waypoint to the next)
+(Note that we use the *new* achieved waypoint to re-compute the linear dV estimate for the next waypoint before then targeting the next waypoint)
 
 \subsection{Rendezvous Approach Directions}
 
@@ -404,6 +398,8 @@ Seems like shorter times maybe gives better behavior of the linear dV estimate? 
 Show what happens if you miss a maneuver
 
 Kinda interesting to show in RLP, VNB
+
+Maybe talk about measuring the "excursion" of the trajectory (perpendicular to the vector from one waypoint to the next)
 
 \section{Conclusions}
 

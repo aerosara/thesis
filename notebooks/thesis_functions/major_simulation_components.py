@@ -14,7 +14,7 @@ from IPython.core.display import HTML
 
 import thesis_functions.utilities
 from thesis_functions.initial_conditions import initial_condition_sets
-from thesis_functions.visualization import CreatePlotGrid, SetPlotGridData
+from thesis_functions.visualization import CreatePlotGrid, SetPlotGridData, ConfigurePlotLegend
 from thesis_functions.astro import FindOrbitCenter, ComputeLibrationPoints, stop_yEquals0, stop_zEquals0
 from thesis_functions.astro import ComputeNonlinearDerivs, ComputeRelmoDynamicsMatrix
 from thesis_functions.astro import odeintNonlinearDerivs, odeintNonlinearDerivsWithLinearRelmoSTM, odeintNonlinearDerivsWithLinearRelmo
@@ -38,9 +38,11 @@ def set_up_target(halo, clock_angle, initial_condition_sets):
     # Barbee's first set of initial conditions are a planar (Lyapunov) orbit at Earth/Moon L1
     # Barbee's next 4 sets of initial conditions are halo orbits at Sun/Earth L2
     
-    halo_cases = ['small', 'medium', 'large', 'greater']
-        
-    index = halo_cases.index(halo) + 2  # add two because the indexing starts from 1 and the halo orbits start from 2 
+    #halo_cases = ['small', 'medium', 'large', 'greater']
+    #index = halo_cases.index(halo) + 2  # add two because the indexing starts from 1 and the halo orbits start from 2 
+    
+    halo_cases = ['EM', 'small', 'medium', 'large', 'greater']
+    index = halo_cases.index(halo) + 1  # add one because the indexing starts from 1 and the orbits start from 1
         
     # Each initial_condition_set has attributes: author, test_case, mu, x, z, y_dot, t
     initial_condition_set = initial_condition_sets.loc['Barbee', index]
@@ -57,7 +59,7 @@ def set_up_target(halo, clock_angle, initial_condition_sets):
         'x_dot': 0.0,
         'y_dot': initial_condition_set.y_dot,
         'z_dot': 0.0})
-
+    
     # reassign so that the series maintains the required order for its values
     target_initial_state = target_initial_state.loc[['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot']]
 
@@ -143,6 +145,32 @@ def compute_RLP_properties(target_initial_state, mu):
 
     return RLP_properties
 
+# <codecell>
+
+
+def plot_full_orbit(target_initial_state, RLP_properties, period, mu):
+    
+    # create plots showing the target satellite in one full orbit
+    axis_array_RLP_absolute = CreatePlotGrid('Satellite 1 Orbit in RLP Frame', 'X', 'Y', 'Z', 'equal')
+    
+    timespan_to_full_orbit = np.linspace(0.0, period, 500)
+    
+    # propagate satellite one full orbit
+    target_ephem_full_orbit = PropagateSatellite(mu, timespan_to_full_orbit, target_initial_state)
+    
+    # add data to plot
+    SetPlotGridData(axis_array_RLP_absolute, target_ephem_full_orbit*RLP_properties.r12, 'line', 'b', 'Target')
+    
+    # plot L1 point
+    L1_point = pd.Series({
+        'x':     RLP_properties.L1[0],
+        'y':     RLP_properties.L1[1],
+        'z':     RLP_properties.L1[2]})
+    
+    SetPlotGridData(axis_array_RLP_absolute, L1_point*RLP_properties.r12, 'points', 'k', 'L1')
+    
+    return
+
 # <headingcell level=3>
 
 # Define Waypoints
@@ -153,19 +181,24 @@ def compute_RLP_properties(target_initial_state, mu):
 def define_waypoints_RIC(approach, spacing, timescale, RLP_properties, axis_array_RIC):
 
     # Create a collection of waypoints which we initially populate in RIC coordinates
-    waypoint_RIC_coordinates = np.array([ #[0.0, 1000.0, 0.0],
-                                          #[0.0,  275.0, 0.0],   # move 725 km  # 400% errors
-                                          #[0.0,  180.0, 0.0],   # move 95 km  # 400% errors
-                                        [0.0,  100.0, 0.0],   # 40% errors
-                                        [0.0,   15.0, 0.0],   # 8% errors
-                                        [0.0,    5.0, 0.0],   # 10% errors
+    waypoint_RIC_coordinates = np.array([#[0.0, 1000.0, 0.0],
+                                         #[0.0,  275.0, 0.0],   # move 725 km
+                                         #[0.0,  180.0, 0.0],   # move 95 km
+                                        #[0.0,  100.0, 0.0],
+                                        [0.0,   15.0, 0.0],
+                                        [0.0,    5.0, 0.0],
                                         [0.0,    1.0, 0.0],
-                                        [0.0,   0.03, 0.0],
+                                        #[0.0,   0.03, 0.0],
                                         [0.0,    0.0, 0.0]])/RLP_properties.r12
 
     # Time points
-    waypoint_times = np.array([#0.0, 2.88, 4.70, 
-                               5.31, 5.67, 6.03, 6.64, 7.0, 7.26])*86400.0/RLP_properties.time_const
+    waypoint_times = np.array([#0.0, 
+                               #2.88, 4.70, 
+                               #5.31, 
+                               5.67, 6.03, 6.64, 
+                               #7.0, 
+                               7.26])*86400.0/RLP_properties.time_const
+                               #0.  ,  0.36,  0.97,  1.59])*86400.0/RLP_properties.time_const
     
     # Create data panel which will hold the waypoints in RIC, RLP, and VNB frames, indexed by time
     waypoints = pd.Panel(items = ['RIC', 'RLP', 'VNB', 
@@ -181,7 +214,7 @@ def define_waypoints_RIC(approach, spacing, timescale, RLP_properties, axis_arra
     print display(HTML((waypoints.RIC*RLP_properties.r12).to_html()))
     
     # add all waypoints to RIC plots
-    SetPlotGridData(axis_array_RIC, waypoints.RIC*RLP_properties.r12, 'points', 'c')
+    SetPlotGridData(axis_array_RIC, waypoints.RIC*RLP_properties.r12, 'points', 'c', 'Nominal Waypoints')
     
     return waypoints
 
@@ -250,8 +283,8 @@ def convert_waypoints_RLP_VNB(target_initial_state, waypoints, RLP_properties, a
     print 'waypoints.VNB * RLP_properties.r12', display(HTML((waypoints.VNB*RLP_properties.r12).to_html()))
 
     # add all waypoints to RLP and VNB plots
-    SetPlotGridData(axis_array_RLP, waypoints.RLP*RLP_properties.r12, 'points', 'c')
-    SetPlotGridData(axis_array_VNB, waypoints.VNB*RLP_properties.r12, 'points', 'c')
+    SetPlotGridData(axis_array_RLP, waypoints.RLP*RLP_properties.r12, 'points', 'c', 'Nominal Waypoints')
+    SetPlotGridData(axis_array_VNB, waypoints.VNB*RLP_properties.r12, 'points', 'c', 'Nominal Waypoints')
     
     return waypoints
 
@@ -458,30 +491,32 @@ def travel_waypoints(target_initial_state, waypoints, RLP_properties, axis_array
         ## VISUALIZATIONS
 
         # plot offsets (relative motion) between satellites 1 and 2 in RLP, RIC, and VNB frames
-        SetPlotGridData(axis_array_RLP, offsets.RLP_analytic_linear_nominal*RLP_properties.r12, 'line', 'g')
-        SetPlotGridData(axis_array_RLP, offsets.RLP_analytic_linear_achieved*RLP_properties.r12, 'dotted', 'r')
-        SetPlotGridData(axis_array_RLP, offsets.RLP_analytic_nonlin*RLP_properties.r12, 'line', 'r')
-        SetPlotGridData(axis_array_RLP, offsets.RLP_targeted_nonlin*RLP_properties.r12, 'line', 'b')
-        SetPlotGridData(axis_array_RLP, offsets.RLP_missed_maneuver*RLP_properties.r12, 'dotted', 'b')
+        SetPlotGridData(axis_array_RLP, offsets.RLP_analytic_linear_nominal*RLP_properties.r12, 'line', 'g', 'Linear Propagation, Linear \(\Delta V\)')
+        #SetPlotGridData(axis_array_RLP, offsets.RLP_analytic_linear_achieved*RLP_properties.r12, 'dotted', 'r')
+        SetPlotGridData(axis_array_RLP, offsets.RLP_analytic_nonlin*RLP_properties.r12, 'line', 'r', 'Nonlinear Propagation, Linear \(\Delta V\)')
+        SetPlotGridData(axis_array_RLP, offsets.RLP_targeted_nonlin*RLP_properties.r12, 'line', 'b', 'Nonlinear Propagation, Targeted \(\Delta V\)')
+        #SetPlotGridData(axis_array_RLP, offsets.RLP_missed_maneuver*RLP_properties.r12, 'dotted', 'b')
 
-        SetPlotGridData(axis_array_RIC, offsets.RIC_analytic_linear_nominal*RLP_properties.r12, 'line', 'g')
-        SetPlotGridData(axis_array_RIC, offsets.RIC_analytic_linear_achieved*RLP_properties.r12, 'dotted', 'r')
-        SetPlotGridData(axis_array_RIC, offsets.RIC_analytic_nonlin*RLP_properties.r12, 'line', 'r')
-        SetPlotGridData(axis_array_RIC, offsets.RIC_targeted_nonlin*RLP_properties.r12, 'line', 'b')
-        SetPlotGridData(axis_array_RIC, offsets.RIC_missed_maneuver*RLP_properties.r12, 'dotted', 'b')
+        SetPlotGridData(axis_array_RIC, offsets.RIC_analytic_linear_nominal*RLP_properties.r12, 'line', 'g', 'Linear Propagation, Linear \(\Delta V\)')
+        #SetPlotGridData(axis_array_RIC, offsets.RIC_analytic_linear_achieved*RLP_properties.r12, 'dotted', 'r')
+        SetPlotGridData(axis_array_RIC, offsets.RIC_analytic_nonlin*RLP_properties.r12, 'line', 'r', 'Nonlinear Propagation, Linear \(\Delta V\)')
+        SetPlotGridData(axis_array_RIC, offsets.RIC_targeted_nonlin*RLP_properties.r12, 'line', 'b', 'Nonlinear Propagation, Targeted \(\Delta V\)')
+        #SetPlotGridData(axis_array_RIC, offsets.RIC_missed_maneuver*RLP_properties.r12, 'dotted', 'b')
 
-        SetPlotGridData(axis_array_VNB, offsets.VNB_analytic_linear_nominal*RLP_properties.r12, 'line', 'g')
-        SetPlotGridData(axis_array_VNB, offsets.VNB_analytic_linear_achieved*RLP_properties.r12, 'dotted', 'r')
-        SetPlotGridData(axis_array_VNB, offsets.VNB_analytic_nonlin*RLP_properties.r12, 'line', 'r')
-        SetPlotGridData(axis_array_VNB, offsets.VNB_targeted_nonlin*RLP_properties.r12, 'line', 'b')
-        SetPlotGridData(axis_array_VNB, offsets.VNB_missed_maneuver*RLP_properties.r12, 'dotted', 'b')
+        SetPlotGridData(axis_array_VNB, offsets.VNB_analytic_linear_nominal*RLP_properties.r12, 'line', 'g', 'Linear Propagation, Linear \(\Delta V\)')
+        #SetPlotGridData(axis_array_VNB, offsets.VNB_analytic_linear_achieved*RLP_properties.r12, 'dotted', 'r')
+        SetPlotGridData(axis_array_VNB, offsets.VNB_analytic_nonlin*RLP_properties.r12, 'line', 'r', 'Nonlinear Propagation, Linear \(\Delta V\)')
+        SetPlotGridData(axis_array_VNB, offsets.VNB_targeted_nonlin*RLP_properties.r12, 'line', 'b', 'Nonlinear Propagation, Targeted \(\Delta V\)')
+        #SetPlotGridData(axis_array_VNB, offsets.VNB_missed_maneuver*RLP_properties.r12, 'dotted', 'b')
 
         #******************************************************#
 
+    ConfigurePlotLegend(axis_array_RIC)
+    
     # add achieved waypoints to plots
-    SetPlotGridData(axis_array_RLP, waypoints.RLP_achieved_targeted_nonlin*RLP_properties.r12, 'points', 'm')
-    SetPlotGridData(axis_array_RIC, waypoints.RIC_achieved_targeted_nonlin*RLP_properties.r12, 'points', 'm')
-    SetPlotGridData(axis_array_VNB, waypoints.VNB_achieved_targeted_nonlin*RLP_properties.r12, 'points', 'm')
+    SetPlotGridData(axis_array_RLP, waypoints.RLP_achieved_targeted_nonlin*RLP_properties.r12, 'points', 'm', 'Achieved Waypoints')
+    SetPlotGridData(axis_array_RIC, waypoints.RIC_achieved_targeted_nonlin*RLP_properties.r12, 'points', 'm', 'Achieved Waypoints')
+    SetPlotGridData(axis_array_VNB, waypoints.VNB_achieved_targeted_nonlin*RLP_properties.r12, 'points', 'm', 'Achieved Waypoints')
 
     # final post-maneuver velocity is same as the target satellite's velocity
     waypoint_velocities.RLP_post_maneuver_targeted_nonlin.loc[end] = target_ephem_for_segment.loc[end, ['x_dot', 'y_dot', 'z_dot']]
@@ -544,7 +579,7 @@ def compute_waypoint_metrics(halo, clock_angle, approach, timescale, spacing, wa
 
         waypoint_metrics.achieved_position_error_targeted.iloc[point] = np.linalg.norm(waypoints.RLP.loc[t] - waypoints.RLP_achieved_targeted_nonlin.loc[t])*RLP_properties.r12*1000 # meters
 
-    print 'waypoint_metrics', display(HTML(waypoint_metrics.to_html()))
+    print 'waypoint_metrics', display(HTML(waypoint_metrics.to_html(float_format=lambda x: '{0:.3f}'.format(x))))
 
     waypoint_metrics.to_csv('output/run_' + halo + '_' + str(clock_angle) + '_' + approach + '_' + timescale + '_' + spacing + '.csv')
     

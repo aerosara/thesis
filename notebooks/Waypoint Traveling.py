@@ -3,7 +3,6 @@
 
 # <codecell>
 
-
 %reset
 %pylab
 %pdb off
@@ -33,7 +32,7 @@ from IPython.core.display import HTML
 
 import thesis_functions.utilities
 from thesis_functions.initial_conditions import initial_condition_sets
-from thesis_functions.visualization import CreatePlotGrid, SetPlotGridData
+from thesis_functions.visualization import CreatePlotGrid, SetPlotGridData, ConfigurePlotLegend
 from thesis_functions.astro import FindOrbitCenter, ComputeLibrationPoints, stop_yEquals0, stop_zEquals0
 from thesis_functions.astro import ComputeNonlinearDerivs, ComputeRelmoDynamicsMatrix
 from thesis_functions.astro import odeintNonlinearDerivs, odeintNonlinearDerivsWithLinearRelmoSTM, odeintNonlinearDerivsWithLinearRelmo
@@ -41,7 +40,7 @@ from thesis_functions.astro import ComputeRequiredVelocity, PropagateSatelliteAn
 from thesis_functions.astro import PropagateSatellite, ComputeOffsets, ConvertOffset, BuildRICFrame, BuildVNBFrame
 from thesis_functions.astro import BuildRICFrames, BuildVNBFrames, ConvertOffsets
 
-from thesis_functions.major_simulation_components import set_up_target, compute_RLP_properties, define_waypoints_RIC
+from thesis_functions.major_simulation_components import set_up_target, compute_RLP_properties, plot_full_orbit, define_waypoints_RIC
 from thesis_functions.major_simulation_components import convert_waypoints_RLP_VNB, travel_waypoints, compute_waypoint_metrics
 
 # <headingcell level=3>
@@ -64,11 +63,12 @@ from thesis_functions.major_simulation_components import convert_waypoints_RLP_V
 # w: white
 
 # Allowed axis modes: 'auto' and 'equal'
+axis_mode = 'auto'
 
 # Plots of offset in RLP, RIC, VNB frames
-axis_array_RLP = CreatePlotGrid('Offset between Satellites 1 and 2 in RLP Frame', 'X', 'Y', 'Z', 'auto')
-axis_array_RIC = CreatePlotGrid('Offset between Satellites 1 and 2 in RIC Frame', 'R', 'I', 'C', 'auto')
-axis_array_VNB = CreatePlotGrid('Offset between Satellites 1 and 2 in VNB Frame', 'V', 'N', 'B', 'auto')
+axis_array_RLP = CreatePlotGrid('Offset between Satellites 1 and 2 in RLP Frame', 'X', 'Y', 'Z', axis_mode)
+axis_array_RIC = CreatePlotGrid('Offset between Satellites 1 and 2 in RIC Frame', 'R', 'I', 'C', axis_mode)
+axis_array_VNB = CreatePlotGrid('Offset between Satellites 1 and 2 in VNB Frame', 'V', 'N', 'B', axis_mode)
 
 # <codecell>
 
@@ -78,6 +78,10 @@ def run_waypoint_traveler(halo, clock_angle, approach, timescale, spacing):
     target_initial_state, period, mu = set_up_target(halo, clock_angle, initial_condition_sets)
     
     RLP_properties = compute_RLP_properties(target_initial_state, mu)
+    
+    plot_full_orbit(target_initial_state, RLP_properties, period, mu)
+    
+    print RLP_properties
     
     waypoints = define_waypoints_RIC(approach, spacing, timescale, RLP_properties, axis_array_RIC)
     
@@ -104,9 +108,14 @@ def run_waypoint_traveler(halo, clock_angle, approach, timescale, spacing):
 # <codecell>
 
 
-halo_cases = ['small', 'medium', 'large', 'greater']
+#halo_cases = ['small', 'medium', 'large', 'greater']
+halo_cases = ['EM']
+#halo_cases = ['small']
 #clock_angles = np.arange(0.0, 360.0, 10.0)
-clock_angles = np.arange(0.0, 360.0, 30.0)
+#clock_angles = np.arange(0.0, 360.0, 30.0)
+clock_angles = np.array([0.0])
+
+# not used yet:
 approach_cases = ['+R', '-R', '+I', '-I', '+C', '-C']
 timescales = ['fast', 'medium', 'slow']
 spacings = ['close', 'medium', 'far']
@@ -133,6 +142,9 @@ for halo in halo_cases:
 
         current_results = run_waypoint_traveler(halo, clock_angle, approach, timescale, spacing)    
 #    #results = results.append(current_results)
+
+# <codecell>
+
 
 # <rawcell>
 

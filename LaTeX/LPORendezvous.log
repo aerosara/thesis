@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  29 DEC 2014 19:48
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  2 JAN 2015 00:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -223,28 +223,32 @@ Package textcomp Info: Setting pplj sub-encoding to TS1/3 on input line 338.
 Package textcomp Info: Setting ptmx sub-encoding to TS1/4 on input line 339.
 Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 340.
 )
+(/usr/local/texlive/2014/texmf-dist/tex/latex/preprint/fullpage.sty
+Package: fullpage 1999/02/23 1.1 (PWD)
+\FP@margin=\skip47
+)
 (./LPORendezvous.aux)
 \openout1 = `LPORendezvous.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 13.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 13.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 14.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 14.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    ... okay on input line 14.
 
 (/usr/local/texlive/2014/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -310,143 +314,143 @@ e
 [1
 
 {/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-[2] [3] [4] [5] [6]
+[2] [3] [4] <./Images/Target_Full_Orbit_1.pdf, id=32, 578.16pt x 433.62pt>
+File: ./Images/Target_Full_Orbit_1.pdf Graphic file (type pdf)
+
+<use ./Images/Target_Full_Orbit_1.pdf>
+Package pdftex.def Info: ./Images/Target_Full_Orbit_1.pdf used on input line 30
+8.
+(pdftex.def)             Requested size: 407.66833pt x 305.74846pt.
+
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[7] <./Images/RIC_1.pdf, id=42, 578.16pt x 433.62pt>
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[5] <./Images/RIC_1.pdf, id=36, 578.16pt x 433.62pt>
 File: ./Images/RIC_1.pdf Graphic file (type pdf)
  <use ./Images/RIC_1.pdf>
-Package pdftex.def Info: ./Images/RIC_1.pdf used on input line 350.
-(pdftex.def)             Requested size: 310.4979pt x 232.87433pt.
+Package pdftex.def Info: ./Images/RIC_1.pdf used on input line 356.
+(pdftex.def)             Requested size: 407.66833pt x 305.74846pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-LaTeX Warning: Command \textdegree invalid in math mode on input line 357.
-
-
-LaTeX Warning: Command \textdegree invalid in math mode on input line 357.
-
-Missing character: There is no ° in font cmr10!
-[8]
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+Underfull \hbox (badness 10000) in paragraph at lines 371--371
 []\OT1/cmr/m/n/10 Linear
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+Underfull \hbox (badness 10000) in paragraph at lines 371--371
 \OT1/cmr/m/n/10 ^^A\OML/cmm/m/it/10 V$
  []
 
 
-Overfull \hbox (10.1862pt too wide) in paragraph at lines 367--367
+Overfull \hbox (10.1862pt too wide) in paragraph at lines 371--371
 []\OT1/cmr/m/n/10 Targeted
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+Underfull \hbox (badness 10000) in paragraph at lines 371--371
 \OT1/cmr/m/n/10 ^^A\OML/cmm/m/it/10 V$
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+Underfull \hbox (badness 10000) in paragraph at lines 371--371
 []$\OT1/cmr/m/n/10 ^^A\OML/cmm/m/it/10 V$
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+Underfull \hbox (badness 10000) in paragraph at lines 371--371
 \OT1/cmr/m/n/10 An-gle
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+Underfull \hbox (badness 10000) in paragraph at lines 371--371
 \OT1/cmr/m/n/10 Dif-fer-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+Underfull \hbox (badness 10000) in paragraph at lines 371--371
 \OT1/cmr/m/n/10 ence
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+Underfull \hbox (badness 10000) in paragraph at lines 371--371
 \OT1/cmr/m/n/10 ni-tude
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+Underfull \hbox (badness 10000) in paragraph at lines 371--371
 \OT1/cmr/m/n/10 Dif-fer-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+Underfull \hbox (badness 10000) in paragraph at lines 371--371
 \OT1/cmr/m/n/10 ence
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+Underfull \hbox (badness 10000) in paragraph at lines 371--371
 []\OT1/cmr/m/n/10 Linear
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+Underfull \hbox (badness 10000) in paragraph at lines 371--371
 \OT1/cmr/m/n/10 Po-si-tion
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--368
+Underfull \hbox (badness 10000) in paragraph at lines 371--372
 []\OT1/cmr/m/n/10 Targeted
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--368
+Underfull \hbox (badness 10000) in paragraph at lines 371--372
 \OT1/cmr/m/n/10 Po-si-tion
- []
-
-
-Overfull \hbox (8.84431pt too wide) in paragraph at lines 365--376
- [] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[9 <./Images/RIC_1.pdf>] [10] (./LPORendezvous.aux) ) 
+[6 <./Images/Target_Full_Orbit_1.pdf>] [7] [8 <./Images/RIC_1.pdf>]
+(./LPORendezvous.aux) ) 
 Here is how much of TeX's memory you used:
- 2947 strings out of 493117
- 41794 string characters out of 6135433
- 106695 words of memory out of 5000000
- 6370 multiletter control sequences out of 15000+600000
+ 2973 strings out of 493117
+ 42353 string characters out of 6135433
+ 108878 words of memory out of 5000000
+ 6391 multiletter control sequences out of 15000+600000
  13874 words of font info for 49 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 38i,13n,23p,1434b,269s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2014/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2014/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2014/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/local/texlive/2014/texmf
--dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/local/texlive/2014/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2014/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2014/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2014/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2014/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2014/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2014/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2014/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2014/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2014/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/publ
-ic/amsfonts/cm/cmsy7.pfb>
-Output written on LPORendezvous.pdf (10 pages, 277476 bytes).
+ 38i,13n,23p,1518b,271s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/cm-s
+uper/cm-super-ts1.enc}</usr/local/texlive/2014/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmbx10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmbx12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmbx7.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmbx9.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmex10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmmi10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmmi12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmmi5.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mmi7.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmm
+ib10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
+10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12
+.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.p
+fb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb>
+</usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></u
+sr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></us
+r/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/
+local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
+Output written on LPORendezvous.pdf (8 pages, 285559 bytes).
 PDF statistics:
- 125 PDF objects out of 1000 (max. 8388607)
- 93 compressed objects within 1 object stream
+ 138 PDF objects out of 1000 (max. 8388607)
+ 104 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 

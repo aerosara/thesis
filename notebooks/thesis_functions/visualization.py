@@ -107,15 +107,12 @@ def SetPlotGridData(axis_array, data, style, color, label):
         markertype = ':'
         
     # add data to plots 
+    ax1.plot(data.y, data.x, markertype, markersize=markersize, color=color, label=label)
+    
     axXZ.plot(data.x, data.z, markertype, markersize=markersize, color=color)
     axYZ.plot(data.y, data.z, markertype, markersize=markersize, color=color)
     axXY.plot(data.x, data.y, markertype, markersize=markersize, color=color)
     ax3D.plot(data.x.values, data.y.values, data.z.values, markertype, markersize=markersize, color=color)
-    
-    ax1.plot(data.y, data.x, markertype, markersize=markersize, color=color, label=label)
-        
-    #ax1.legend()
-    #ax1.legend(loc='center left', bbox_to_anchor=(1.2, 0.5))
         
 def ConfigurePlotLegend(axis_array):
     
