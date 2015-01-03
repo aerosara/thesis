@@ -22,7 +22,7 @@ def FindOrbitCenter(x, y, z):
     #          and z-coordinate corresponding to maximum y-amplitude  #y=0
     center = [x[y.argmax()], y[x.argmax()], z[y.argmax()]]  #np.abs(y).argmin()]]
 
-    print 'center = ', center
+    #print 'center = ', center
     
     return center
 
@@ -430,7 +430,7 @@ def TargetRequiredVelocity(target_initial_state, chaser_velocity_initial_guess, 
         #plt.show()
     
     chaser_initial_velocity_targeted = chaser_velocity_next_guess
-    print 'start time', start,  'end time', end, 'iteration count', iteration_count
+    #print 'start time', start,  'end time', end, 'iteration count', iteration_count
     
     return chaser_initial_velocity_targeted
 

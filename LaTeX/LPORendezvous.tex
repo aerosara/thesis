@@ -1,9 +1,9 @@
 \documentclass[a4paper]{article}
-\usepackage{amsmath} % for multi-line equations
+\usepackage{amsmath} % for multi-line aligned equations
 \usepackage{enumitem} % for bullet points
 \usepackage{graphicx} % for displaying images
 \graphicspath{ {./Images/} } % search path for images
-\usepackage{booktabs} % for making tables
+\usepackage{booktabs} % for making tables in professional style with top and bottom border
 \usepackage{textcomp} % for degree symbol
 \usepackage{fullpage} % for reducing page margins
 
@@ -377,7 +377,7 @@ For the tuning parameters of the shooting method, the perturbation value for the
 			Total & XX  & XX &  & XX &  & \\
 			\bottomrule
 		\end{tabular}
-		\caption{Waypoints in RIC Frame}
+		\caption{\(\Delta V\) and Position Error at each Waypoint}
 	\end{center}
 \end{table}
 
@@ -385,9 +385,34 @@ For the tuning parameters of the shooting method, the perturbation value for the
 
 \subsection{Rendezvous Approach Directions}
 
-Show cases where we approach from different directions (+/-R, +/-I, +/-C)
+This technique can be used to evaluate the relative \(\Delta V\) cost of performing a rendezvous at different points along the target spacecraft's orbit.  The following results present twelve test cases that each begin with the target satellite at a different ``clock angle" in its orbit; each test case begins 30\textdegree apart, as indicated by the asterisks shown in Figure \ref{fig:FullOrbit_2}.
 
-Show cases where we approach at different clock angles around the halo
+\begin{figure}[h] \label{fig:FullOrbit_2}
+	\begin{center}
+		\includegraphics[width=0.9\textwidth]{Target_Full_Orbit_2}
+		\caption{Twelve Target Satellite Initial Conditions with 30\textdegree Clock Angle Spacing}
+	\end{center}
+\end{figure}
+
+Each of these twelve rendezvous sequences are computed using the waypoint locations defined in the RIC frame as shown in Table \ref{tab:Waypoints_1}.  However, due to the different local curvature of the target orbit at each of the twelve starting locations, the relative motion patterns in the RIC frame for each rendezvous are different, as shown in Figure \ref{fig:RIC_2}.  When viewed using the CRTBP rotating libration point frame as in Figure \ref{fig:RLP_2}, it is more intuitively seen that each rendezvous approaches the target satellite from a different direction in the CRTBP frame, due to the rotation of the RIC frame with the target satellite's orbit.
+
+\begin{figure}[h] \label{fig:RIC_2}
+	\begin{center}
+		\includegraphics[width=0.9\textwidth]{RIC_2}
+		\caption{Relative Motion of Chaser Satellite with respect to a Target using Initial Conditions with 30\textdegree Clock Angle Spacing; RIC Frame}
+	\end{center}
+\end{figure}
+
+\begin{figure}[h] \label{fig:RLP_2}
+	\begin{center}
+		\includegraphics[width=0.9\textwidth]{RLP_2}
+		\caption{Relative Motion of Chaser Satellite with respect to a Target using Initial Conditions with 30\textdegree Clock Angle Spacing; CRTBP Frame}
+	\end{center}
+\end{figure}
+
+\section{Notes to Self}
+
+Show cases where we approach from different directions (+/-R, +/-I, +/-C)
 
 Evaluate relative cost of approaching in different ways
 
@@ -402,6 +427,8 @@ Kinda interesting to show in RLP, VNB
 Maybe talk about measuring the "excursion" of the trajectory (perpendicular to the vector from one waypoint to the next)
 
 \section{Conclusions}
+
+Technique can be used for any LPO (Lyapunov, halo, Lissajous) for any RLP system or L-point
 
 \begin{thebibliography}{99}
 	\bibitem[label]{cite_key}

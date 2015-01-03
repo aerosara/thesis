@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  2 JAN 2015 00:32
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  2 JAN 2015 18:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -418,39 +418,70 @@ Underfull \hbox (badness 10000) in paragraph at lines 371--372
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[6 <./Images/Target_Full_Orbit_1.pdf>] [7] [8 <./Images/RIC_1.pdf>]
-(./LPORendezvous.aux) ) 
+[6 <./Images/Target_Full_Orbit_1.pdf>]
+<./Images/Target_Full_Orbit_2.pdf, id=59, 650.43pt x 342.37914pt>
+File: ./Images/Target_Full_Orbit_2.pdf Graphic file (type pdf)
+
+<use ./Images/Target_Full_Orbit_2.pdf>
+Package pdftex.def Info: ./Images/Target_Full_Orbit_2.pdf used on input line 39
+2.
+(pdftex.def)             Requested size: 407.66833pt x 214.59767pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./Images/RIC_2.pdf, id=60, 589.00049pt x 433.62pt>
+File: ./Images/RIC_2.pdf Graphic file (type pdf)
+ <use ./Images/RIC_2.pdf>
+Package pdftex.def Info: ./Images/RIC_2.pdf used on input line 401.
+(pdftex.def)             Requested size: 407.66833pt x 300.13766pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./Images/RLP_2.pdf, id=61, 636.87938pt x 566.4161pt>
+File: ./Images/RLP_2.pdf Graphic file (type pdf)
+ <use ./Images/RLP_2.pdf>
+Package pdftex.def Info: ./Images/RLP_2.pdf used on input line 408.
+(pdftex.def)             Requested size: 407.66833pt x 362.56558pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[7] [8 <./Images/RIC_1.pdf>] [9 <./Images/Target_Full_Orbit_2.pdf>] [10 <./Imag
+es/RIC_2.pdf>] [11 <./Images/RLP_2.pdf>] (./LPORendezvous.aux) ) 
 Here is how much of TeX's memory you used:
- 2973 strings out of 493117
- 42353 string characters out of 6135433
- 108878 words of memory out of 5000000
- 6391 multiletter control sequences out of 15000+600000
+ 2991 strings out of 493117
+ 42762 string characters out of 6135433
+ 108910 words of memory out of 5000000
+ 6406 multiletter control sequences out of 15000+600000
  13874 words of font info for 49 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  38i,13n,23p,1518b,271s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/cm-s
-uper/cm-super-ts1.enc}</usr/local/texlive/2014/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmbx10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmbx12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmbx7.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmbx9.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmex10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmmi10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmmi12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmmi5.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mmi7.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmm
-ib10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
-10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12
-.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.p
-fb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb>
-</usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></u
-sr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></us
-r/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/
-local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on LPORendezvous.pdf (8 pages, 285559 bytes).
+{/usr/local/tex
+live/2014/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/local/texl
+ive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texli
+ve/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texliv
+e/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/local/texlive/
+2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/local/texlive/20
+14/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/201
+4/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2014
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2014/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2014/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2014/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2014/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2014/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2014/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2014/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2014/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2014/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2014/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2014/texmf-dist/fonts/ty
+pe1/public/cm-super/sfrm1000.pfb>
+Output written on LPORendezvous.pdf (11 pages, 350284 bytes).
 PDF statistics:
- 138 PDF objects out of 1000 (max. 8388607)
- 104 compressed objects within 2 object streams
+ 193 PDF objects out of 1000 (max. 8388607)
+ 149 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -68,16 +68,25 @@ def CreatePlotGrid(title, xlabel, ylabel, zlabel, aspectmode):
     fig_height_in = fig_width_in * golden_ratio   # figure height in inches
     fig_dims      = [fig_width_in, fig_height_in] # fig dims as a list
 
-    # XY Plane
+    # Y vs X in RLP, R vs I in RIC
     fig1, (ax1) = plt.subplots(1,1);
-    fig1.figsize = fig_dims
-    
+    #fig1.figsize = fig_dims    
+    fig1.set_size_inches(fig_dims)
     ax1.set_title(xlabel + ylabel + ' Plane')
     ax1.xaxis.set_label_text(ylabel + ' axis')
     ax1.yaxis.set_label_text(xlabel + ' axis')
     ax1.set_aspect(aspectmode)
+
+    # B vs V in VNB
+    fig2, (ax2) = plt.subplots(1,1);
+    #fig2.figsize = fig_dims
+    fig2.set_size_inches(fig_dims)
+    ax2.set_title(xlabel + zlabel + ' Plane')
+    ax2.xaxis.set_label_text(zlabel + ' axis')
+    ax2.yaxis.set_label_text(zlabel + ' axis')
+    ax2.set_aspect(aspectmode)
     
-    axis_array = ((axXZ, axYZ), (axXY, ax3D), ax1)
+    axis_array = ((axXZ, axYZ), (axXY, ax3D), (ax1, ax2))
     
     return axis_array
 
@@ -94,7 +103,7 @@ def SetPlotGridData(axis_array, data, style, color, label):
     # k: black
     # w: white
     
-    ((axXZ, axYZ), (axXY, ax3D), ax1) = axis_array
+    ((axXZ, axYZ), (axXY, ax3D), (ax1, ax2)) = axis_array
 
     if style == 'points':
         markersize = 5
@@ -105,22 +114,27 @@ def SetPlotGridData(axis_array, data, style, color, label):
     elif style == 'dotted':
         markersize = 1
         markertype = ':'
+    elif style == 'star':
+        markersize = 5
+        markertype = '*'
         
     # add data to plots 
     ax1.plot(data.y, data.x, markertype, markersize=markersize, color=color, label=label)
+    ax2.plot(data.x, data.z, markertype, markersize=markersize, color=color, label=label)
     
     axXZ.plot(data.x, data.z, markertype, markersize=markersize, color=color)
     axYZ.plot(data.y, data.z, markertype, markersize=markersize, color=color)
     axXY.plot(data.x, data.y, markertype, markersize=markersize, color=color)
-    ax3D.plot(data.x.values, data.y.values, data.z.values, markertype, markersize=markersize, color=color)
+    #ax3D.plot(data.x.values, data.y.values, data.z.values, markertype, markersize=markersize, color=color)
         
 def ConfigurePlotLegend(axis_array):
     
-    ((axXZ, axYZ), (axXY, ax3D), ax1) = axis_array
+    ((axXZ, axYZ), (axXY, ax3D), (ax1, ax2)) = axis_array
     
     handles, labels = ax1.get_legend_handles_labels()
     
     ax1.legend([handles[1], handles[2], handles[3]], [labels[1], labels[2], labels[3]], loc='lower right')
+    ax2.legend([handles[1], handles[2], handles[3]], [labels[1], labels[2], labels[3]], loc='lower right')
     #'Linear Propagation, Linear dV', 'Nonlinear Propagation, Linear dV', 'Nonlinear Propagation, Targeted dV''])
     
     #plt.savefig('..\LaTeX\Images\RIC.pdf', format='pdf')

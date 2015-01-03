@@ -29,7 +29,7 @@ from thesis_functions.astro import BuildRICFrames, BuildVNBFrames, ConvertOffset
 # <codecell>
 
 
-def set_up_target(halo, clock_angle, initial_condition_sets):
+def set_up_target(halo, clock_angle, initial_condition_sets, axis_array_RLP, axis_array_RIC, axis_array_VNB):
 
     # Set initial conditions for the target satellite 
 
@@ -63,8 +63,8 @@ def set_up_target(halo, clock_angle, initial_condition_sets):
     # reassign so that the series maintains the required order for its values
     target_initial_state = target_initial_state.loc[['x', 'y', 'z', 'x_dot', 'y_dot', 'z_dot']]
 
-    print 'initial_condition_sets: Barbee'
-    print display(HTML(initial_condition_sets.loc['Barbee'].to_html()))
+    #print 'initial_condition_sets: Barbee'
+    #print display(HTML(initial_condition_sets.loc['Barbee'].to_html()))
 
     # propagate target initial state to the desired starting clock angle
     if (clock_angle != 0.0):
@@ -77,7 +77,7 @@ def set_up_target(halo, clock_angle, initial_condition_sets):
         initial_state_to_clock_angle = PropagateSatellite(mu, timespan_to_clock_angle, target_initial_state)
 
         target_initial_state = initial_state_to_clock_angle.iloc[-1]
-        
+    
     return target_initial_state, period, mu
 
 # <headingcell level=3>
@@ -87,7 +87,7 @@ def set_up_target(halo, clock_angle, initial_condition_sets):
 # <codecell>
 
 
-def compute_RLP_properties(target_initial_state, mu):
+def compute_RLP_properties(mu):
     
     # libration_points DataFrame will have attributes: X1, X2, L1, L2, L3, L4, L5
     # X1 and X2 are positions of larger and smaller bodies along X axis
@@ -95,13 +95,6 @@ def compute_RLP_properties(target_initial_state, mu):
     
     # RLP_properties will contain the libration_points information plus other constants
     RLP_properties = libration_points.copy()
-
-    # The FindOrbitCenter function doesn't work if you only propagate a partial orbit, so just treat L1/L2 as the center
-    # determine which libration point we're orbiting by looking at magnitude/sign of the x component of the initial state
-    if (0.0 < target_initial_state.x < 1.0):
-        RLP_properties['center'] = RLP_properties.L1
-    elif (target_initial_state.x > 1.0):
-        RLP_properties['center'] = RLP_properties.L2
     
     # gravitational constant
     RLP_properties['G']   = 6.67384e-11/1e9 # m3/(kg*s^2) >> converted to km3
@@ -145,13 +138,21 @@ def compute_RLP_properties(target_initial_state, mu):
 
     return RLP_properties
 
+
+def set_active_point(target_initial_state, RLP_properties):
+        
+    # The FindOrbitCenter function doesn't work if you only propagate a partial orbit, so just treat L1/L2 as the center
+    # determine which libration point we're orbiting by looking at magnitude/sign of the x component of the initial state
+    if (0.0 < target_initial_state.x < 1.0):
+        RLP_properties['center'] = RLP_properties.L1
+    elif (target_initial_state.x > 1.0):
+        RLP_properties['center'] = RLP_properties.L2
+    
+
 # <codecell>
 
 
-def plot_full_orbit(target_initial_state, RLP_properties, period, mu):
-    
-    # create plots showing the target satellite in one full orbit
-    axis_array_RLP_absolute = CreatePlotGrid('Satellite 1 Orbit in RLP Frame', 'X', 'Y', 'Z', 'equal')
+def plot_full_orbit(target_initial_state, RLP_properties, period, mu, axis_array_RLP_absolute):
     
     timespan_to_full_orbit = np.linspace(0.0, period, 500)
     
@@ -168,6 +169,13 @@ def plot_full_orbit(target_initial_state, RLP_properties, period, mu):
         'z':     RLP_properties.L1[2]})
     
     SetPlotGridData(axis_array_RLP_absolute, L1_point*RLP_properties.r12, 'points', 'k', 'L1')
+    
+    return
+    
+def plot_initial_condition(target_initial_state, RLP_properties, axis_array_RLP_absolute):
+    
+    # plot initial condition
+    SetPlotGridData(axis_array_RLP_absolute, target_initial_state*RLP_properties.r12, 'star', 'm', 'Initial Conditions')
     
     return
 
@@ -210,8 +218,8 @@ def define_waypoints_RIC(approach, spacing, timescale, RLP_properties, axis_arra
     # Copy the RIC waypoint data into the panel
     waypoints['RIC'] = waypoint_RIC_coordinates
 
-    print 'waypoints.RIC * RLP_properties.r12'
-    print display(HTML((waypoints.RIC*RLP_properties.r12).to_html()))
+    #print 'waypoints.RIC * RLP_properties.r12'
+    #print display(HTML((waypoints.RIC*RLP_properties.r12).to_html()))
     
     # add all waypoints to RIC plots
     SetPlotGridData(axis_array_RIC, waypoints.RIC*RLP_properties.r12, 'points', 'c', 'Nominal Waypoints')
@@ -279,8 +287,8 @@ def convert_waypoints_RLP_VNB(target_initial_state, waypoints, RLP_properties, a
         # Reset the state as the last entry in the ephem.
         target_initial_state_for_segment = target_state_at_endpoint
     
-    print 'waypoints.RLP * RLP_properties.r12', display(HTML((waypoints.RLP*RLP_properties.r12).to_html()))
-    print 'waypoints.VNB * RLP_properties.r12', display(HTML((waypoints.VNB*RLP_properties.r12).to_html()))
+    #print 'waypoints.RLP * RLP_properties.r12', display(HTML((waypoints.RLP*RLP_properties.r12).to_html()))
+    #print 'waypoints.VNB * RLP_properties.r12', display(HTML((waypoints.VNB*RLP_properties.r12).to_html()))
 
     # add all waypoints to RLP and VNB plots
     SetPlotGridData(axis_array_RLP, waypoints.RLP*RLP_properties.r12, 'points', 'c', 'Nominal Waypoints')
@@ -512,6 +520,7 @@ def travel_waypoints(target_initial_state, waypoints, RLP_properties, axis_array
         #******************************************************#
 
     ConfigurePlotLegend(axis_array_RIC)
+    ConfigurePlotLegend(axis_array_RLP)
     
     # add achieved waypoints to plots
     SetPlotGridData(axis_array_RLP, waypoints.RLP_achieved_targeted_nonlin*RLP_properties.r12, 'points', 'm', 'Achieved Waypoints')
@@ -579,7 +588,7 @@ def compute_waypoint_metrics(halo, clock_angle, approach, timescale, spacing, wa
 
         waypoint_metrics.achieved_position_error_targeted.iloc[point] = np.linalg.norm(waypoints.RLP.loc[t] - waypoints.RLP_achieved_targeted_nonlin.loc[t])*RLP_properties.r12*1000 # meters
 
-    print 'waypoint_metrics', display(HTML(waypoint_metrics.to_html(float_format=lambda x: '{0:.3f}'.format(x))))
+    #print 'waypoint_metrics', display(HTML(waypoint_metrics.to_html(float_format=lambda x: '{0:.3f}'.format(x))))
 
     waypoint_metrics.to_csv('output/run_' + halo + '_' + str(clock_angle) + '_' + approach + '_' + timescale + '_' + spacing + '.csv')
     
