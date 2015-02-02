@@ -9,27 +9,23 @@
 
 %opening
 \title{Libration Point Orbit Rendezvous Technique Using Linearized Relative Motion Dynamics and Nonlinear Differential Correction}
-\author{Sara Case}
+\author{Sara Case\\ Department of Aerospace Engineering\\ University of Maryland, College Park}
+\date{Spring 2015}
 
 \begin{document}
 
 \maketitle
 
-\begin{abstract}
-	
-	Abstract goes here.
-
-\end{abstract}
 
 \section{Introduction}
 
-Previous libration point missions include ISEE-3, ACE, WIND, SOHO, which all went to the Sun-Earth L1 point (give more details).  Several spacecraft have been deployed to the Sun-Earth L2 point, and the James Webb Space Telescope is planned to launch to that point in 2018.  (Maybe mention other planned missions; including DSCOVR!)  So far, all libration point missions have consisted of a single satellite which operates independently of any other satellite.  There is research on deploying a formation of satellites to fly together around libration points (give examples).  However, not much research has been performed regarding rendezvous with libration point orbits.
+The history of satellites being deployed to libration point orbits dates back to 1978, when ISEE-3 was launched to the Sun-Earth L1 point. ACE, WIND, SOHO are currently orbiting the same point, with the DSCOVR and LPF satellites set to join them in 2015.  Several spacecraft have been deployed to the Sun-Earth L2 point, and the ARTEMIS mission explored L1 and L2 in the Earth-Moon system.  Several additional libration point orbiting missions are currently planned, including the James Webb Space Telescope.  So far, all libration point missions have consisted of a single satellite which operates independently of any other satellite.  There is research on deploying a formation of satellites to fly together around libration points.  However, not much research has been performed regarding rendezvous with libration point orbiters.  %  TODO: (give examples of formation flying research)
 
-Libration point orbit rendezvous would be a critical component for many possible satellite scenarios.  If a large satellite needs to be launched in components and assembled in orbit, the individual components would need to perform rendezvous and docking in order to assemble themselves.  If a valuable space asset such as a telescope requires an on-orbit repair, the satellite servicing crew will need to rendezvous with the object.  A libration point could be a useful place to build a space station (refer to a paper about this), and in that case rendezvous capabilities would be important during the construction of the station as well as every crew and cargo mission to visit the station.
+Libration point orbit rendezvous would be a critical component for many possible mission architectures.  If a large satellite needs to be launched in components and assembled in orbit, the individual components would need to perform rendezvous and docking prior to assembly.  If a valuable space asset such as a telescope requires an on-orbit repair, the satellite servicing mission will need to rendezvous with the object.  A libration point orbit could be a useful place to build a space station, and in that case rendezvous capabilities would be important during the construction of the station as well as every crew and cargo mission to visit the station. % TODO: (refer to a paper about building a space station at a libration point)
 
-Satellite rendezvous in low-Earth orbit is well-studied, due to many years of experience operating the International Space Station (cite rendezvous ISS paper?) and other applications.  The Hill's / Clohessy-Wiltshire equations can be used to estimate the relative motion of a chaser vehicle with respect to a target vehicle in a circular orbit.  These equations of relative motion can be used to compute the estimated \(\Delta V\) (instantaneous change in velocity) to travel between waypoints defining an approach trajectory (mention r-bar, v-bar?).  However, for libration point orbits, the dynamical environment is quite different and the same equations of motion can not be used.
+Satellite rendezvous in low-Earth orbit is well-studied, due to many years of experience operating the International Space Station and other applications.  The Hill's / Clohessy-Wiltshire equations can be used to estimate the relative motion of a chaser vehicle with respect to a target vehicle in a circular orbit.  These equations of relative motion can be used to compute the estimated \(\Delta V\) (instantaneous change in velocity) to travel between waypoints defining an approach trajectory.  However, for libration point orbits, the dynamical environment is quite different and the same equations of motion can not be used. % TODO: (cite rendezvous ISS paper) (mention r-bar, v-bar?)
 
-Luquette has developed linearized equations of relative motion for formation flying in libration point orbits.  Lian et al. have used these linearized dynamics to compute impulses for a chaser satellite to travel between waypoints in order to approach a target orbiting a libration point.  This paper discusses the results of this technique, and presents an additional step in which the shooting method is used to refine the computed \(\Delta V\) for use in nonlinear propagation.
+Luquette \cite{luquette2004} has developed linearized equations of relative motion for formation flying in libration point orbits.  Lian et al. \cite{lian2011} have used these linearized dynamics to compute impulses for a chaser satellite to travel between waypoints in order to approach a target orbiting a libration point.  This paper discusses the results of this technique, and presents an additional step in which the shooting method is used to refine the computed \(\Delta V\) for use in nonlinear propagation.
 
 \section{Dynamics}
 
@@ -71,7 +67,7 @@ and \(\mathbf{X_1}\) and \(\mathbf{X_2}\) are the positions of the larger and sm
 (Need to provide definition of \(\mu\))
 
 \subsection{Linearized CRTBP Relative Motion Dynamics}
-Luquette has derived linearized equations of relative motion of a chaser satellite with respect to a target satellite orbiting in the restricted three body problem (RTBP).  He provides the equations of motion in two reference frames: the inertial frame as well as the rotating (RTBP) frame.  These equations of motion are valid anywhere in the RTBP system; they are not assumed to be near any specific libration point.
+Luquette \cite{luquette2004} has derived linearized equations of relative motion of a chaser satellite with respect to a target satellite orbiting in the restricted three body problem (RTBP).  He provides the equations of motion in two reference frames: the inertial frame as well as the rotating (RTBP) frame.  These equations of motion are valid anywhere in the RTBP system; they are not assumed to be near any specific libration point.
 
 The equations of relative motion of a chaser satellite with respect to a target satellite, given in the RTBP reference frame, are:
 
@@ -430,8 +426,7 @@ Maybe talk about measuring the "excursion" of the trajectory (perpendicular to t
 
 Technique can be used for any LPO (Lyapunov, halo, Lissajous) for any RLP system or L-point
 
-\begin{thebibliography}{99}
-	\bibitem[label]{cite_key}
-\end{thebibliography}
+\bibliographystyle{unsrt}
+\bibliography{LPORendezvous}
 
 \end{document}
