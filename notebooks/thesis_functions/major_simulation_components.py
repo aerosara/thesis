@@ -189,23 +189,58 @@ def plot_initial_condition(target_initial_state, RLP_properties, axis_array_RLP_
 def define_waypoints_RIC(approach, spacing, timescale, RLP_properties, axis_array_RIC):
 
     # Create a collection of waypoints which we initially populate in RIC coordinates
-    waypoint_RIC_coordinates = np.array([#[0.0, 1000.0, 0.0],
-                                         #[0.0,  275.0, 0.0],   # move 725 km
-                                         #[0.0,  180.0, 0.0],   # move 95 km
-                                        #[0.0,  100.0, 0.0],
-                                        [0.0,   15.0, 0.0],
-                                        [0.0,    5.0, 0.0],
-                                        [0.0,    1.0, 0.0],
-                                        #[0.0,   0.03, 0.0],
-                                        [0.0,    0.0, 0.0]])/RLP_properties.r12
+    #waypoint_RIC_coordinates = np.array([#[0.0, 1000.0, 0.0],
+    #                                     #[0.0,  275.0, 0.0],   # move 725 km
+    #                                     #[0.0,  180.0, 0.0],   # move 95 km
+    #                                    #[0.0,  100.0, 0.0],
+    #                                    [0.0,   15.0, 0.0],
+    #                                    [0.0,    5.0, 0.0],
+    #                                    [0.0,    1.0, 0.0],
+    #                                    #[0.0,   0.03, 0.0],
+    #                                    [0.0,    0.0, 0.0]])/RLP_properties.r12
 
     # Time points
-    waypoint_times = np.array([#0.0, 
-                               #2.88, 4.70, 
-                               #5.31, 
-                               5.67, 6.03, 6.64, 
-                               #7.0, 
-                               7.26])*86400.0/RLP_properties.time_const
+    #waypoint_times = np.array([#0.0, 
+    #                           #2.88, 4.70, 
+    #                           #5.31, 
+    #                           5.67, 6.03, 6.64, 
+    #                           #7.0, 
+    #                           7.26])*86400.0/RLP_properties.time_const
+    #                           #0.  ,  0.36,  0.97,  1.59])*86400.0/RLP_properties.time_const
+    
+    if (approach == '+R'):
+        waypoint_RIC_coordinates = np.array([[15.0, 0.0, 0.0],
+                                            [5.0,   0.0, 0.0],
+                                            [1.0,   0.0, 0.0],
+                                            [0.0,   0.0, 0.0]])/RLP_properties.r12
+    elif (approach == '-R'):
+        waypoint_RIC_coordinates = np.array([[-15.0, 0.0, 0.0],
+                                            [-5.0,   0.0, 0.0],
+                                            [-1.0,   0.0, 0.0],
+                                            [0.0,    0.0, 0.0]])/RLP_properties.r12
+    elif (approach == '+I'):
+        waypoint_RIC_coordinates = np.array([[0.0,   15.0, 0.0],
+                                            [0.0,    5.0, 0.0],
+                                            [0.0,    1.0, 0.0],
+                                            [0.0,    0.0, 0.0]])/RLP_properties.r12
+    elif (approach == '-I'):
+        waypoint_RIC_coordinates = np.array([[0.0,  -15.0, 0.0],
+                                            [0.0,   -5.0, 0.0],
+                                            [0.0,   -1.0, 0.0],
+                                            [0.0,    0.0, 0.0]])/RLP_properties.r12
+    elif (approach == '+C'):
+        waypoint_RIC_coordinates = np.array([[0.0,   0.0, 15.0],
+                                            [0.0,    0.0, 5.0],
+                                            [0.0,    0.0, 1.0],
+                                            [0.0,    0.0, 0.0]])/RLP_properties.r12
+    elif (approach == '-C'):
+        waypoint_RIC_coordinates = np.array([[0.0,   0.0, -15.0],
+                                            [0.0,    0.0, -5.0],
+                                            [0.0,    0.0, -1.0],
+                                            [0.0,    0.0, 0.0]])/RLP_properties.r12
+
+    # Time points
+    waypoint_times = np.array([5.67, 6.03, 6.64, 7.26])*86400.0/RLP_properties.time_const
                                #0.  ,  0.36,  0.97,  1.59])*86400.0/RLP_properties.time_const
     
     # Create data panel which will hold the waypoints in RIC, RLP, and VNB frames, indexed by time

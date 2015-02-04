@@ -31,29 +31,29 @@ def CreatePlotGrid(title, xlabel, ylabel, zlabel, aspectmode):
 
     # XZ Plane
     axXZ.set_title(xlabel + zlabel + ' Plane')
-    axXZ.xaxis.set_label_text(xlabel + ' axis')
-    axXZ.yaxis.set_label_text(zlabel + ' axis')
+    axXZ.xaxis.set_label_text(xlabel + ' axis (km)')
+    axXZ.yaxis.set_label_text(zlabel + ' axis (km)')
     axXZ.set_aspect(aspectmode)
 
     # YZ Plane
     axYZ.set_title(ylabel + zlabel + ' Plane')
-    axYZ.xaxis.set_label_text(ylabel + ' axis')
-    axYZ.yaxis.set_label_text(zlabel + ' axis')
+    axYZ.xaxis.set_label_text(ylabel + ' axis (km)')
+    axYZ.yaxis.set_label_text(zlabel + ' axis (km)')
     axYZ.set_aspect(aspectmode)
 
     # XY Plane
     axXY.set_title(xlabel + ylabel + ' Plane')
-    axXY.xaxis.set_label_text(xlabel + ' axis')
-    axXY.yaxis.set_label_text(ylabel + ' axis')
+    axXY.xaxis.set_label_text(xlabel + ' axis (km)')
+    axXY.yaxis.set_label_text(ylabel + ' axis (km)')
     axXY.set_aspect(aspectmode)
 
     # plot in 3D
     ax3D.axis('off')
     ax3D = fig.add_subplot(224, projection='3d') # "224" means "2x2 grid, 4th subplot"
     ax3D.set_title('3D View in ' + xlabel + ylabel + zlabel + ' Frame')
-    ax3D.xaxis.set_label_text(xlabel + ' axis')
-    ax3D.yaxis.set_label_text(ylabel + ' axis')
-    ax3D.zaxis.set_label_text(zlabel + ' axis')
+    ax3D.xaxis.set_label_text(xlabel + ' axis (km)')
+    ax3D.yaxis.set_label_text(ylabel + ' axis (km)')
+    ax3D.zaxis.set_label_text(zlabel + ' axis (km)')
     ax3D.set_aspect(aspectmode)
     
     # for publishing in paper
@@ -73,8 +73,8 @@ def CreatePlotGrid(title, xlabel, ylabel, zlabel, aspectmode):
     #fig1.figsize = fig_dims    
     fig1.set_size_inches(fig_dims)
     ax1.set_title(xlabel + ylabel + ' Plane')
-    ax1.xaxis.set_label_text(ylabel + ' axis')
-    ax1.yaxis.set_label_text(xlabel + ' axis')
+    ax1.xaxis.set_label_text(ylabel + ' axis (km)')
+    ax1.yaxis.set_label_text(xlabel + ' axis (km)')
     ax1.set_aspect(aspectmode)
 
     # B vs V in VNB
@@ -82,8 +82,8 @@ def CreatePlotGrid(title, xlabel, ylabel, zlabel, aspectmode):
     #fig2.figsize = fig_dims
     fig2.set_size_inches(fig_dims)
     ax2.set_title(xlabel + zlabel + ' Plane')
-    ax2.xaxis.set_label_text(zlabel + ' axis')
-    ax2.yaxis.set_label_text(zlabel + ' axis')
+    ax2.xaxis.set_label_text(xlabel + ' axis (km)')
+    ax2.yaxis.set_label_text(zlabel + ' axis (km)')
     ax2.set_aspect(aspectmode)
     
     axis_array = ((axXZ, axYZ), (axXY, ax3D), (ax1, ax2))

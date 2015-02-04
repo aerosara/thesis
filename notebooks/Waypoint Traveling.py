@@ -134,7 +134,7 @@ spacings = ['close', 'medium', 'far']
 
 halo = halo_cases[0]
 clock_angle = clock_angles[0]
-approach = approach_cases[0]
+approach = '-C'
 timescale = timescales[0]
 spacing = spacings[0]
 
@@ -191,12 +191,27 @@ print 'summary_metrics', display(HTML(summary_metrics.to_html(float_format=lambd
 
 
 fig3, (ax3) = plt.subplots(1,1);
+ax3.plot(summary_metrics.clock_angle, summary_metrics.sum_DV_analytic, label='Sum of Linear \(\Delta V\)')
+ax3.plot(summary_metrics.clock_angle, summary_metrics.sum_DV_targeted, label='Sum of Targeted \(\Delta V\)')
+#lims = ylim()
+#ylim([0, lims[1]]) 
+ax3.set_title('Total Rendezvous \(\Delta V\) vs. Clock Angle')
+ax3.xaxis.set_label_text('Clock Angle (degrees)')
+ax3.yaxis.set_label_text('Sum of \(\Delta V\) (m/s)')
+ax3.legend(loc='upper right')
 
-ax3.plot(summary_metrics.clock_angle, summary_metrics.sum_DV_analytic)
-ax3.plot(summary_metrics.clock_angle, summary_metrics.sum_DV_targeted)
+#fig4, (ax4) = plt.subplots(1,1);
+#ax4.plot(summary_metrics.clock_angle, summary_metrics.sum_DV_magnitude_difference)
 
-# <codecell>
+#fig5, (ax5) = plt.subplots(1,1);
+#ax5.plot(summary_metrics.clock_angle, summary_metrics.sum_achieved_position_error_analytic)
+#ax5.plot(summary_metrics.clock_angle, summary_metrics.sum_achieved_position_error_targeted)
 
+#fig6, (ax6) = plt.subplots(1,1);
+#ax6.plot(summary_metrics.clock_angle, summary_metrics.sum_DV_angle_difference)
+
+#fig3, (ax3) = plt.subplots(1,1);
+#ax3.plot(summary_metrics.clock_angle, (summary_metrics.sum_DV_analytic-summary_metrics.sum_DV_targeted).abs()/summary_metrics.sum_DV_analytic*100)
 
 # <rawcell>
 
