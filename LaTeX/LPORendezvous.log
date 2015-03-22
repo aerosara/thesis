@@ -1,9 +1,7 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2015.1.16)  2 FEB 2015 00:11
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2015.1.16)  3 FEB 2015 00:05
 entering extended mode
 **LPORendezvous.tex
-
-("E:\SCase\GitHub\thesis\LaTeX - Draft Paper sent to Mark Jesick, JPL - 2-1-201
-5\LPORendezvous.tex"
+(E:\SCase\GitHub\thesis\LaTeX\LPORendezvous.tex
 LaTeX2e <2011/06/27>
 Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
 abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
@@ -236,54 +234,58 @@ Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 340.
 Package: fullpage 1999/02/23 1.1 (PWD)
 \FP@margin=\skip47
 )
-("E:\SCase\GitHub\thesis\LaTeX - Draft Paper sent to Mark Jesick, JPL - 2-1-201
-5\LPORendezvous.aux")
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 15.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 15.
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\float\float.sty"
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count105
+\float@exts=\toks22
+\float@box=\box29
+\@float@everytoks=\toks23
+\@floatcapt=\box30
+)
+(E:\SCase\GitHub\thesis\LaTeX\LPORendezvous.aux)
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 16.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 16.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ts1cmr.fd"
 File: ts1cmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    ... okay on input line 16.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count105
+\scratchcounter=\count106
 \scratchdimen=\dimen128
-\scratchbox=\box29
-\nofMPsegments=\count106
-\nofMParguments=\count107
-\everyMPshowfont=\toks22
-\MPscratchCnt=\count108
+\scratchbox=\box31
+\nofMPsegments=\count107
+\nofMParguments=\count108
+\everyMPshowfont=\toks24
+\MPscratchCnt=\count109
 \MPscratchDim=\dimen129
-\MPnumerator=\count109
-\makeMPintoPDFobject=\count110
-\everyMPtoPDFconversion=\toks23
+\MPnumerator=\count110
+\makeMPintoPDFobject=\count111
+\everyMPtoPDFconversion=\toks25
 ) [1
 
 {C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}] [2] [3] [4]
-<./Images/Target_Full_Orbit_1.pdf, id=29, 578.16pt x 433.62pt>
+<./Images/Target_Full_Orbit_1.pdf, id=29, 529.33495pt x 196.03288pt>
 File: ./Images/Target_Full_Orbit_1.pdf Graphic file (type pdf)
 
 <use ./Images/Target_Full_Orbit_1.pdf>
-Package pdftex.def Info: ./Images/Target_Full_Orbit_1.pdf used on input line 30
-4.
-(pdftex.def)             Requested size: 407.66833pt x 305.74846pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
+Package pdftex.def Info: ./Images/Target_Full_Orbit_1.pdf used on input line 31
+5.
+(pdftex.def)             Requested size: 407.66833pt x 150.97867pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -294,156 +296,144 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 [5] <./Images/RIC_1.pdf, id=33, 578.16pt x 433.62pt>
 File: ./Images/RIC_1.pdf Graphic file (type pdf)
  <use ./Images/RIC_1.pdf>
-Package pdftex.def Info: ./Images/RIC_1.pdf used on input line 352.
+Package pdftex.def Info: ./Images/RIC_1.pdf used on input line 366.
 (pdftex.def)             Requested size: 407.66833pt x 305.74846pt.
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[6 <E:/SCase/GitHub/thesis/LaTeX - Draft Paper sent to Mark Jesick, JPL - 2-1-2
-015/Images/Target_Full_Orbit_1.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+[6 <E:/SCase/GitHub/thesis/LaTeX/Images/Target_Full_Orbit_1.pdf>]
+Underfull \hbox (badness 10000) in paragraph at lines 376--376
 []\OT1/cmr/m/n/10 Linear
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+Underfull \hbox (badness 10000) in paragraph at lines 376--376
 $\OT1/cmr/m/n/10 \OML/cmm/m/it/10 V$
  []
 
 
-Overfull \hbox (10.1862pt too wide) in paragraph at lines 367--367
+Overfull \hbox (10.1862pt too wide) in paragraph at lines 376--376
 []\OT1/cmr/m/n/10 Targeted
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+Underfull \hbox (badness 10000) in paragraph at lines 376--376
 $\OT1/cmr/m/n/10 \OML/cmm/m/it/10 V$
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+Underfull \hbox (badness 10000) in paragraph at lines 376--376
 []$\OT1/cmr/m/n/10 \OML/cmm/m/it/10 V$
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+Underfull \hbox (badness 10000) in paragraph at lines 376--376
 \OT1/cmr/m/n/10 An-gle
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+Underfull \hbox (badness 10000) in paragraph at lines 376--376
 \OT1/cmr/m/n/10 Dif-fer-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+Underfull \hbox (badness 10000) in paragraph at lines 376--376
 \OT1/cmr/m/n/10 ence
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
-\OT1/cmr/m/n/10 ni-tude
+Underfull \hbox (badness 10000) in paragraph at lines 376--376
+[]$\OMS/cmsy/m/n/10 k\OT1/cmr/m/n/10 \OML/cmm/m/it/10 V\OMS/cmsy/m/n/10 k$
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+Underfull \hbox (badness 10000) in paragraph at lines 376--376
 \OT1/cmr/m/n/10 Dif-fer-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+Underfull \hbox (badness 10000) in paragraph at lines 376--376
 \OT1/cmr/m/n/10 ence
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+Underfull \hbox (badness 10000) in paragraph at lines 376--376
 []\OT1/cmr/m/n/10 Linear
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
+Underfull \hbox (badness 10000) in paragraph at lines 376--376
 \OT1/cmr/m/n/10 Po-si-tion
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--368
+Underfull \hbox (badness 10000) in paragraph at lines 376--377
 []\OT1/cmr/m/n/10 Targeted
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 367--368
+Underfull \hbox (badness 10000) in paragraph at lines 376--377
 \OT1/cmr/m/n/10 Po-si-tion
  []
 
-<./Images/Target_Full_Orbit_2.pdf, id=56, 650.43pt x 342.37914pt>
+[7 <E:/SCase/GitHub/thesis/LaTeX/Images/RIC_1.pdf>]
+<./Images/Target_Full_Orbit_2.pdf, id=80, 581.64279pt x 210.43471pt>
 File: ./Images/Target_Full_Orbit_2.pdf Graphic file (type pdf)
 
 <use ./Images/Target_Full_Orbit_2.pdf>
-Package pdftex.def Info: ./Images/Target_Full_Orbit_2.pdf used on input line 38
-8.
-(pdftex.def)             Requested size: 407.66833pt x 214.59767pt.
+Package pdftex.def Info: ./Images/Target_Full_Orbit_2.pdf used on input line 40
+4.
+(pdftex.def)             Requested size: 407.66833pt x 147.49594pt.
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[7] <./Images/RIC_2.pdf, id=61, 589.00049pt x 433.62pt>
+<./Images/RIC_2.pdf, id=81, 589.00049pt x 433.62pt>
 File: ./Images/RIC_2.pdf Graphic file (type pdf)
-
-<use ./Images/RIC_2.pdf>
-Package pdftex.def Info: ./Images/RIC_2.pdf used on input line 397.
+ <use ./Images/RIC_2.pdf>
+Package pdftex.def Info: ./Images/RIC_2.pdf used on input line 414.
 (pdftex.def)             Requested size: 407.66833pt x 300.13766pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<./Images/RLP_2.pdf, id=62, 636.87938pt x 566.4161pt>
+<./Images/RLP_2.pdf, id=82, 636.87938pt x 566.4161pt>
 File: ./Images/RLP_2.pdf Graphic file (type pdf)
  <use ./Images/RLP_2.pdf>
-Package pdftex.def Info: ./Images/RLP_2.pdf used on input line 404.
-(pdftex.def)             Requested size: 407.66833pt x 362.56558pt.
+Package pdftex.def Info: ./Images/RLP_2.pdf used on input line 422.
+(pdftex.def)             Requested size: 318.4389pt x 283.20737pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-
-("E:\SCase\GitHub\thesis\LaTeX - Draft Paper sent to Mark Jesick, JPL - 2-1-201
-5\LPORendezvous.bbl" [8 <E:/SCase/GitHub/thesis/LaTeX - Draft Paper sent to Mar
-k Jesick, JPL - 2-1-2015/Images/RIC_1.pdf>]) [9 <E:/SCase/GitHub/thesis/LaTeX -
- Draft Paper sent to Mark Jesick, JPL - 2-1-2015/Images/Target_Full_Orbit_2.pdf
->] [10 <E:/SCase/GitHub/thesis/LaTeX - Draft Paper sent to Mark Jesick, JPL - 2
--1-2015/Images/RIC_2.pdf>] [11 <E:/SCase/GitHub/thesis/LaTeX - Draft Paper sent
- to Mark Jesick, JPL - 2-1-2015/Images/RLP_2.pdf>]
-("E:\SCase\GitHub\thesis\LaTeX - Draft Paper sent to Mark Jesick, JPL - 2-1-201
-5\LPORendezvous.aux") ) 
+(E:\SCase\GitHub\thesis\LaTeX\LPORendezvous.bbl) [8 <E:/SCase/GitHub/thesis/LaT
+eX/Images/Target_Full_Orbit_2.pdf>] [9 <E:/SCase/GitHub/thesis/LaTeX/Images/RIC
+_2.pdf>] [10 <E:/SCase/GitHub/thesis/LaTeX/Images/RLP_2.pdf>]
+(E:\SCase\GitHub\thesis\LaTeX\LPORendezvous.aux) ) 
 Here is how much of TeX's memory you used:
- 2636 strings out of 493921
- 36784 string characters out of 3144876
- 95127 words of memory out of 3000000
- 5911 multiletter control sequences out of 15000+200000
+ 2697 strings out of 493921
+ 37140 string characters out of 3144876
+ 94447 words of memory out of 3000000
+ 5968 multiletter control sequences out of 15000+200000
  13613 words of font info for 48 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 27i,13n,21p,1518b,266s stack positions out of 5000i,500n,10000p,200000b,50000s
- <C:\Users\scase\AppData\Local\MiKTeX\2.9\fonts\pk\ljfou
-r\jknappen\ec\dpi600\tcrm1000.pk><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1
-/public/amsfonts/cm/cmbx10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/p
-ublic/amsfonts/cm/cmbx12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/pub
-lic/amsfonts/cm/cmbx7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public
-/amsfonts/cm/cmex10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/a
-msfonts/cm/cmmi10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/ams
-fonts/cm/cmmi12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfo
-nts/cm/cmmi5.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts
-/cm/cmmi7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
-/cmmib10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
-cmr10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr
-12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.
-pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb>
-<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C
-:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/P
-rogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on LPORendezvous.pdf (11 pages, 393181 bytes).
+ 27i,13n,21p,1677b,268s stack positions out of 5000i,500n,10000p,200000b,50000s
+ <C:\Users\scase\AppData\Loca
+l\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\tcrm1000.pk><C:/Program Files (
+x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Program Files (x8
+6)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Files (x86)
+/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx7.pfb><C:/Program Files (x86)/Mi
+KTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files (x86)/MiKT
+eX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files (x86)/MiKTeX
+ 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Program Files (x86)/MiKTeX 2
+.9/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Program Files (x86)/MiKTeX 2.9/
+fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fon
+ts/type1/public/amsfonts/cm/cmmib10.pfb><C:/Program Files (x86)/MiKTeX 2.9/font
+s/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/t
+ype1/public/amsfonts/cm/cmr12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type
+1/public/amsfonts/cm/cmr17.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/p
+ublic/amsfonts/cm/cmr7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publi
+c/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/
+amsfonts/cm/cmsy7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/ams
+fonts/cm/cmti10.pfb>
+Output written on LPORendezvous.pdf (10 pages, 395598 bytes).
 PDF statistics:
- 186 PDF objects out of 1000 (max. 8388607)
+ 188 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  26 words of extra memory for PDF output out of 10000 (max. 10000000)
 
