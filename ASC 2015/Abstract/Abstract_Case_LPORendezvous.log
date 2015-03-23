@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  22 MAR 2015 14:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  22 MAR 2015 17:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**LPORendezvous.tex
-(./LPORendezvous.tex
+**Abstract_Case_LPORendezvous.tex
+(./Abstract_Case_LPORendezvous.tex
 LaTeX2e <2014/05/01>
 Babel <3.9k> and hyphenation patterns for 78 languages loaded.
 (/usr/local/texlive/2014/texmf-dist/tex/latex/base/article.cls
@@ -235,8 +235,8 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \@float@everytoks=\toks23
 \@floatcapt=\box30
 )
-(./LPORendezvous.aux)
-\openout1 = `LPORendezvous.aux'.
+(./Abstract_Case_LPORendezvous.aux)
+\openout1 = `Abstract_Case_LPORendezvous.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
 LaTeX Font Info:    ... okay on input line 16.
@@ -322,162 +322,37 @@ e
 [1
 
 {/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-[2] [3] [4]
-<./Images/Target_Full_Orbit_1.pdf, id=30, 529.33495pt x 196.03288pt>
-File: ./Images/Target_Full_Orbit_1.pdf Graphic file (type pdf)
-
-<use ./Images/Target_Full_Orbit_1.pdf>
-Package pdftex.def Info: ./Images/Target_Full_Orbit_1.pdf used on input line 31
-5.
-(pdftex.def)             Requested size: 407.66833pt x 150.97867pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[5] <./Images/RIC_1.pdf, id=34, 578.16pt x 433.62pt>
+[2] <./Images/RIC_1.pdf, id=14, 578.16pt x 433.62pt>
 File: ./Images/RIC_1.pdf Graphic file (type pdf)
  <use ./Images/RIC_1.pdf>
-Package pdftex.def Info: ./Images/RIC_1.pdf used on input line 366.
+Package pdftex.def Info: ./Images/RIC_1.pdf used on input line 57.
 (pdftex.def)             Requested size: 407.66833pt x 305.74846pt.
 
-[6 <./Images/Target_Full_Orbit_1.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
-[]\OT1/cmr/m/n/10 Linear
- []
+[3 <./Images/RIC_1.pdf>] [4] (./Abstract_Case_LPORendezvous.bbl) [5
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
-\OT1/cmr/m/n/10 ^^A\OML/cmm/m/it/10 V$
- []
-
-
-Overfull \hbox (10.1862pt too wide) in paragraph at lines 376--376
-[]\OT1/cmr/m/n/10 Targeted
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
-\OT1/cmr/m/n/10 ^^A\OML/cmm/m/it/10 V$
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
-[]$\OT1/cmr/m/n/10 ^^A\OML/cmm/m/it/10 V$
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
-\OT1/cmr/m/n/10 An-gle
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
-\OT1/cmr/m/n/10 Dif-fer-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
-\OT1/cmr/m/n/10 ence
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
-[]$\OMS/cmsy/m/n/10 k\OT1/cmr/m/n/10 ^^A\OML/cmm/m/it/10 V\OMS/cmsy/m/n/10 k$
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
-\OT1/cmr/m/n/10 Dif-fer-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
-\OT1/cmr/m/n/10 ence
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
-[]\OT1/cmr/m/n/10 Linear
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
-\OT1/cmr/m/n/10 Po-si-tion
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 376--377
-[]\OT1/cmr/m/n/10 Targeted
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 376--377
-\OT1/cmr/m/n/10 Po-si-tion
- []
-
-[7 <./Images/RIC_1.pdf>]
-<./Images/Target_Full_Orbit_2.pdf, id=81, 581.64279pt x 210.43471pt>
-File: ./Images/Target_Full_Orbit_2.pdf Graphic file (type pdf)
-
-<use ./Images/Target_Full_Orbit_2.pdf>
-Package pdftex.def Info: ./Images/Target_Full_Orbit_2.pdf used on input line 40
-4.
-(pdftex.def)             Requested size: 407.66833pt x 147.49594pt.
-
-<./Images/RIC_2.pdf, id=82, 589.00049pt x 433.62pt>
-File: ./Images/RIC_2.pdf Graphic file (type pdf)
- <use ./Images/RIC_2.pdf>
-Package pdftex.def Info: ./Images/RIC_2.pdf used on input line 414.
-(pdftex.def)             Requested size: 407.66833pt x 300.13766pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<./Images/RLP_2.pdf, id=83, 636.87938pt x 566.4161pt>
-File: ./Images/RLP_2.pdf Graphic file (type pdf)
- <use ./Images/RLP_2.pdf>
-Package pdftex.def Info: ./Images/RLP_2.pdf used on input line 422.
-(pdftex.def)             Requested size: 318.4389pt x 283.20737pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-(./LPORendezvous.bbl) [8 <./Images/Target_Full_Orbit_2.pdf>] [9 <./Images/RIC_2
-.pdf>] [10 <./Images/RLP_2.pdf>] (./LPORendezvous.aux) ) 
+]
+(./Abstract_Case_LPORendezvous.aux) ) 
 Here is how much of TeX's memory you used:
- 3054 strings out of 493117
- 43610 string characters out of 6135433
- 108362 words of memory out of 5000000
- 6463 multiletter control sequences out of 15000+600000
- 13613 words of font info for 48 fonts, out of 8000000 for 9000
+ 2974 strings out of 493117
+ 42293 string characters out of 6135433
+ 104187 words of memory out of 5000000
+ 6396 multiletter control sequences out of 15000+600000
+ 9681 words of font info for 35 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 38i,13n,23p,1677b,271s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/201
-4/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/local/texlive/2014
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2014/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2014/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/local/texlive/2014/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2014/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2014/texmf
--dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2014/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2014/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2014/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2014/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2014/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2014/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2014/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2014/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2014/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1
-/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/
-public/cm-super/sfrm1000.pfb>
-Output written on LPORendezvous.pdf (10 pages, 350894 bytes).
+ 38i,6n,23p,1572b,269s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2014/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2014/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2014/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2014/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmr17.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmti10.pfb>
+Output written on Abstract_Case_LPORendezvous.pdf (5 pages, 193608 bytes).
 PDF statistics:
- 191 PDF objects out of 1000 (max. 8388607)
- 148 compressed objects within 2 object streams
+ 70 PDF objects out of 1000 (max. 8388607)
+ 52 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 26 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 6 words of extra memory for PDF output out of 10000 (max. 10000000)
 

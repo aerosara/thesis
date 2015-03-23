@@ -1,0 +1,17 @@
+\begin{thebibliography}{1}
+
+\bibitem{luquette2004}
+Richard~J Luquette and Robert~M Sanner.
+\newblock Linear state-space representation of the dynamics of relative motion,
+  based on restricted three body dynamics.
+\newblock In {\em AIAA Guidance, Navigation, and Control Conference and
+  Exhibit, AIAA}, volume 4783, 2004.
+
+\bibitem{lian2011}
+Yijun Lian, Luhua Liu, Yunhe Meng, Guojian Tang, and Kejun Chen.
+\newblock Constant thrust glideslope guidance algorithm for rendezvous in
+  multi-body realm.
+\newblock In {\em Recent Advances in Space Technologies (RAST), 2011 5th
+  International Conference on}, pages 232--236. IEEE, 2011.
+
+\end{thebibliography}
