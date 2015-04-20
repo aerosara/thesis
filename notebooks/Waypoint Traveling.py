@@ -123,18 +123,23 @@ def run_waypoint_traveler(halo, clock_angle, approach, timescale, spacing):
 #halo_cases = ['small', 'medium', 'large', 'greater']
 halo_cases = ['EM']
 #halo_cases = ['small']
-#clock_angles = np.arange(0.0, 360.0, 10.0)
-clock_angles = np.arange(0.0, 360.0, 30.0)
-#clock_angles = np.array([0.0])
+approach_cases = ['+R', '-R', '+I', '-I', '+C', '-C']
 
 # not used yet:
-approach_cases = ['+R', '-R', '+I', '-I', '+C', '-C']
 timescales = ['fast', 'medium', 'slow']
 spacings = ['close', 'medium', 'far']
 
+# Used for first set of results in paper:
+halo_cases = ['EM']
+clock_angles = np.array([0.0])
+
+# Used for second set of results in paper:
+#halo_cases = ['EM']
+#clock_angles = np.arange(0.0, 360.0, 30.0)
+
 halo = halo_cases[0]
 clock_angle = clock_angles[0]
-approach = '-C'
+approach = '+I'
 timescale = timescales[0]
 spacing = spacings[0]
 

@@ -10,10 +10,10 @@ from matplotlib import rcParams
 from mpl_toolkits.mplot3d import Axes3D
 
 # font size
-rcParams['axes.labelsize'] = 10
-rcParams['xtick.labelsize'] = 10
-rcParams['ytick.labelsize'] = 10
-rcParams['legend.fontsize'] = 10
+rcParams['axes.labelsize'] = 12
+rcParams['xtick.labelsize'] = 12
+rcParams['ytick.labelsize'] = 12
+rcParams['legend.fontsize'] = 12
 
 # typeface
 rcParams['font.family'] = 'serif'
