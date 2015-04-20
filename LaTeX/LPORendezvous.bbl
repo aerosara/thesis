@@ -1,7 +1,18 @@
 \begin{thebibliography}{1}
 
+\bibitem{beichman2004}
+C.~Beichman, G.~G{\'o}mez, M.~Lo, J.~Masdemont, and L.~Romans.
+\newblock Searching for life with the terrestrial planet finder: Lagrange point
+  options for a formation flying interferometer.
+\newblock {\em Advances in Space Research}, 34(3):637--644, 2004.
+
+\bibitem{clohessy1960}
+W.~H. Clohessy and R.~S. Wiltshire.
+\newblock Terminal guidance system for satellite rendezvous.
+\newblock {\em Journal of the Aerospace Sciences}, 1960.
+
 \bibitem{luquette2004}
-Richard~J Luquette and Robert~M Sanner.
+R.~J. Luquette and R.~M. Sanner.
 \newblock Linear state-space representation of the dynamics of relative motion,
   based on restricted three body dynamics.
 \newblock In {\em AIAA Guidance, Navigation, and Control Conference and

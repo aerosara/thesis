@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  22 MAR 2015 14:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  19 APR 2015 23:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -235,42 +235,48 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \@float@everytoks=\toks23
 \@floatcapt=\box30
 )
+(/usr/local/texlive/2014/texmf-dist/tex/latex/tools/afterpage.sty
+Package: afterpage 1995/10/27 v1.08 After-Page Package (DPC)
+\AP@output=\toks24
+\AP@partial=\box31
+\AP@footins=\box32
+)
 (./LPORendezvous.aux)
 \openout1 = `LPORendezvous.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 16.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 16.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 17.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 17.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    ... okay on input line 17.
 
 (/usr/local/texlive/2014/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count106
 \scratchdimen=\dimen128
-\scratchbox=\box31
+\scratchbox=\box33
 \nofMPsegments=\count107
 \nofMParguments=\count108
-\everyMPshowfont=\toks24
+\everyMPshowfont=\toks25
 \MPscratchCnt=\count109
 \MPscratchDim=\dimen129
 \MPnumerator=\count110
 \makeMPintoPDFobject=\count111
-\everyMPtoPDFconversion=\toks25
+\everyMPtoPDFconversion=\toks26
 ) (/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
 )
@@ -322,162 +328,299 @@ e
 [1
 
 {/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-[2] [3] [4]
-<./Images/Target_Full_Orbit_1.pdf, id=30, 529.33495pt x 196.03288pt>
+[2] [3] [4] [5]
+<./Images/Target_Full_Orbit_1.pdf, id=35, 591.16072pt x 235.38861pt>
 File: ./Images/Target_Full_Orbit_1.pdf Graphic file (type pdf)
 
 <use ./Images/Target_Full_Orbit_1.pdf>
 Package pdftex.def Info: ./Images/Target_Full_Orbit_1.pdf used on input line 31
-5.
-(pdftex.def)             Requested size: 407.66833pt x 150.97867pt.
+6.
+(pdftex.def)             Requested size: 407.66833pt x 162.3249pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
-
-[5] <./Images/RIC_1.pdf, id=34, 578.16pt x 433.62pt>
-File: ./Images/RIC_1.pdf Graphic file (type pdf)
- <use ./Images/RIC_1.pdf>
-Package pdftex.def Info: ./Images/RIC_1.pdf used on input line 366.
-(pdftex.def)             Requested size: 407.66833pt x 305.74846pt.
 
 [6 <./Images/Target_Full_Orbit_1.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
+<./Images/RIC_1.pdf, id=56, 601.64778pt x 464.33476pt>
+File: ./Images/RIC_1.pdf Graphic file (type pdf)
+
+<use ./Images/RIC_1.pdf>
+Package pdftex.def Info: ./Images/RIC_1.pdf used on input line 379.
+(pdftex.def)             Requested size: 407.66833pt x 314.63107pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Overfull \hbox (5.18222pt too wide) in paragraph at lines 414--414
 []\OT1/cmr/m/n/10 Linear
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
-\OT1/cmr/m/n/10 ^^A\OML/cmm/m/it/10 V$
+Overfull \hbox (8.69017pt too wide) in paragraph at lines 414--414
+[]\OT1/cmr/m/n/10 Corrected
  []
 
 
-Overfull \hbox (10.1862pt too wide) in paragraph at lines 376--376
-[]\OT1/cmr/m/n/10 Targeted
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
-\OT1/cmr/m/n/10 ^^A\OML/cmm/m/it/10 V$
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
+Underfull \hbox (badness 10000) in paragraph at lines 414--414
 []$\OT1/cmr/m/n/10 ^^A\OML/cmm/m/it/10 V$
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
-\OT1/cmr/m/n/10 An-gle
+Underfull \hbox (badness 10000) in paragraph at lines 414--414
+[]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
+Underfull \hbox (badness 10000) in paragraph at lines 414--414
 \OT1/cmr/m/n/10 Dif-fer-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
-\OT1/cmr/m/n/10 ence
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
+Underfull \hbox (badness 10000) in paragraph at lines 414--414
 []$\OMS/cmsy/m/n/10 k\OT1/cmr/m/n/10 ^^A\OML/cmm/m/it/10 V\OMS/cmsy/m/n/10 k$
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
+Underfull \hbox (badness 10000) in paragraph at lines 414--414
 \OT1/cmr/m/n/10 Dif-fer-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
-\OT1/cmr/m/n/10 ence
+Underfull \hbox (badness 10000) in paragraph at lines 414--414
+[]\OT1/cmr/m/n/10 Position
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
-[]\OT1/cmr/m/n/10 Linear
+Underfull \hbox (badness 10000) in paragraph at lines 414--414
+[]\OT1/cmr/m/n/10 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
-\OT1/cmr/m/n/10 Po-si-tion
+Underfull \hbox (badness 10000) in paragraph at lines 414--414
+\OT1/cmr/m/n/10 Lin-ear
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 376--377
-[]\OT1/cmr/m/n/10 Targeted
+Underfull \hbox (badness 10000) in paragraph at lines 414--415
+[]\OT1/cmr/m/n/10 Position
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 376--377
-\OT1/cmr/m/n/10 Po-si-tion
+Underfull \hbox (badness 10000) in paragraph at lines 414--415
+[]\OT1/cmr/m/n/10 ,
  []
 
-[7 <./Images/RIC_1.pdf>]
-<./Images/Target_Full_Orbit_2.pdf, id=81, 581.64279pt x 210.43471pt>
+
+Overfull \hbox (5.84473pt too wide) in paragraph at lines 414--415
+[]
+ []
+
+
+Overfull \hbox (2.29333pt too wide) in paragraph at lines 415--415
+[]\OT1/cmr/m/n/10 (m/s)| 
+ []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[7] [8 <./Images/RIC_1.pdf>]
+<./Images/Target_Full_Orbit_2.pdf, id=79, 569.92065pt x 223.78015pt>
 File: ./Images/Target_Full_Orbit_2.pdf Graphic file (type pdf)
 
 <use ./Images/Target_Full_Orbit_2.pdf>
-Package pdftex.def Info: ./Images/Target_Full_Orbit_2.pdf used on input line 40
-4.
-(pdftex.def)             Requested size: 407.66833pt x 147.49594pt.
+Package pdftex.def Info: ./Images/Target_Full_Orbit_2.pdf used on input line 43
+7.
+(pdftex.def)             Requested size: 362.37569pt x 142.29002pt.
 
-<./Images/RIC_2.pdf, id=82, 589.00049pt x 433.62pt>
+<./Images/RIC_2.pdf, id=80, 578.16pt x 451.6875pt>
 File: ./Images/RIC_2.pdf Graphic file (type pdf)
  <use ./Images/RIC_2.pdf>
-Package pdftex.def Info: ./Images/RIC_2.pdf used on input line 414.
-(pdftex.def)             Requested size: 407.66833pt x 300.13766pt.
+Package pdftex.def Info: ./Images/RIC_2.pdf used on input line 447.
+(pdftex.def)             Requested size: 362.37569pt x 283.10347pt.
 
+[9
 
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<./Images/RLP_2.pdf, id=83, 636.87938pt x 566.4161pt>
+ <./Images/Target_Full_Orbit_2.pdf> <./Images/RIC_2.pdf>]
+<./Images/RLP_2.pdf, id=109, 578.16pt x 452.59087pt>
 File: ./Images/RLP_2.pdf Graphic file (type pdf)
  <use ./Images/RLP_2.pdf>
-Package pdftex.def Info: ./Images/RLP_2.pdf used on input line 422.
-(pdftex.def)             Requested size: 318.4389pt x 283.20737pt.
+Package pdftex.def Info: ./Images/RLP_2.pdf used on input line 459.
+(pdftex.def)             Requested size: 407.66833pt x 319.12494pt.
+
+Overfull \hbox (0.78166pt too wide) in paragraph at lines 473--473
+[]\OT1/cmr/m/n/10 Initial
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 473--473
+\OT1/cmr/m/n/10 Clock
+ []
+
+
+Overfull \hbox (5.18222pt too wide) in paragraph at lines 473--473
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 473--473
+[]\OT1/cmr/m/n/10 Total
+ []
+
+
+Overfull \hbox (8.69017pt too wide) in paragraph at lines 473--473
+[]
+ []
+
+
+Overfull \hbox (2.38068pt too wide) in paragraph at lines 473--473
+[][]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 473--473
+\OT1/cmr/m/n/10 ^^A\OML/cmm/m/it/10 V$
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 473--473
+\OT1/cmr/m/n/10 An-gle
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 473--473
+\OT1/cmr/m/n/10 Dif-fer-
+ []
+
+
+Overfull \hbox (2.38068pt too wide) in paragraph at lines 473--473
+[][]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 473--473
+\OMS/cmsy/m/n/10 k\OT1/cmr/m/n/10 ^^A\OML/cmm/m/it/10 V\OMS/cmsy/m/n/10 k$
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 473--473
+\OT1/cmr/m/n/10 Dif-fer-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 473--473
+[][]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 473--473
+\OT1/cmr/m/n/10 Po-si-tion
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 473--473
+\OT1/cmr/m/n/10 Er-ror,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 473--473
+\OT1/cmr/m/n/10 Lin-ear
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 473--474
+[][]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 473--474
+\OT1/cmr/m/n/10 Po-si-tion
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 473--474
+\OT1/cmr/m/n/10 Er-ror,
+ []
+
+
+Overfull \hbox (5.84473pt too wide) in paragraph at lines 473--474
+[]
+ []
+
+
+Overfull \hbox (2.29333pt too wide) in paragraph at lines 474--474
+[]\OT1/cmr/m/n/10 (m/s)| 
+ []
+
+
+Overfull \hbox (0.78923pt too wide) in paragraph at lines 477--477
+[]\OT1/cmr/m/n/10 1218.218| 
+ []
+
+
+Overfull \hbox (0.78923pt too wide) in paragraph at lines 486--486
+[]\OT1/cmr/m/n/10 1123.118| 
+ []
+
+
+Overfull \hbox (0.78923pt too wide) in paragraph at lines 487--487
+[]\OT1/cmr/m/n/10 1166.519| 
+ []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-(./LPORendezvous.bbl) [8 <./Images/Target_Full_Orbit_2.pdf>] [9 <./Images/RIC_2
-.pdf>] [10 <./Images/RLP_2.pdf>] (./LPORendezvous.aux) ) 
+<./Images/Total_DV_2.pdf, id=110, 578.16pt x 433.62pt>
+File: ./Images/Total_DV_2.pdf Graphic file (type pdf)
+
+<use ./Images/Total_DV_2.pdf>
+Package pdftex.def Info: ./Images/Total_DV_2.pdf used on input line 497.
+(pdftex.def)             Requested size: 407.66833pt x 305.74846pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[10
+
+ <./Images/RLP_2.pdf>] [11 <./Images/Total_DV_2.pdf>] (./LPORendezvous.bbl)
+[12
+
+] (./LPORendezvous.aux) ) 
 Here is how much of TeX's memory you used:
- 3054 strings out of 493117
- 43610 string characters out of 6135433
- 108362 words of memory out of 5000000
- 6463 multiletter control sequences out of 15000+600000
- 13613 words of font info for 48 fonts, out of 8000000 for 9000
+ 3089 strings out of 493117
+ 44203 string characters out of 6135433
+ 111879 words of memory out of 5000000
+ 6491 multiletter control sequences out of 15000+600000
+ 14220 words of font info for 50 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 38i,13n,23p,1677b,271s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/201
-4/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/local/texlive/2014
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2014/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2014/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/local/texlive/2014/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2014/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2014/texmf
--dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2014/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2014/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2014/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2014/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2014/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2014/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2014/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2014/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2014/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1
-/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/
-public/cm-super/sfrm1000.pfb>
-Output written on LPORendezvous.pdf (10 pages, 350894 bytes).
+ 38i,13n,23p,1838b,271s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/cm
+-super/cm-super-ts1.enc}</usr/local/texlive/2014/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmbx10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmbx12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmbx7.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmbx9.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmex10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmmi10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmmi12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmmi5.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmmi7.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mmib10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mr10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
+12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17
+.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pf
+b></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><
+/usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></
+usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></us
+r/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr
+/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
+Output written on LPORendezvous.pdf (12 pages, 406402 bytes).
 PDF statistics:
- 191 PDF objects out of 1000 (max. 8388607)
- 148 compressed objects within 2 object streams
+ 208 PDF objects out of 1000 (max. 8388607)
+ 160 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 26 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
