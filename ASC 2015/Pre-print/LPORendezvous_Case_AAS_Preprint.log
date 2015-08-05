@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  27 JUL 2015 20:56
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  4 AUG 2015 22:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -316,6 +316,26 @@ Package: enumitem 2011/09/28 v3.5.2 Customized lists
 \enit@inbox=\box28
 \enitdp@description=\count115
 )
+(/usr/local/texlive/2014/texmf-dist/tex/latex/booktabs/booktabs.sty
+Package: booktabs 2005/04/14 v1.61803 publication quality tables
+\heavyrulewidth=\dimen127
+\lightrulewidth=\dimen128
+\cmidrulewidth=\dimen129
+\belowrulesep=\dimen130
+\belowbottomsep=\dimen131
+\aboverulesep=\dimen132
+\abovetopsep=\dimen133
+\cmidrulesep=\dimen134
+\cmidrulekern=\dimen135
+\defaultaddspace=\dimen136
+\@cmidla=\count116
+\@cmidlb=\count117
+\@aboverulesep=\dimen137
+\@belowrulesep=\dimen138
+\@thisruleclass=\count118
+\@lastruleclass=\count119
+\@thisrulewidth=\dimen139
+)
 (/usr/local/texlive/2014/texmf-dist/tex/latex/base/textcomp.sty
 Package: textcomp 2005/09/27 v1.99g Standard LaTeX package
 Package textcomp Info: Sub-encoding information:
@@ -432,16 +452,16 @@ File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 (/usr/local/texlive/2014/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count116
-\scratchdimen=\dimen127
+\scratchcounter=\count120
+\scratchdimen=\dimen140
 \scratchbox=\box29
-\nofMPsegments=\count117
-\nofMParguments=\count118
+\nofMPsegments=\count121
+\nofMParguments=\count122
 \everyMPshowfont=\toks21
-\MPscratchCnt=\count119
-\MPscratchDim=\dimen128
-\MPnumerator=\count120
-\makeMPintoPDFobject=\count121
+\MPscratchCnt=\count123
+\MPscratchDim=\dimen141
+\MPnumerator=\count124
+\makeMPintoPDFobject=\count125
 \everyMPtoPDFconversion=\toks22
 ) (/usr/local/texlive/2014/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
@@ -467,7 +487,7 @@ Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 (/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
-\c@section@level=\count122
+\c@section@level=\count126
 )
 LaTeX Info: Redefining \ref on input line 35.
 LaTeX Info: Redefining \pageref on input line 35.
@@ -489,477 +509,205 @@ LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <12> not available
 (Font)              Font shape `OT1/phv/b/n' tried instead on input line 41.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 47.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 50.
-
-
-LaTeX Warning: Citation `beichman2004' on page 1 undefined on input line 50.
-
-
-LaTeX Warning: Citation `clohessy1960' on page 1 undefined on input line 52.
-
-[1
+ [1
 
 {/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-
-LaTeX Warning: Citation `luquette2004' on page 2 undefined on input line 54.
-
-
-LaTeX Warning: Citation `lian2011' on page 2 undefined on input line 54.
-
-
 Underfull \vbox (badness 1337) has occurred while \output is active []
 
  [2]
 [3]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 177.
+(hyperref)                removing `math shift' on input line 185.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\Delta' on input line 177.
-
-[4] [5] [6]
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 312.
+(hyperref)                removing `\Delta' on input line 185.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\Delta' on input line 312.
+(hyperref)                removing `math shift' on input line 185.
 
+[4]
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 188.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\Delta' on input line 188.
+
+[5] [6]
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 323.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\Delta' on input line 323.
+
+[7]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 328.
-<./Figures/Target_Full_Orbit_1.pdf, id=145, 591.16072pt x 235.38861pt>
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 329.
+ <./Figures/Target_Full_Orbit_1.pdf, id=153, 591.16072pt x 235.38861pt>
 File: ./Figures/Target_Full_Orbit_1.pdf Graphic file (type pdf)
 
 <use ./Figures/Target_Full_Orbit_1.pdf>
 Package pdftex.def Info: ./Figures/Target_Full_Orbit_1.pdf used on input line 3
-35.
+46.
 (pdftex.def)             Requested size: 390.25534pt x 155.38927pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[7]
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-Package hyperref Warning: Suppressing empty link on input line 394.
-
-[8 <./Figures/Target_Full_Orbit_1.pdf>]
-<./Figures/RIC_1.pdf, id=185, 601.64778pt x 464.33476pt>
+ [8 <./Figures/Target_Full_Orbit_1.pdf>] <./Figures/RIC_1.pdf, id=185, 601.6477
+8pt x 464.33476pt>
 File: ./Figures/RIC_1.pdf Graphic file (type pdf)
 
 <use ./Figures/RIC_1.pdf>
-Package pdftex.def Info: ./Figures/RIC_1.pdf used on input line 398.
+Package pdftex.def Info: ./Figures/RIC_1.pdf used on input line 397.
 (pdftex.def)             Requested size: 390.25534pt x 301.1976pt.
+ [9 <./Figures/RIC_1.pdf>]
+LaTeX Font Info:    Try loading font information for TS1+ptm on input line 405.
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-LaTeX Font Info:    Try loading font information for TS1+ptm on input line 406.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
-Overfull \hbox (5.81688pt too wide) in paragraph at lines 433--433
-[]\OT1/ptm/m/n/10.95 Linear
+Overfull \hbox (3.33743pt too wide) in paragraph at lines 435--435
+[]\OT1/ptm/m/n/10 Linear
  []
 
 
-Overfull \hbox (9.03209pt too wide) in paragraph at lines 433--433
-[]\OT1/ptm/m/n/10.95 Corrected
+Overfull \hbox (5.28633pt too wide) in paragraph at lines 435--435
+[]\OT1/ptm/m/n/10 Corrected
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 433--433
-[]$\OT1/cmr/m/n/10.95 ^^A\OML/cmm/m/it/10.95 V$
+Underfull \hbox (badness 10000) in paragraph at lines 435--435
+[]$\OT1/cmr/m/n/10 ^^A\OML/cmm/m/it/10 V$
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 433--433
+Underfull \hbox (badness 10000) in paragraph at lines 435--435
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 433--433
-\OT1/ptm/m/n/10.95 Dif-
+Underfull \hbox (badness 10000) in paragraph at lines 435--435
+\OT1/ptm/m/n/10 Dif-fer-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 433--433
-\OT1/ptm/m/n/10.95 fer-
+Underfull \hbox (badness 10000) in paragraph at lines 435--435
+[]$\OMS/cmsy/m/n/10 k\OT1/cmr/m/n/10 ^^A\OML/cmm/m/it/10 V\OMS/cmsy/m/n/10 k$
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 433--433
-\OT1/ptm/m/n/10.95 Dif-
+Underfull \hbox (badness 10000) in paragraph at lines 435--435
+\OT1/ptm/m/n/10 Dif-fer-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 433--433
-\OT1/ptm/m/n/10.95 fer-
+Underfull \hbox (badness 10000) in paragraph at lines 435--435
+[]\OT1/ptm/m/n/10 Position
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 433--433
-[]\OT1/ptm/m/n/10.95 Position
+Underfull \hbox (badness 10000) in paragraph at lines 435--435
+[]\OT1/ptm/m/n/10 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 433--433
-[]\OT1/ptm/m/n/10.95 ,
+Underfull \hbox (badness 10000) in paragraph at lines 435--435
+\OT1/ptm/m/n/10 Lin-ear
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 433--433
-\OT1/ptm/m/n/10.95 Lin-ear
+Underfull \hbox (badness 10000) in paragraph at lines 435--436
+[]\OT1/ptm/m/n/10 Position
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 433--434
-[]\OT1/ptm/m/n/10.95 Position
+Underfull \hbox (badness 10000) in paragraph at lines 435--436
+[]\OT1/ptm/m/n/10 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 433--434
-[]\OT1/ptm/m/n/10.95 ,
- []
-
-
-Overfull \hbox (6.18665pt too wide) in paragraph at lines 433--434
+Overfull \hbox (2.44089pt too wide) in paragraph at lines 435--436
 []
  []
 
-
-Overfull \hbox (1.87517pt too wide) in paragraph at lines 436--436
-[]\OT1/ptm/m/n/10.95 0.346| 
- []
-
-
-Overfull \hbox (1.87517pt too wide) in paragraph at lines 437--437
-[]\OT1/ptm/m/n/10.95 0.293| 
- []
-
-
-Overfull \hbox (1.87517pt too wide) in paragraph at lines 438--438
-[]\OT1/ptm/m/n/10.95 0.064| 
- []
-
-
-Overfull \hbox (1.87517pt too wide) in paragraph at lines 439--439
-[]\OT1/ptm/m/n/10.95 0.019| 
- []
-
-
-Overfull \hbox (1.87517pt too wide) in paragraph at lines 440--440
-[]\OT1/ptm/m/n/10.95 0.722| 
- []
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<./Figures/Target_Full_Orbit_2.pdf, id=188, 569.92065pt x 223.78015pt>
+<./Figures/Target_Full_Orbit_2.pdf, id=206, 569.92065pt x 223.78015pt>
 File: ./Figures/Target_Full_Orbit_2.pdf Graphic file (type pdf)
 
 <use ./Figures/Target_Full_Orbit_2.pdf>
 Package pdftex.def Info: ./Figures/Target_Full_Orbit_2.pdf used on input line 4
-56.
+55.
 (pdftex.def)             Requested size: 346.89731pt x 136.21202pt.
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[9] <./Figures/RIC_2.pdf, id=197, 578.16pt x 451.6875pt>
+<./Figures/RIC_2.pdf, id=209, 578.16pt x 451.6875pt>
 File: ./Figures/RIC_2.pdf Graphic file (type pdf)
-
-<use ./Figures/RIC_2.pdf>
-Package pdftex.def Info: ./Figures/RIC_2.pdf used on input line 466.
+ <use ./Figures/RIC_2.pdf>
+Package pdftex.def Info: ./Figures/RIC_2.pdf used on input line 465.
 (pdftex.def)             Requested size: 346.89731pt x 271.01459pt.
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[10 <./Figures/RIC_1.pdf>] [11 <./Figures/Target_Full_Orbit_2.pdf>] [12 <./Figu
-res/RIC_2.pdf>] <./Figures/RLP_2.pdf, id=251, 578.16pt x 452.59087pt>
+[10] [11 <./Figures/Target_Full_Orbit_2.pdf> <./Figures/RIC_2.pdf>]
+<./Figures/RLP_2.pdf, id=247, 578.16pt x 452.59087pt>
 File: ./Figures/RLP_2.pdf Graphic file (type pdf)
 
 <use ./Figures/RLP_2.pdf>
-Package pdftex.def Info: ./Figures/RLP_2.pdf used on input line 478.
+Package pdftex.def Info: ./Figures/RLP_2.pdf used on input line 477.
 (pdftex.def)             Requested size: 390.25534pt x 305.49255pt.
 
-Overfull \hbox (0.55168pt too wide) in paragraph at lines 492--492
-[]\OT1/ptm/m/n/10.95 Initial
- []
-
-
-Overfull \hbox (0.55196pt too wide) in paragraph at lines 492--492
-\OT1/ptm/m/n/10.95 Clock
- []
-
-
-Overfull \hbox (1.15425pt too wide) in paragraph at lines 492--492
-[]| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 492--492
-[]\OT1/ptm/m/n/10.95 Total
- []
-
-
-Overfull \hbox (5.81688pt too wide) in paragraph at lines 492--492
-[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 492--492
-[]\OT1/ptm/m/n/10.95 Total
- []
-
-
-Overfull \hbox (9.03209pt too wide) in paragraph at lines 492--492
-[]
- []
-
-
-Overfull \hbox (3.48813pt too wide) in paragraph at lines 492--492
-[][]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 492--492
-\OT1/cmr/m/n/10.95 ^^A\OML/cmm/m/it/10.95 V$
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 492--492
-\OT1/ptm/m/n/10.95 An-gle
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 492--492
-\OT1/ptm/m/n/10.95 Dif-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 492--492
-\OT1/ptm/m/n/10.95 fer-
- []
-
-
-Overfull \hbox (3.48813pt too wide) in paragraph at lines 492--492
-[][]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 492--492
-\OT1/ptm/m/n/10.95 Dif-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 492--492
-\OT1/ptm/m/n/10.95 fer-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 492--492
-[][]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 492--492
-\OT1/ptm/m/n/10.95 Po-si-tion
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 492--492
-\OT1/ptm/m/n/10.95 Er-ror,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 492--492
-\OT1/ptm/m/n/10.95 Lin-ear
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 492--493
-[][]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 492--493
-\OT1/ptm/m/n/10.95 Po-si-tion
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 492--493
-\OT1/ptm/m/n/10.95 Er-ror,
- []
-
-
-Overfull \hbox (6.18665pt too wide) in paragraph at lines 492--493
-[]
- []
-
-
-Overfull \hbox (1.87517pt too wide) in paragraph at lines 495--495
-[]\OT1/ptm/m/n/10.95 0.722| 
- []
-
-
-Overfull \hbox (1.87517pt too wide) in paragraph at lines 496--496
-[]\OT1/ptm/m/n/10.95 0.649| 
- []
-
-
-Overfull \hbox (4.07376pt too wide) in paragraph at lines 496--496
-[]\OT1/ptm/m/n/10.95 1218.218| 
- []
-
-
-Overfull \hbox (1.87517pt too wide) in paragraph at lines 497--497
-[]\OT1/ptm/m/n/10.95 0.646| 
- []
-
-
-Overfull \hbox (1.87517pt too wide) in paragraph at lines 498--498
-[]\OT1/ptm/m/n/10.95 0.646| 
- []
-
-
-Overfull \hbox (1.87517pt too wide) in paragraph at lines 499--499
-[]\OT1/ptm/m/n/10.95 0.646| 
- []
-
-
-Overfull \hbox (1.87517pt too wide) in paragraph at lines 500--500
-[]\OT1/ptm/m/n/10.95 0.664| 
- []
-
-
-Overfull \hbox (1.87517pt too wide) in paragraph at lines 501--501
-[]\OT1/ptm/m/n/10.95 0.767| 
- []
-
-
-Overfull \hbox (1.87517pt too wide) in paragraph at lines 502--502
-[]\OT1/ptm/m/n/10.95 0.648| 
- []
-
-
-Overfull \hbox (1.87517pt too wide) in paragraph at lines 503--503
-[]\OT1/ptm/m/n/10.95 0.646| 
- []
-
-
-Overfull \hbox (1.87517pt too wide) in paragraph at lines 504--504
-[]\OT1/ptm/m/n/10.95 0.647| 
- []
-
-
-Overfull \hbox (1.87517pt too wide) in paragraph at lines 505--505
-[]\OT1/ptm/m/n/10.95 0.649| 
- []
-
-
-Overfull \hbox (4.07376pt too wide) in paragraph at lines 505--505
-[]\OT1/ptm/m/n/10.95 1123.118| 
- []
-
-
-Overfull \hbox (1.87517pt too wide) in paragraph at lines 506--506
-[]\OT1/ptm/m/n/10.95 0.664| 
- []
-
-
-Overfull \hbox (4.07376pt too wide) in paragraph at lines 506--506
-[]\OT1/ptm/m/n/10.95 1166.519| 
- []
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<./Figures/Total_DV_2.pdf, id=256, 578.16pt x 433.62pt>
-File: ./Figures/Total_DV_2.pdf Graphic file (type pdf)
-
-<use ./Figures/Total_DV_2.pdf>
-Package pdftex.def Info: ./Figures/Total_DV_2.pdf used on input line 516.
+<./Figures/Total_DV_2_1degsteps.pdf, id=249, 578.16pt x 433.62pt>
+File: ./Figures/Total_DV_2_1degsteps.pdf Graphic file (type pdf)
+
+<use ./Figures/Total_DV_2_1degsteps.pdf>
+Package pdftex.def Info: ./Figures/Total_DV_2_1degsteps.pdf used on input line 
+487.
 (pdftex.def)             Requested size: 390.25534pt x 292.68748pt.
 
+<./Figures/Log_Position_Error_2_1degsteps.pdf, id=251, 578.16pt x 433.62pt>
+File: ./Figures/Log_Position_Error_2_1degsteps.pdf Graphic file (type pdf)
 
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 564.
-
-(./LPORendezvous_Case_AAS_Preprint.fot)
-\openout3 = `LPORendezvous_Case_AAS_Preprint.fot'.
-
- [13
+<use ./Figures/Log_Position_Error_2_1degsteps.pdf>
+Package pdftex.def Info: ./Figures/Log_Position_Error_2_1degsteps.pdf used on i
+nput line 497.
+(pdftex.def)             Requested size: 346.89731pt x 260.17401pt.
+ [12
 
  <./Figures/RLP_2.pdf>]
-<Figures/test.pdf, id=281, 255.95625pt x 187.70125pt>
-File: Figures/test.pdf Graphic file (type pdf)
- <use Figures/test.pdf>
-Package pdftex.def Info: Figures/test.pdf used on input line 567.
-(pdftex.def)             Requested size: 252.94499pt x 185.49257pt.
+<./Figures/DV_Angle_Diff_2_1degsteps.png, id=272, 578.16pt x 433.62pt>
+File: ./Figures/DV_Angle_Diff_2_1degsteps.png Graphic file (type png)
 
+<use ./Figures/DV_Angle_Diff_2_1degsteps.png>
+Package pdftex.def Info: ./Figures/DV_Angle_Diff_2_1degsteps.png used on input 
+line 507.
+(pdftex.def)             Requested size: 346.89731pt x 260.17401pt.
+ [13 <./Figures/Total_DV_2_1degsteps.pdf>] [14 <./Figures/Log_Position_Error_2_
+1degsteps.pdf> <./Figures/DV_Angle_Diff_2_1degsteps.png>] (./LPORendezvous_Case
+_AAS_Preprint.bbl)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 560.
+ [15
 
-LaTeX Warning: Citation `doe2005' on page 14 undefined on input line 576.
-
-
-LaTeX Warning: Citation `style1959' on page 14 undefined on input line 576.
-
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 576.
-
-(/usr/local/texlive/2014/texmf-dist/tex/latex/psnfss/ot1pcr.fd
-File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-) [14] [15 <./Figures/Total_DV_2.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 614--618
-
- []
-
-[16 <./Figures/test.pdf>] (./LPORendezvous_Case_AAS_Preprint.bbl)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 630.
- [17]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 630.
+]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 560.
 
 (./LPORendezvous_Case_AAS_Preprint.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 630.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 630.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 560.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 560.
 Package rerunfilecheck Info: File `LPORendezvous_Case_AAS_Preprint.out' has not
  changed.
-(rerunfilecheck)             Checksum: C186D62F4CEAAF4EC13D5BFE3413A2F5;1257.
-
-
-LaTeX Warning: There were undefined references.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 630.
+(rerunfilecheck)             Checksum: 69E5CF25A548BA90D27674B001D646D5;894.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 560.
  ) 
 Here is how much of TeX's memory you used:
- 7341 strings out of 493117
- 107576 string characters out of 6135433
- 200732 words of memory out of 5000000
- 10578 multiletter control sequences out of 15000+600000
- 38790 words of font info for 91 fonts, out of 8000000 for 9000
+ 7347 strings out of 493117
+ 108035 string characters out of 6135433
+ 194525 words of memory out of 5000000
+ 10588 multiletter control sequences out of 15000+600000
+ 34651 words of font info for 84 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 34i,14n,45p,1862b,481s stack positions out of 5000i,500n,10000p,200000b,80000s
-pdfTeX warning (dest): name{section*.18} has been referenced but does not exi
+ 34i,14n,45p,1838b,335s stack positions out of 5000i,500n,10000p,200000b,80000s
+pdfTeX warning (dest): name{section*.12} has been referenced but does not exi
 st, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.17} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.16} has been referenced but does not exist
-, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.12} has been referenced but does not exist
-, replaced by a fixed one
 
 pdfTeX warning (dest): name{section*.9} has been referenced but does not exist,
  replaced by a fixed one
@@ -984,20 +732,20 @@ e/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive
 texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2014/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2014/te
 xmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2014/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2014/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2014/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2014/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2014/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2014/texmf-dist/fon
-ts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1
-/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/ti
-mes/utmb8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/times/utmr8a
-.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on LPORendezvous_Case_AAS_Preprint.pdf (17 pages, 447625 bytes).
+f-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2014/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2014/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2014/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2014/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2014/texmf-dist/font
+s/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1
+/urw/times/utmb8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/times
+/utmr8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/times/utmri8a.p
+fb>
+Output written on LPORendezvous_Case_AAS_Preprint.pdf (15 pages, 447700 bytes).
 
 PDF statistics:
- 427 PDF objects out of 1000 (max. 8388607)
- 366 compressed objects within 4 object streams
- 73 named destinations out of 1000 (max. 500000)
- 180 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 388 PDF objects out of 1000 (max. 8388607)
+ 332 compressed objects within 4 object streams
+ 76 named destinations out of 1000 (max. 500000)
+ 137 words of extra memory for PDF output out of 10000 (max. 10000000)
 
