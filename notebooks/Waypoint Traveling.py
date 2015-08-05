@@ -130,12 +130,12 @@ timescales = ['fast', 'medium', 'slow']
 spacings = ['close', 'medium', 'far']
 
 # Used for first set of results in paper:
-halo_cases = ['EM']
-clock_angles = np.array([0.0])
+#halo_cases = ['EM']
+#clock_angles = np.array([0.0])
 
 # Used for second set of results in paper:
-#halo_cases = ['EM']
-#clock_angles = np.arange(0.0, 360.0, 30.0)
+halo_cases = ['EM']
+clock_angles = np.arange(0.0, 360.0, 1.0)
 
 halo = halo_cases[0]
 clock_angle = clock_angles[0]
@@ -205,18 +205,32 @@ ax3.xaxis.set_label_text('Clock Angle (degrees)')
 ax3.yaxis.set_label_text('Sum of \(\Delta V\) (m/s)')
 ax3.legend(loc='upper right')
 
-#fig4, (ax4) = plt.subplots(1,1);
-#ax4.plot(summary_metrics.clock_angle, summary_metrics.sum_DV_magnitude_difference)
+fig4, (ax4) = plt.subplots(1,1);
+ax4.plot(summary_metrics.clock_angle, summary_metrics.sum_DV_magnitude_difference)
+ax4.set_title('Linear-Targeted \(\Delta V\) Difference vs. Clock Angle')
+ax4.xaxis.set_label_text('Clock Angle (degrees)')
+ax4.yaxis.set_label_text('\(\Delta V\) Difference (m/s)')
 
-#fig5, (ax5) = plt.subplots(1,1);
-#ax5.plot(summary_metrics.clock_angle, summary_metrics.sum_achieved_position_error_analytic)
-#ax5.plot(summary_metrics.clock_angle, summary_metrics.sum_achieved_position_error_targeted)
+fig5, (ax5) = plt.subplots(1,1);
+ax5.plot(summary_metrics.clock_angle, summary_metrics.sum_achieved_position_error_analytic, label='Sum of Linear Position Error')
+ax5.plot(summary_metrics.clock_angle, summary_metrics.sum_achieved_position_error_targeted, label='Sum of Targeted Position Error')
+ax5.semilogy()
+ax5.set_title('Total Rendezvous Position Error vs. Clock Angle')
+ax5.xaxis.set_label_text('Clock Angle (degrees)')
+ax5.yaxis.set_label_text('Sum of Position Error (log(m))')
+ax5.legend(loc='upper right')
 
-#fig6, (ax6) = plt.subplots(1,1);
-#ax6.plot(summary_metrics.clock_angle, summary_metrics.sum_DV_angle_difference)
+fig6, (ax6) = plt.subplots(1,1);
+ax6.plot(summary_metrics.clock_angle, summary_metrics.sum_DV_angle_difference)
+ax6.set_title('Linear-Targeted \(\Delta V\) Angle Difference vs. Clock Angle')
+ax6.xaxis.set_label_text('Clock Angle (degrees)')
+ax6.yaxis.set_label_text('\(\Delta V\) Angle Difference (deg)')
 
-#fig3, (ax3) = plt.subplots(1,1);
-#ax3.plot(summary_metrics.clock_angle, (summary_metrics.sum_DV_analytic-summary_metrics.sum_DV_targeted).abs()/summary_metrics.sum_DV_analytic*100)
+fig7, (ax7) = plt.subplots(1,1);
+ax7.plot(summary_metrics.clock_angle, (summary_metrics.sum_DV_analytic-summary_metrics.sum_DV_targeted).abs()/summary_metrics.sum_DV_analytic*100)
+ax7.set_title('Linear-Targeted \(\Delta V\) Difference vs. Clock Angle')
+ax7.xaxis.set_label_text('Clock Angle (degrees)')
+ax7.yaxis.set_label_text('\(\Delta V\) Difference (\%)')
 
 # <rawcell>
 
