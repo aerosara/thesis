@@ -51,7 +51,7 @@ The history of satellites being deployed to libration point orbits dates back to
 
 Satellite rendezvous in low-Earth orbit is well-studied, due to many years of experience operating the International Space Station and other applications.  The Hill's/Clohessy-Wiltshire (HCW) equations are frequently used to closely approximate the relative motion of a chaser vehicle with respect to a target vehicle in a circular orbit.\cite{clohessy1960}  These equations of relative motion are used to compute the approximate \(\Delta V\) (instantaneous change in velocity) to travel between waypoints defining an approach trajectory.  However, for libration point orbits, the dynamical environment is quite different and the same equations of motion are not applicable.  % TODO: (cite rendezvous ISS paper) (mention r-bar, v-bar?)
 
-Luquette has developed linearized equations of relative motion for formation flying in libration point orbits.\cite{luquette2004}   Lian et al.~have used these linearized dynamics to compute impulses for a chaser satellite to travel between waypoints in order to approach a target orbiting a libration point.\cite{lian2011}  This paper discusses the results of applying this technique for a set of test cases, and presents an additional step in which the shooting method of differential correction is used to refine the computed \(\Delta V\) for use with the nonlinear equations of motion.  % "set of test cases in the Earth-Moon L1 system"
+Luquette has developed linearized equations of relative motion for formation flying in libration point orbits.\cite{luquette2004}   Lian et al.~have used these linearized dynamics to compute impulses for a chaser satellite to travel between waypoints in order to approach a target orbiting a libration point.\cite{lian2011}  This paper discusses the results of applying this technique for a set of test cases, and presents an additional step in which the shooting method of differential correction is used to refine the computed \(\Delta V\) for use with the nonlinear equations of motion. It is demonstrated that without the differential correction step, applying the \(\Delta V\) computed using the linear equations of relative motion can lead to significant position errors when modeling the maneuver in a simulation using the nonlinear dynamics.
 
 \section{Dynamics}
 
@@ -452,7 +452,7 @@ This technique can be used to evaluate the relative \(\Delta V\) cost of perform
 
 \begin{figure}[htb] 
 	\begin{center}
-		\includegraphics[width=0.8\textwidth]{Target_Full_Orbit_2}
+		\includegraphics[width=0.9\textwidth]{Target_Full_Orbit_2}
 		\caption{Twelve Target Satellite Initial Conditions}
 		\label{fig:FullOrbit_2}
 	\end{center}
@@ -462,15 +462,15 @@ Each of these twelve rendezvous sequences are computed using the same waypoint l
 
 \begin{figure}[htb] 
 	\begin{center}
-		\includegraphics[width=0.8\textwidth]{RIC_2}
+		\includegraphics[width=0.9\textwidth]{RIC_2}
 		\caption{Rendezvous using 12 Different Initial Clock Angles}
 		\label{fig:RIC_2}
 	\end{center}
 \end{figure}
 
-\clearpage
-
 When viewed using the CRTBP reference frame's rotating axes as in Figure~\ref{fig:RLP_2}, it is more intuitively seen that each of these in-track rendezvous sequences approach the target satellite from a different direction in the CRTBP frame, due to the rotation of the RIC frame with the target satellite's orbit.
+
+\clearpage
 
 \begin{figure}[htb] 
 	\begin{center}
@@ -484,23 +484,13 @@ The same rendezvous was then computed for 360 test cases with the initial condit
 
 \begin{figure}[htb] 
 	\begin{center}
-		\includegraphics[width=0.9\textwidth]{Total_DV_2_1degsteps} 
+		\includegraphics[width=0.8\textwidth]{Total_DV_2_1degsteps} 
 		\caption{Total Rendezvous \(\Delta\)V for Different Initial Clock Angles}
 		\label{fig:DV_2}
 	\end{center}
 \end{figure}
 
-The total rendezvous position error, summed up over waypoints 2 through 4, is shown in Figure~\ref{fig:PosErr_2} as a function of the initial clock angle.  The position error when the linear approximated \(\Delta V\) is applied in the nonlinear model is on the order of 1 km, while the order of magnitude of the position error after the differential correction has been applied is 10 cm, which was about the tolerance level of the correction algorithm and could even be improved with more differential correction iterations.
-
-\begin{figure}[htb] 
-	\begin{center}
-		\includegraphics[width=0.8\textwidth]{Log_Position_Error_2_1degsteps} 
-		\caption{Total Rendezvous Position Error for Different Initial Clock Angles}
-		\label{fig:PosErr_2}
-	\end{center}
-\end{figure}
-
-Although the differences in the magnitude of the \(\Delta V\) vector are not large when comparing the linear approximation to the nonlinear differential correction, the direction of the \(\Delta V\) vector is sometimes quite different. The angle between the \(\Delta V\) vectors, summed up over each impulse of the rendezvous, is shown in Figure~\ref{fig:DVAngle_2}.
+Although the differences in the magnitude of the \(\Delta V\) vector are not large when comparing the linear approximation to the nonlinear differential correction, the direction of the \(\Delta V\) vector is sometimes quite different. The angle between these two \(\Delta V\) vectors, summed up over each impulse of the rendezvous, is shown in Figure~\ref{fig:DVAngle_2}.
 
 \begin{figure}[htb] 
 	\begin{center}
@@ -510,11 +500,25 @@ Although the differences in the magnitude of the \(\Delta V\) vector are not lar
 	\end{center}
 \end{figure}
 
-These same techniques and metrics can be used to evaluate other rendezvous approach strategies, such as approaching the target satellite with different waypoint spacing, or from a different direction, or in a different target orbit.
+The total rendezvous position error, summed up over waypoints 2 through 4, is shown in Figure~\ref{fig:PosErr_2} as a function of the initial clock angle.  The position error when the linear approximated \(\Delta V\) is applied in the nonlinear model is on the order of 1 km, while the order of magnitude of the position error after the differential correction has been applied is 10 cm, which was about the tolerance level of the correction algorithm and could even be improved with more differential correction iterations.
 
-%TODO: conclusions section here
+\clearpage 
 
-\clearpage
+\begin{figure}[htb] 
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{Log_Position_Error_2_1degsteps} 
+		\caption{Total Rendezvous Position Error for Different Initial Clock Angles}
+		\label{fig:PosErr_2}
+	\end{center}
+\end{figure}
+
+\section{Conclusions}
+This procedure and the types of metrics presented in the plots discussed above can be used to evaluate other rendezvous approach strategies, such as approaching the target satellite from a different direction, or with different waypoint spacing and time intervals, or in a different target orbit.
+
+Going forward, there is much that can be done to further develop this procedure. The procedure should be tested against many more rendezvous scenarios, to identify when the procedure works well and when it may fail (in particular, it will be useful to characterize when the linear approximation is not good enough to compute a useful initial \(\Delta V\) approximation). The nonlinear differential correction step of the procedure can be expanded to model not only the CRTBP dynamics, but the full planetary ephemeris model. These enhancements to the procedure will allow analysis to determine whether the linear approximation is generally accurate enough to establish the \(\Delta V\) budget for a rendezvous sequence, or if the nonlinear differential correction step is necessary even early in the mission design process.
+
+This procedure can be used to search for trends in rendezvous \(\Delta V\) cost as a function of the total time of flight, approach direction, and the target orbit size and shape. The safety of a given rendezvous configuration can also be studied: for example, if a maneuver at one of the rendezvous waypoints is missed for some reason, is the configuration of the two satellites passively safe? As with low-Earth orbit rendezvous, this type of safety concern will be important to consider when designing rendezvous sequences.
+
 
 % Python Configuration for these results:
 %halo_cases = ['EM']
@@ -547,11 +551,9 @@ These same techniques and metrics can be used to evaluate other rendezvous appro
 
 % Maybe talk about measuring the "excursion" of the trajectory (perpendicular to the vector from one waypoint to the next)
 
-%\section{Conclusions}
-
 
 \section{Acknowledgment}
-Any acknowledgments by the author may appear here. The acknowledgments section is optional.
+The author wishes to thank Brent Barbee for his encouragement to pursue this topic of research.
 
 
 \bibliographystyle{AAS_publication}   % Number the references.

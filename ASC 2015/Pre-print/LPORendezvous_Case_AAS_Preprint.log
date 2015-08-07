@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  5 AUG 2015 14:02
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  6 AUG 2015 17:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -511,11 +511,8 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 47.
  [1
 
-{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \vbox (badness 1337) has occurred while \output is active []
+{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
 
- [2]
-[3]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 185.
@@ -549,14 +546,14 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 [7]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 329.
- <./Figures/Target_Full_Orbit_1.pdf, id=153, 591.16072pt x 235.38861pt>
+ <./Figures/Target_Full_Orbit_1.pdf, id=157, 591.16072pt x 235.38861pt>
 File: ./Figures/Target_Full_Orbit_1.pdf Graphic file (type pdf)
 
 <use ./Figures/Target_Full_Orbit_1.pdf>
 Package pdftex.def Info: ./Figures/Target_Full_Orbit_1.pdf used on input line 3
 46.
 (pdftex.def)             Requested size: 390.25534pt x 155.38927pt.
- [8 <./Figures/Target_Full_Orbit_1.pdf>] <./Figures/RIC_1.pdf, id=185, 601.6477
+ [8 <./Figures/Target_Full_Orbit_1.pdf>] <./Figures/RIC_1.pdf, id=189, 601.6477
 8pt x 464.33476pt>
 File: ./Figures/RIC_1.pdf Graphic file (type pdf)
 
@@ -634,80 +631,87 @@ Overfull \hbox (2.44089pt too wide) in paragraph at lines 435--436
 []
  []
 
-<./Figures/Target_Full_Orbit_2.pdf, id=206, 569.92065pt x 223.78015pt>
+<./Figures/Target_Full_Orbit_2.pdf, id=210, 569.92065pt x 223.78015pt>
 File: ./Figures/Target_Full_Orbit_2.pdf Graphic file (type pdf)
 
 <use ./Figures/Target_Full_Orbit_2.pdf>
 Package pdftex.def Info: ./Figures/Target_Full_Orbit_2.pdf used on input line 4
 55.
-(pdftex.def)             Requested size: 346.89731pt x 136.21202pt.
+(pdftex.def)             Requested size: 390.25534pt x 153.23724pt.
 
-<./Figures/RIC_2.pdf, id=209, 578.16pt x 451.6875pt>
+<./Figures/RIC_2.pdf, id=213, 578.16pt x 451.6875pt>
 File: ./Figures/RIC_2.pdf Graphic file (type pdf)
  <use ./Figures/RIC_2.pdf>
 Package pdftex.def Info: ./Figures/RIC_2.pdf used on input line 465.
-(pdftex.def)             Requested size: 346.89731pt x 271.01459pt.
+(pdftex.def)             Requested size: 390.25534pt x 304.88278pt.
 
 [10] [11 <./Figures/Target_Full_Orbit_2.pdf> <./Figures/RIC_2.pdf>]
-<./Figures/RLP_2.pdf, id=247, 578.16pt x 452.59087pt>
+<./Figures/RLP_2.pdf, id=252, 578.16pt x 452.59087pt>
 File: ./Figures/RLP_2.pdf Graphic file (type pdf)
 
 <use ./Figures/RLP_2.pdf>
 Package pdftex.def Info: ./Figures/RLP_2.pdf used on input line 477.
 (pdftex.def)             Requested size: 390.25534pt x 305.49255pt.
 
-<./Figures/Total_DV_2_1degsteps.pdf, id=249, 578.16pt x 433.62pt>
+<./Figures/Total_DV_2_1degsteps.pdf, id=254, 578.16pt x 433.62pt>
 File: ./Figures/Total_DV_2_1degsteps.pdf Graphic file (type pdf)
 
 <use ./Figures/Total_DV_2_1degsteps.pdf>
 Package pdftex.def Info: ./Figures/Total_DV_2_1degsteps.pdf used on input line 
 487.
-(pdftex.def)             Requested size: 390.25534pt x 292.68748pt.
-
-<./Figures/Log_Position_Error_2_1degsteps.pdf, id=251, 578.16pt x 433.62pt>
-File: ./Figures/Log_Position_Error_2_1degsteps.pdf Graphic file (type pdf)
-
-<use ./Figures/Log_Position_Error_2_1degsteps.pdf>
-Package pdftex.def Info: ./Figures/Log_Position_Error_2_1degsteps.pdf used on i
-nput line 497.
 (pdftex.def)             Requested size: 346.89731pt x 260.17401pt.
- [12
 
- <./Figures/RLP_2.pdf>]
-<./Figures/DV_Angle_Diff_2_1degsteps.png, id=272, 578.16pt x 433.62pt>
+<./Figures/DV_Angle_Diff_2_1degsteps.png, id=256, 578.16pt x 433.62pt>
 File: ./Figures/DV_Angle_Diff_2_1degsteps.png Graphic file (type png)
 
 <use ./Figures/DV_Angle_Diff_2_1degsteps.png>
 Package pdftex.def Info: ./Figures/DV_Angle_Diff_2_1degsteps.png used on input 
-line 507.
+line 497.
 (pdftex.def)             Requested size: 346.89731pt x 260.17401pt.
- [13 <./Figures/Total_DV_2_1degsteps.pdf>] [14 <./Figures/Log_Position_Error_2_
-1degsteps.pdf> <./Figures/DV_Angle_Diff_2_1degsteps.png>] (./LPORendezvous_Case
-_AAS_Preprint.bbl)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 560.
- [15
+ [12
 
-]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 560.
+ <./Figures/RLP_2.pdf>]
+[13 <./Figures/Total_DV_2_1degsteps.pdf> <./Figures/DV_Angle_Diff_2_1degsteps.p
+ng>]
+<./Figures/Log_Position_Error_2_1degsteps.pdf, id=293, 578.16pt x 433.62pt>
+File: ./Figures/Log_Position_Error_2_1degsteps.pdf Graphic file (type pdf)
+
+<use ./Figures/Log_Position_Error_2_1degsteps.pdf>
+Package pdftex.def Info: ./Figures/Log_Position_Error_2_1degsteps.pdf used on i
+nput line 509.
+(pdftex.def)             Requested size: 346.89731pt x 260.17401pt.
+
+(./LPORendezvous_Case_AAS_Preprint.bbl
+Underfull \vbox (badness 4660) has occurred while \output is active []
+
+ [14
+
+ <./Figures/Log_Position_Error_2_1degsteps.pdf>])
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 562.
+ [15]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 562.
 
 (./LPORendezvous_Case_AAS_Preprint.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 560.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 560.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 562.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 562.
 Package rerunfilecheck Info: File `LPORendezvous_Case_AAS_Preprint.out' has not
  changed.
-(rerunfilecheck)             Checksum: 69E5CF25A548BA90D27674B001D646D5;894.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 560.
+(rerunfilecheck)             Checksum: 3200E344060A3B18689A6BB1EF002AAD;943.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 562.
  ) 
 Here is how much of TeX's memory you used:
- 7347 strings out of 493117
- 108035 string characters out of 6135433
- 194525 words of memory out of 5000000
- 10588 multiletter control sequences out of 15000+600000
+ 7349 strings out of 493117
+ 108059 string characters out of 6135433
+ 195525 words of memory out of 5000000
+ 10589 multiletter control sequences out of 15000+600000
  34651 words of font info for 84 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 34i,14n,45p,1838b,335s stack positions out of 5000i,500n,10000p,200000b,80000s
-pdfTeX warning (dest): name{section*.12} has been referenced but does not exi
+ 34i,14n,45p,1838b,339s stack positions out of 5000i,500n,10000p,200000b,80000s
+pdfTeX warning (dest): name{section*.13} has been referenced but does not exi
 st, replaced by a fixed one
+
+pdfTeX warning (dest): name{section*.12} has been referenced but does not exist
+, replaced by a fixed one
 
 pdfTeX warning (dest): name{section*.9} has been referenced but does not exist,
  replaced by a fixed one
@@ -741,11 +745,11 @@ s/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1
 /urw/times/utmb8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/times
 /utmr8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/times/utmri8a.p
 fb>
-Output written on LPORendezvous_Case_AAS_Preprint.pdf (15 pages, 447706 bytes).
+Output written on LPORendezvous_Case_AAS_Preprint.pdf (15 pages, 449323 bytes).
 
 PDF statistics:
- 388 PDF objects out of 1000 (max. 8388607)
- 332 compressed objects within 4 object streams
- 76 named destinations out of 1000 (max. 500000)
- 137 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 392 PDF objects out of 1000 (max. 8388607)
+ 336 compressed objects within 4 object streams
+ 77 named destinations out of 1000 (max. 500000)
+ 145 words of extra memory for PDF output out of 10000 (max. 10000000)
 
